@@ -7,7 +7,7 @@ namespace backend.RequestHandler;
 
 internal static class ShortRequestHandler
 {
-    public static async Task<ShortestPath> Handle(ShortRequest request)
+    public static async Task<ShortHandle> GetHandle(ShortRequest request)
     {
         var ps = new List<WebPoint>();
 
@@ -15,6 +15,6 @@ internal static class ShortRequestHandler
         ps.AddRange(request.sequence);
         ps.Add(request.target);
 
-        return await RoutingEngineFactory.GetInstance().GetShortestPath(ps);
+        return await RoutingEngineFactory.GetInstance().GetShortHandle(ps);
     }
 }

@@ -1,9 +1,8 @@
-using System;
-using System.Net.Http;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using backend.Entity;
 using backend.RequestHandler;
+using backend.RoutingEngine;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -22,29 +21,15 @@ public sealed class ShortController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     public async Task<ActionResult<ShortResponse>> PostAsync(ShortRequest request)
     {
-        var ine = () => StatusCode(500, "service is temporarily unavailable");
-        var nof = () => NotFound("cannot construct the shortest path for the given configuration");
+        var handle = await ShortRequestHandler.GetHandle(request);
 
-        try {
+        if (handle.status != RoutingEngineStatus.OK) { _logger.LogError(handle.message); }
 
-            var path = await ShortRequestHandler.Handle(request);
-            return Ok(new ShortResponse() { distance = path.distance, route = path.route });
-        }
-        catch (AggregateException ea) {
-
-            var ex = ea.GetBaseException();
-            _logger.LogError(ex.Message);
-            return (ex as HttpRequestException is not null) ? ine.Invoke() : nof.Invoke();
-        }
-        catch (HttpRequestException ex) {
-
-            _logger.LogError(ex.Message);
-            return ine.Invoke();
-        }
-        catch (Exception ex) { Console.Write(ex.GetType());
-
-            _logger.LogError(ex.Message);
-            return nof.Invoke();
-        }
+        return handle.status switch
+        {
+            RoutingEngineStatus.OK => Ok(new ShortResponse() { distance = handle.path.distance, route = handle.path.route }),
+            RoutingEngineStatus.BR => BadRequest("Cannot find the shortest path for the given configuration."),
+            _                      => StatusCode(500, "Service is temporarily unavailable. Try again later.")
+        };
     }
 }
