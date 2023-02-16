@@ -6,5 +6,5 @@ namespace backend.RoutingEngine;
 
 internal interface IRoutingEngine
 {
-    Task<ShortHandle> GetShortHandle(List<WebPoint> sequence);
+    Task<ShortObject> HandleShort(List<WebPoint> sequence);
 }

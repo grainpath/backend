@@ -10,7 +10,7 @@ class ShortestPath
     internal List<WebPoint> route { get; set; }
 }
 
-class ShortHandle
+class ShortObject
 {
     public string message { get; set; }
 

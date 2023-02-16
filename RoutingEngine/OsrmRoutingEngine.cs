@@ -10,6 +10,6 @@ sealed class OsrmRoutingEngine : IRoutingEngine
 
     static OsrmRoutingEngine() { _addr = System.Environment.GetEnvironmentVariable("GRAINPATH_RE_ADDR"); }
 
-    public async Task<ShortHandle> GetShortHandle(List<WebPoint> sequence)
+    public async Task<ShortObject> HandleShort(List<WebPoint> sequence)
         => await OsrmShortestPathFinder.Find(_addr, sequence);
 }
