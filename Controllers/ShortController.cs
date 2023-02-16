@@ -21,13 +21,13 @@ public sealed class ShortController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     public async Task<ActionResult<ShortResponse>> PostAsync(ShortRequest request)
     {
-        var handle = await ShortRequestHandler.GetHandle(request);
+        var obj = await ShortRequestHandler.Handle(request);
 
-        if (handle.status != RoutingEngineStatus.OK) { _logger.LogError(handle.message); }
+        if (obj.status != RoutingEngineStatus.OK) { _logger.LogError(obj.message); }
 
-        return handle.status switch
+        return obj.status switch
         {
-            RoutingEngineStatus.OK => Ok(new ShortResponse() { distance = handle.path.distance, route = handle.path.route }),
+            RoutingEngineStatus.OK => Ok(new ShortResponse() { distance = obj.payload.distance, route = obj.payload.shape }),
             RoutingEngineStatus.BR => BadRequest("Cannot find the shortest path for the given configuration."),
             _                      => StatusCode(500, "Service is temporarily unavailable. Try again later.")
         };
