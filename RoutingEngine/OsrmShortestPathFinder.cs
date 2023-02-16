@@ -44,7 +44,7 @@ static class OsrmShortestPathFinder
          * See http://project-osrm.org/docs/v5.24.0/api/#responses
          */
 
-        // handle http request
+        // http request
 
         HttpResponseMessage res;
 
@@ -64,7 +64,11 @@ static class OsrmShortestPathFinder
 
         // deserialize body
 
-        var ans = JsonSerializer.Deserialize<Answer>(body);
+        Answer ans;
+
+        try {
+            ans = JsonSerializer.Deserialize<Answer>(body);
+        } catch (Exception ex) { return new() { status = RoutingEngineStatus.BR, message = ex.Message }; }
 
         if (ans.code != "Ok" || ans.routes is null || ans.routes.Count == 0) {
             return new() { status = RoutingEngineStatus.BR, message = ans.message };
@@ -76,15 +80,15 @@ static class OsrmShortestPathFinder
             return new() { status = RoutingEngineStatus.BR, message = "Empty route geometry or distance" };
         }
 
-        // construct answer
+        // construct object
 
         return new()
         {
             status = RoutingEngineStatus.OK,
-            path = new()
+            payload = new()
             {
                 distance = route.distance.Value,
-                route = route.geometry.Coordinates
+                shape = route.geometry.Coordinates
                     .Select(p => new WebPoint() { lon = p.Longitude, lat = p.Latitude })
                     .ToList()
             }
