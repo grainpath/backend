@@ -28,7 +28,7 @@ static class OsrmShortestPathFinder
         public List<Route> routes { get; set; }
     }
 
-    private static readonly string _prefix = @"route/v1/foot/";
+    private static readonly string _prefix = @"/route/v1/foot/";
     private static readonly string _suffix = @"?geometries=geojson&skip_waypoints=true";
 
     public static async Task<ShortHandle> Find(string addr, List<WebPoint> sequence)
