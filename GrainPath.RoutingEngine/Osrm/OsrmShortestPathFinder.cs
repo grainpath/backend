@@ -5,12 +5,13 @@ using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using backend.Entity;
 using GeoJSON.Text.Geometry;
+using GrainPath.Application.Entities;
+using GrainPath.Application.Interfaces;
 
-namespace backend.RoutingEngine;
+namespace GrainPath.RoutingEngine.Osrm;
 
-static class OsrmShortestPathFinder
+internal static class OsrmShortestPathFinder
 {
     private sealed class Route
     {
@@ -85,10 +86,10 @@ static class OsrmShortestPathFinder
         return new()
         {
             status = RoutingEngineStatus.OK,
-            payload = new()
+            response = new()
             {
                 distance = route.distance.Value,
-                shape = route.geometry.Coordinates
+                route = route.geometry.Coordinates
                     .Select(p => new WebPoint() { lon = p.Longitude, lat = p.Latitude })
                     .ToList()
             }

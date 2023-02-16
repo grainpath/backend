@@ -5,11 +5,12 @@ using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using backend.Entity;
+using GrainPath.Application.Entities;
+using GrainPath.Application.Interfaces;
 
-namespace backend.RoutingEngine;
+namespace GrainPath.RoutingEngine.Valhalla;
 
-static class ValhallaShortestPathFinder
+internal static class ValhallaShortestPathFinder
 {
     private sealed class Query
     {
@@ -182,10 +183,10 @@ static class ValhallaShortestPathFinder
         return new()
         {
             status = RoutingEngineStatus.OK,
-            payload = new()
+            response = new()
             {
                 distance = ans.trip.summary.length.Value * 1000,
-                shape = shape
+                route = shape
             }
         };
     }

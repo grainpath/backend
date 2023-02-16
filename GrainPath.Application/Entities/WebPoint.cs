@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace backend.Entity;
+namespace GrainPath.Application.Entities;
 
 public class WebPoint
 {

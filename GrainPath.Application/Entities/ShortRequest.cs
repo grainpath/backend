@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace backend.Entity;
+namespace GrainPath.Application.Entities;
 
 public class ShortRequest
 {

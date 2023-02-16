@@ -1,8 +1,9 @@
+using GrainPath.RoutingEngine.Osrm;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace backend;
+namespace GrainPath.Api;
 
 public class Program
 {
@@ -14,6 +15,14 @@ public class Program
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddSingleton<IAppContext, AppContext>((_) =>
+        {
+            return new()
+            {
+                Engine = new OsrmRoutingEngine()
+            };
+        });
 
         var wapp = builder.Build();
 
