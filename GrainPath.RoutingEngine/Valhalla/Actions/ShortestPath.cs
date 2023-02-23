@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Interfaces;
 
-namespace GrainPath.RoutingEngine.Valhalla;
+namespace GrainPath.RoutingEngine.Valhalla.Actions;
 
-internal static class ValhallaShortestPathFinder
+internal static class ShortestPath
 {
     private sealed class Query
     {
@@ -87,7 +87,7 @@ internal static class ValhallaShortestPathFinder
 
     private static string _prefix = "/route?json=";
 
-    public static async Task<ShortObject> Find(string addr, List<WebPoint> sequence)
+    public static async Task<ShortObject> Act(string addr, List<WebPoint> sequence)
     {
         var suffix = new Query() { locations = sequence };
         var query = addr + _prefix + JsonSerializer.Serialize(suffix);

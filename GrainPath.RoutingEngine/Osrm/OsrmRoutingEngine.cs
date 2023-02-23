@@ -2,15 +2,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Interfaces;
+using GrainPath.RoutingEngine.Osrm.Actions;
 
 namespace GrainPath.RoutingEngine.Osrm;
 
 public sealed class OsrmRoutingEngine : IRoutingEngine
 {
-    private static readonly string _addr;
+    private readonly string _addr;
 
-    static OsrmRoutingEngine() { _addr = System.Environment.GetEnvironmentVariable("GRAINPATH_REO_ADDR"); }
+    public OsrmRoutingEngine(string addr) { _addr = addr; }
 
-    public async Task<ShortObject> HandleShort(List<WebPoint> sequence)
-        => await OsrmShortestPathFinder.Find(_addr, sequence);
+    public async Task<ShortObject> GetShortestPath(List<WebPoint> sequence)
+        => await ShortestPath.Act(_addr, sequence);
 }

@@ -9,9 +9,9 @@ using GeoJSON.Text.Geometry;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Interfaces;
 
-namespace GrainPath.RoutingEngine.Osrm;
+namespace GrainPath.RoutingEngine.Osrm.Actions;
 
-internal static class OsrmShortestPathFinder
+internal static class ShortestPath
 {
     private sealed class Route
     {
@@ -32,7 +32,7 @@ internal static class OsrmShortestPathFinder
     private static readonly string _prefix = @"/route/v1/foot/";
     private static readonly string _suffix = @"?geometries=geojson&skip_waypoints=true";
 
-    public static async Task<ShortObject> Find(string addr, List<WebPoint> sequence)
+    public static async Task<ShortObject> Act(string addr, List<WebPoint> sequence)
     {
         var sview = sequence.Select(p => p.lon.ToString() + ',' + p.lat.ToString());
         var query = addr + _prefix + string.Join(';', sview) + _suffix;

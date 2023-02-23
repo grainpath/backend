@@ -2,15 +2,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Interfaces;
+using GrainPath.RoutingEngine.Valhalla.Actions;
 
 namespace GrainPath.RoutingEngine.Valhalla;
 
 public sealed class ValhallaRoutingEngine : IRoutingEngine
 {
-    private static readonly string _addr;
+    private readonly string _addr;
 
-    static ValhallaRoutingEngine() { _addr = System.Environment.GetEnvironmentVariable("GRAINPATH_REV_ADDR"); }
+    public ValhallaRoutingEngine(string addr) { _addr = addr; }
 
-    public async Task<ShortObject> HandleShort(List<WebPoint> sequence)
-        => await ValhallaShortestPathFinder.Find(_addr, sequence);
+    public async Task<ShortObject> GetShortestPath(List<WebPoint> sequence)
+        => await ShortestPath.Act(_addr, sequence);
 }
