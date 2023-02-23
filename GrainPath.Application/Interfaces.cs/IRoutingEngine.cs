@@ -15,5 +15,5 @@ public enum RoutingEngineStatus
 
 public interface IRoutingEngine
 {
-    public Task<ShortObject> HandleShort(List<WebPoint> sequence);
+    public Task<ShortObject> GetShortestPath(List<WebPoint> sequence);
 }

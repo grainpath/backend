@@ -1,8 +1,9 @@
 using System.Net.Mime;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
+using GrainPath.Application.Handlers;
 using GrainPath.Application.Interfaces;
-using GrainPath.Application.RequestHandlers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -23,9 +24,12 @@ public sealed class ShortController : ControllerBase
     [HttpPost(Name = "GetShortestPath")]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ShortResponse>> PostAsync(ShortRequest request)
     {
-        var obj = await ShortRequestHandler.Handle(_context.Engine, request);
+        var obj = await ShortHandler.Handle(_context.Engine, request);
 
         if (obj.status != RoutingEngineStatus.OK) { _logger.LogError(obj.message); }
 

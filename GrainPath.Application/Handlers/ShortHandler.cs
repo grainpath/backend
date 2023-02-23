@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Interfaces;
 
-namespace GrainPath.Application.RequestHandlers;
+namespace GrainPath.Application.Handlers;
 
-public static class ShortRequestHandler
+public static class ShortHandler
 {
     public static async Task<ShortObject> Handle(IRoutingEngine engine, ShortRequest request)
     {
@@ -15,6 +15,6 @@ public static class ShortRequestHandler
         ps.AddRange(request.sequence);
         ps.Add(request.target);
 
-        return await engine.HandleShort(ps);
+        return await engine.GetShortestPath(ps);
     }
 }
