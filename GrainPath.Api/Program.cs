@@ -1,4 +1,5 @@
-using GrainPath.RoutingEngine.Osrm;
+using GrainPath.Data;
+using GrainPath.RoutingEngine;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,9 +19,13 @@ public class Program
 
         builder.Services.AddSingleton<IAppContext, AppContext>((_) =>
         {
+            var model = ModelFactory.GetInstance();
+
             return new()
             {
-                Engine = new OsrmRoutingEngine()
+                Model = model,
+                Engine = RoutingEngineFactory.GetInstance(),
+                Autocomplete = model.GetAutocomplete()
             };
         });
 

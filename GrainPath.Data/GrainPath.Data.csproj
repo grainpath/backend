@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GrainPath.Domain\GrainPath.Domain.csproj" PrivateAssets="All" />
-    <ProjectReference Include="..\PruningRadixTrie\PruningRadixTrie.csproj" PrivateAssets="All" />
+    <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GrainPath.Application\GrainPath.Application.csproj" />
   </ItemGroup>
 
 </Project>

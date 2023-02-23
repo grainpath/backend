@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GrainPath.Application\GrainPath.Application.csproj" />
+    <ProjectReference Include="..\GrainPath.Data\GrainPath.Data.csproj" />
     <ProjectReference Include="..\GrainPath.RoutingEngine\GrainPath.RoutingEngine.csproj" />
   </ItemGroup>
 
