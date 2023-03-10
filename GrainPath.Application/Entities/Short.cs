@@ -35,7 +35,7 @@ public class ShortResponse
     public double? distance { get; set; }
 
     /// <summary>
-    /// GeoJSON LineString represented as an ordered sequence of points.
+    /// Ordered sequence of points representing linestring.
     /// </summary>
     [Required]
     public List<WebPoint> route { get; set; }

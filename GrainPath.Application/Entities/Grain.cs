@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GrainPath.Application.Entities;
 
-public class PartialGrain
+public class LightGrain
 {
     public class Tags
     {

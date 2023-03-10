@@ -2,7 +2,7 @@ namespace GrainPath.Data.MongoDb;
 
 internal static class MongoDbConst
 {
-    public static string Conn { get; set; } = "GRAINPATH_DBM_CONN";
+    public static string Connection { get; set; } = "GRAINPATH_DBM_CONN";
 
     public static string Database { get; set; } = "grainpath";
 

@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using System.Threading.Tasks;
+using GrainPath.Api.Reporters;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Handlers;
 using GrainPath.Application.Interfaces;
@@ -25,7 +26,7 @@ public sealed class ShortController : ControllerBase
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ShortResponse>> PostAsync(ShortRequest request)
     {
@@ -36,8 +37,8 @@ public sealed class ShortController : ControllerBase
         return obj.status switch
         {
             RoutingEngineStatus.OK => Ok(obj.response),
-            RoutingEngineStatus.BR => BadRequest("Cannot find the shortest path for the given configuration."),
-            _                      => StatusCode(500, "Service is temporarily unavailable. Try again later.")
+            RoutingEngineStatus.BR => NotFound(ShortReporter.Report404()),
+            _                      => StatusCode(500, ShortReporter.Report500())
         };
     }
 }

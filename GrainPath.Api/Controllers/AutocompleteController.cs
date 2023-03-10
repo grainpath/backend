@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Net.Mime;
+using GrainPath.Api.Reporters;
 using GrainPath.Application.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,6 @@ public sealed class AutocompleteController : ControllerBase
     {
         return _context.Autocomplete.TryGetValue(request.index, out var index)
             ? Ok(index.TopK(request.prefix, request.count))
-            : NotFound($"Requested index \"{request.index}\" does not exist.");
+            : NotFound(AutocompleteReporter.Report404(request.index));
     }
 }

@@ -10,7 +10,7 @@ internal static class MongoDbModelFactory
     private static readonly MongoClient _client;
 
     static MongoDbModelFactory() {
-        var conn = Environment.GetEnvironmentVariable(MongoDbConst.Conn);
+        var conn = Environment.GetEnvironmentVariable(MongoDbConst.Connection);
         _client = new MongoClient(new MongoUrl(conn));
     }
 
