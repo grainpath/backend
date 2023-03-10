@@ -1,5 +1,6 @@
 using GrainPath.Data;
 using GrainPath.RoutingEngine;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,12 +9,20 @@ namespace GrainPath.Api;
 
 public class Program
 {
+    private static readonly string _policy = "GrainPathCors";
+
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
+        builder.Services.AddCors(cors => cors.AddPolicy(_policy, builder =>
+        {
+            builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+        }));
 
+        builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
+
+        builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -37,8 +46,10 @@ public class Program
                 .UseSwaggerUI();
         }
 
-        wapp.UseHttpsRedirection()
-            .UseAuthorization();
+        wapp.UseCors(_policy)
+            .UseHttpsRedirection()
+            .UseAuthorization()
+            .UseAuthentication();
 
         wapp.MapControllers();
 
