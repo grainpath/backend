@@ -13,7 +13,7 @@ public class ShortRequest
     public WebPoint target { get; set; }
 
     [Required]
-    public List<WebPoint> sequence { get; set; }
+    public List<WebPoint> waypoints { get; set; }
 }
 
 public class ShortObject
@@ -35,8 +35,15 @@ public class ShortResponse
     public double? distance { get; set; }
 
     /// <summary>
+    /// Duration of the route in <b>seconds</b>
+    /// </summary>
+    [Required]
+    [Range(0, double.MaxValue)]
+    public double? duration { get; set; }
+
+    /// <summary>
     /// Ordered sequence of points representing linestring.
     /// </summary>
     [Required]
-    public List<WebPoint> route { get; set; }
+    public List<WebPoint> polyline { get; set; }
 }

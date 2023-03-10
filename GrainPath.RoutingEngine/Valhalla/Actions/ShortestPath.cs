@@ -28,7 +28,15 @@ internal static class ShortestPath
 
     private sealed class Summary
     {
+        /// <summary>
+        /// Distance of a route in <b>specified units</b> (kilometers).
+        /// </summary>
         public double? length { get; set; }
+
+        /// <summary>
+        /// Duration of a route in <b>seconds</b>.
+        /// </summary>
+        public double? time { get; set; }
     }
 
     private sealed class Trip
@@ -143,7 +151,7 @@ internal static class ShortestPath
             };
         }
 
-        if (ans.trip.summary is null || ans.trip.summary.length is null) {
+        if (ans.trip.summary is null || ans.trip.summary.length is null || ans.trip.summary.time is null) {
             return new()
             {
                 status = RoutingEngineStatus.BR,
@@ -185,8 +193,9 @@ internal static class ShortestPath
             status = RoutingEngineStatus.OK,
             response = new()
             {
-                distance = ans.trip.summary.length.Value * 1000,
-                route = shape
+                distance = ans.trip.summary.length.Value * 1000.0,
+                duration = ans.trip.summary.time.Value,
+                polyline = shape
             }
         };
     }

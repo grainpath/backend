@@ -17,6 +17,8 @@ internal static class ShortestPath
     {
         public double? distance { get; set; }
 
+        public double? duration { get; set; }
+
         public LineString geometry { get; set; }
     }
 
@@ -77,8 +79,8 @@ internal static class ShortestPath
 
         var route = ans.routes.First();
 
-        if (route.geometry is null || route.distance is null) {
-            return new() { status = RoutingEngineStatus.BR, message = "Empty route geometry or distance" };
+        if (route.distance is null || route.duration is null || route.geometry is null) {
+            return new() { status = RoutingEngineStatus.BR, message = "Empty distance, or duration, or geometry." };
         }
 
         // construct object
@@ -89,7 +91,8 @@ internal static class ShortestPath
             response = new()
             {
                 distance = route.distance.Value,
-                route = route.geometry.Coordinates
+                duration = route.duration.Value,
+                polyline = route.geometry.Coordinates
                     .Select(p => new WebPoint() { lon = p.Longitude, lat = p.Latitude })
                     .ToList()
             }

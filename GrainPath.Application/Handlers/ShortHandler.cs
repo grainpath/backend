@@ -12,7 +12,7 @@ public static class ShortHandler
         var ps = new List<WebPoint>();
 
         ps.Add(request.source);
-        ps.AddRange(request.sequence);
+        ps.AddRange(request.waypoints);
         ps.Add(request.target);
 
         return await engine.GetShortestPath(ps);
