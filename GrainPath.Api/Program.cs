@@ -33,8 +33,9 @@ public class Program
             return new()
             {
                 Model = model,
-                Engine = RoutingEngineFactory.GetInstance(),
-                Autocomplete = model.GetAutocomplete()
+                Autoc = model.GetAutoc(),
+                Bound = model.GetBound(),
+                Engine = RoutingEngineFactory.GetInstance()
             };
         });
 

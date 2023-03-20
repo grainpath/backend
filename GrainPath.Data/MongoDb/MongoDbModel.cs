@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Interfaces;
@@ -13,7 +12,9 @@ internal sealed class MongoDbModel : IModel
 
     public MongoDbModel(IMongoDatabase database) { _database = database; }
 
-    public Dictionary<string, AutocompleteIndex> GetAutocomplete() => Autocomplete.Act(_database);
+    public AutocIndex GetAutoc() => Autoc.Act(_database);
+
+    public BoundResponse GetBound() => Bound.Act(_database);
 
     public Task<HeavyPlace> Find(string id)
     {

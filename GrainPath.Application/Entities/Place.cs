@@ -13,35 +13,42 @@ public class PlaceRequest
 }
 
 [BsonIgnoreExtraElements]
-public class HeavyPlace
+public class Tags
 {
     [BsonIgnoreExtraElements]
-    public class Tags
+    public class Address
     {
-        [BsonIgnoreExtraElements]
-        public class Address
-        {
-            public string settlement { get; set; }
+        public string settlement { get; set; }
 
-            public string postal_code { get; set; }
-        }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<WebPoint> polygon { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string description { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string image { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string website { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Address address { get; set; }
+        public string postal_code { get; set; }
     }
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<WebPoint> polygon { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string description { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string image { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string website { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Address address { get; set; }
+}
+
+public class LightPlace
+{
+    public Tags tags { get; set; }
+
+    public SortedSet<string> keywords { get; set; }
+}
+
+[BsonIgnoreExtraElements]
+public class HeavyPlace
+{
     [BsonIgnoreExtraElements]
     public class Linked
     {
