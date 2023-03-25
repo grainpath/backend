@@ -13,7 +13,7 @@ internal static class Autoc
 
         public string label { get; set; }
 
-        public List<string> tags { get; set; }
+        public List<string> features { get; set; }
     }
 
     private sealed class Document
@@ -35,7 +35,7 @@ internal static class Autoc
         var result = new AutocIndex();
 
         foreach (var item in doc.keywords) {
-            result.Add(item.label, item.tags, item.count);
+            result.Add(item.label, item.features, item.count);
         }
 
         return result;

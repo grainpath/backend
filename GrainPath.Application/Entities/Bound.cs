@@ -24,11 +24,11 @@ public sealed class BoundResponse
     public List<string> rental { get; set; }
 
     [Required]
+    public NumericBound rank { get; set; }
+
+    [Required]
     public NumericBound capacity { get; set; }
 
     [Required]
-    public NumericBound min_age { get; set; }
-
-    [Required]
-    public NumericBound rank { get; set; }
+    public NumericBound minimum_age { get; set; }
 }

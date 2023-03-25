@@ -25,9 +25,9 @@ internal static class Bound
 
         public NumericBound rank { get; set; }
 
-        public NumericBound min_age { get; set; }
-
         public NumericBound capacity { get; set; }
+
+        public NumericBound minimum_age { get; set; }
     }
 
     private sealed class Document
@@ -53,8 +53,8 @@ internal static class Bound
             clothes = limits.clothes.Select(item => item.label).ToList(),
             cuisine = limits.cuisine.Select(item => item.label).ToList(),
             rank = limits.rank,
-            min_age = limits.min_age,
-            capacity = limits.capacity
+            capacity = limits.capacity,
+            minimum_age = limits.minimum_age,
         };
     }
 }

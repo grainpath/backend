@@ -19,7 +19,7 @@ public sealed class AutocController : ControllerBase
         _context = context; _logger = logger;
     }
 
-    [HttpPost(Name = "GetAutoc")]
+    [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]

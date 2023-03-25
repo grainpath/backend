@@ -18,10 +18,10 @@ public sealed class BoundController : ControllerBase
         _context = context; _logger = logger;
     }
 
-    [HttpGet(Name = "GetBound")]
+    [HttpPost]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<BoundResponse> Get()
+    public ActionResult<BoundResponse> Post()
     {
         return Ok(_context.Bound);
     }
