@@ -12,5 +12,5 @@ public interface IModel
 
     public Task<HeavyPlace> GetPlace(PlaceRequest request);
 
-    public Task<List<StackItem>> GetStack(StackRequest request);
+    public Task<List<FilteredPlace>> GetStack(StackRequest request);
 }

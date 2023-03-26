@@ -176,13 +176,27 @@ public class PlaceLinked
 [BsonIgnoreExtraElements]
 public class HeavyPlace : LightPlace
 {
+    [JsonIgnore]
+    public GeoJsonPoint<GeoJson2DCoordinates> position { get; set; }
+
     public PlaceLinked linked { get; set; }
 
     public PlaceFeatures features { get; set; }
 }
 
 [BsonIgnoreExtraElements]
-public class PositionedHeavyPlace : HeavyPlace
+public sealed class FilteredPlace
 {
-    public GeoJsonPoint<GeoJson2DCoordinates> position { get; set; }
+    ///<summary>
+    /// Simplified place representation as given in the database.
+    ///</summary>
+    [Required]
+    public LightPlace place { get; set; }
+
+    ///<summary>
+    /// Contains a list of filters satisfied by the place.
+    ///</summary>
+    [Required]
+    [MinLength(1)]
+    public SortedSet<string> satisfy { get; set; }
 }
