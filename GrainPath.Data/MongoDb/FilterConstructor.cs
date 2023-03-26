@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using GrainPath.Application.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -27,7 +28,7 @@ internal static class FilterDefinitionExtensions
         => (x is null) ? f : f & b.Gte(e, x.min) & b.Lte(e, x.max);
 
     public static F textual(this F f, B b, string x, ET e)
-        => (x is null) ? f : f & b.StringIn(e, new BsonRegularExpression(x, "i"));
+        => (x is null) ? f : f & b.StringIn(e, new BsonRegularExpression(Regex.Escape(x), "i"));
 
     public static F collect(this F f, B b, KeywordCollectFilter x, EC e)
     {
