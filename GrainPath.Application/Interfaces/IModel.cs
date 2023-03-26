@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 
@@ -9,5 +10,7 @@ public interface IModel
 
     public BoundResponse GetBound();
 
-    public Task<HeavyPlace> Find(string id);
+    public Task<HeavyPlace> GetPlace(PlaceRequest request);
+
+    public Task<List<StackItem>> GetStack(StackRequest request);
 }

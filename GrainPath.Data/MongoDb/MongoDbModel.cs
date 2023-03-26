@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Interfaces;
@@ -16,11 +17,7 @@ internal sealed class MongoDbModel : IModel
 
     public BoundResponse GetBound() => Bound.Act(_database);
 
-    public Task<HeavyPlace> Find(string id)
-    {
-        return _database
-            .GetCollection<HeavyPlace>(MongoDbConst.GrainCollection)
-            .Find(grain => grain.id == id)
-            .FirstOrDefaultAsync();
-    }
+    public Task<HeavyPlace> GetPlace(PlaceRequest request) => Place.Act(_database, request);
+
+    public Task<List<StackItem>> GetStack(StackRequest request) => Stack.Act(_database, request);
 }

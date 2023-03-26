@@ -1,6 +1,5 @@
 using System.Net.Mime;
 using System.Threading.Tasks;
-using GrainPath.Api.Reporters;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Handlers;
 using GrainPath.Application.Interfaces;
@@ -22,7 +21,7 @@ public sealed class ShortController : ControllerBase
         _context = context; _logger = logger;
     }
 
-    [HttpPost(Name = "GetShortestPath")]
+    [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -37,8 +36,8 @@ public sealed class ShortController : ControllerBase
         return obj.status switch
         {
             RoutingEngineStatus.OK => Ok(obj.response),
-            RoutingEngineStatus.BR => NotFound(ShortReporter.Report404()),
-            _                      => StatusCode(500, ShortReporter.Report500())
+            RoutingEngineStatus.BR => NotFound(),
+            _                      => StatusCode(500)
         };
     }
 }

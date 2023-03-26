@@ -1,7 +1,6 @@
 using System;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using GrainPath.Api.Reporters;
 using GrainPath.Application.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +21,7 @@ public sealed class PlaceController : ControllerBase
         _context = context; _logger = logger;
     }
 
-    [HttpPost(Name = "GetPlace")]
+    [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -33,12 +32,12 @@ public sealed class PlaceController : ControllerBase
         try {
             if (!ObjectId.TryParse(request.id, out _)) { return NotFound(); }
 
-            var grain = await _context.Model.Find(request.id);
+            var grain = await _context.Model.GetPlace(request);
             return grain is not null ? Ok(grain) : NotFound();
         }
         catch (Exception ex) {
             _logger.LogError(ex.Message);
-            return StatusCode(500, PlaceReporter.Report500());
+            return StatusCode(500);
         }
     }
 }

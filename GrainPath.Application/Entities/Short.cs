@@ -28,14 +28,14 @@ public class ShortObject
 public class ShortResponse
 {
     /// <summary>
-    /// Distance of the route in <b>meters</b>.
+    /// Distance of the route in <b>kilometres</b>.
     /// </summary>
     [Required]
     [Range(0, double.MaxValue)]
     public double? distance { get; set; }
 
     /// <summary>
-    /// Duration of the route in <b>seconds</b>
+    /// Duration of the route in <b>minutes</b>
     /// </summary>
     [Required]
     [Range(0, double.MaxValue)]
