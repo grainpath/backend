@@ -56,7 +56,7 @@ internal static class ShortestPath
         } catch (Exception ex) { return new() { status = RoutingEngineStatus.UN, message = ex.Message }; }
 
         if (res.StatusCode == HttpStatusCode.BadRequest) {
-            return new() { status = RoutingEngineStatus.BR, message = report(res.StatusCode) };
+            return new() { status = RoutingEngineStatus.NF, message = report(res.StatusCode) };
         }
 
         if (res.StatusCode != HttpStatusCode.OK) {
@@ -71,16 +71,16 @@ internal static class ShortestPath
 
         try {
             ans = JsonSerializer.Deserialize<Answer>(body);
-        } catch (Exception ex) { return new() { status = RoutingEngineStatus.BR, message = ex.Message }; }
+        } catch (Exception ex) { return new() { status = RoutingEngineStatus.NF, message = ex.Message }; }
 
         if (ans.code != "Ok" || ans.routes is null || ans.routes.Count == 0) {
-            return new() { status = RoutingEngineStatus.BR, message = ans.message };
+            return new() { status = RoutingEngineStatus.NF, message = ans.message };
         }
 
         var route = ans.routes.First();
 
         if (route.distance is null || route.duration is null || route.geometry is null) {
-            return new() { status = RoutingEngineStatus.BR, message = "Empty distance, or duration, or geometry." };
+            return new() { status = RoutingEngineStatus.NF, message = "Empty distance, or duration, or geometry." };
         }
 
         // construct object

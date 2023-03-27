@@ -6,13 +6,11 @@ namespace GrainPath.Application.Entities;
 
 public class ShortRequest
 {
+    /// <summary>
+    /// Ordered sequence of waypoints to be visited.
+    /// </summary>
     [Required]
-    public WebPoint source { get; set; }
-
-    [Required]
-    public WebPoint target { get; set; }
-
-    [Required]
+    [MinLength(2)]
     public List<WebPoint> waypoints { get; set; }
 }
 

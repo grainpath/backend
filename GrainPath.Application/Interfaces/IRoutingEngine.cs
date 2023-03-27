@@ -8,7 +8,7 @@ public enum RoutingEngineStatus
 {
     OK = 200,
 
-    BR = 400,   // bad response
+    NF = 400,   // not found
 
     UN = 500,   // unavailable
 }

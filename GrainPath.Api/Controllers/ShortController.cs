@@ -1,7 +1,6 @@
 using System.Net.Mime;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
-using GrainPath.Application.Handlers;
 using GrainPath.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,18 +24,21 @@ public sealed class ShortController : ControllerBase
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ShortResponse>> PostAsync(ShortRequest request)
     {
-        var obj = await ShortHandler.Handle(_context.Engine, request);
+        if (request.waypoints.Count < 2) { return BadRequest(); }
+
+        var obj = await _context.Engine.GetShortestPath(request.waypoints);
 
         if (obj.status != RoutingEngineStatus.OK) { _logger.LogError(obj.message); }
 
         return obj.status switch
         {
             RoutingEngineStatus.OK => Ok(obj.response),
-            RoutingEngineStatus.BR => NotFound(),
+            RoutingEngineStatus.NF => NotFound(),
             _                      => StatusCode(500)
         };
     }

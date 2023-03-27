@@ -9,6 +9,7 @@ public sealed class StackRequest
     /// Radius around the center in <b>kilometers</b>.
     /// </summary>
     [Required]
+    [Range(0, 12)]
     public double? radius { get; set; }
 
     /// <summary>

@@ -125,7 +125,7 @@ internal static class ShortestPath
 
         }.Aggregate(false, (prev, next) => { return prev || res.StatusCode == next; });
 
-        if (p) { return new() { status = RoutingEngineStatus.BR, message = report(res.StatusCode) }; }
+        if (p) { return new() { status = RoutingEngineStatus.NF, message = report(res.StatusCode) }; }
 
         if (res.StatusCode != HttpStatusCode.OK) {
             return new() { status = RoutingEngineStatus.UN, message = report(res.StatusCode) };
@@ -139,14 +139,14 @@ internal static class ShortestPath
 
         try {
             ans = JsonSerializer.Deserialize<Answer>(body);
-        } catch (Exception ex) { return new() { status = RoutingEngineStatus.BR, message = ex.Message }; }
+        } catch (Exception ex) { return new() { status = RoutingEngineStatus.NF, message = ex.Message }; }
 
-        if (ans.trip is null) { return new() { status = RoutingEngineStatus.BR, message = "Got empty Answer object." }; }
+        if (ans.trip is null) { return new() { status = RoutingEngineStatus.NF, message = "Got empty Answer object." }; }
 
         if (ans.trip.status is null || ans.trip.status != 0) {
             return new()
             {
-                status = RoutingEngineStatus.BR,
+                status = RoutingEngineStatus.NF,
                 message = "Got missing or malformed status on trip object." + Environment.NewLine + "[message] " + ans.trip.status_message
             };
         }
@@ -154,7 +154,7 @@ internal static class ShortestPath
         if (ans.trip.summary is null || ans.trip.summary.length is null || ans.trip.summary.time is null) {
             return new()
             {
-                status = RoutingEngineStatus.BR,
+                status = RoutingEngineStatus.NF,
                 message = "Got missing or malformed summary on trip object."
             };
         }
@@ -162,7 +162,7 @@ internal static class ShortestPath
         if (ans.trip.legs is null || ans.trip.legs.Count == 0) {
             return new()
             {
-                status = RoutingEngineStatus.BR,
+                status = RoutingEngineStatus.NF,
                 message = "Got missing or empty list of legs"
             };
         }
@@ -176,7 +176,7 @@ internal static class ShortestPath
             var partial = ans.trip.legs[i].shape;
 
             if (partial is null) {
-                return new() { status = RoutingEngineStatus.BR, message = "Got a leg with missing shape." };
+                return new() { status = RoutingEngineStatus.NF, message = "Got a leg with missing shape." };
             }
 
             foreach (var point in decode(partial)) {

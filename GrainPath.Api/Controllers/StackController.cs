@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using GrainPath.Api.Helpers;
 using GrainPath.Application.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,17 +31,9 @@ public sealed class StackController : ControllerBase
     public async Task<ActionResult<List<FilteredPlace>>> PostAsync(StackRequest request)
     {
         try {
-            // different filters with same keywords are forbidden!
-            var p = new HashSet<string>(request.conditions.Select(c => c.keyword)).Count < request.conditions.Count;
-
-            // invalid numeric condition
-            foreach(var con in request.conditions) {
-                foreach (var ncon in new[] { con.filters.rank, con.filters.capacity, con.filters.minimum_age }) {
-                    p |= ncon is not null && ncon.max < ncon.min;
-                }
-            }
-
-            return (p) ? BadRequest() : Ok(await _context.Model.GetStack(request));
+            return RequestVerifier.Verify(request)
+                ? Ok(await _context.Model.GetStack(request))
+                : BadRequest();
         }
         catch (Exception ex) {
             _logger.LogError(ex.Message);
