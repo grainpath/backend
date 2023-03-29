@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GrainPath.Application.Entities;
+using MongoDB.Bson;
 
 namespace GrainPath.Api.Helpers;
 
@@ -20,6 +21,8 @@ internal static class RequestVerifier
 
         return !p;
     }
+
+    public static bool Verify(PlaceRequest request) => ObjectId.TryParse(request.id, out _);
 
     public static bool Verify(StackRequest request) => verify(request.conditions);
 
