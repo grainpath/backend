@@ -8,7 +8,7 @@ public interface IModel
 {
     public AutocIndex GetAutoc();
 
-    public BoundResponse GetBound();
+    public BoundObject GetBound();
 
     public Task<HeavyPlace> GetPlace(PlaceRequest request);
 

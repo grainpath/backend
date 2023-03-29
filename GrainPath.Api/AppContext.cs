@@ -7,10 +7,9 @@ public interface IAppContext
 
     public AutocIndex Autoc { get; init; }
 
-    public BoundResponse Bound { get; init; }
+    public BoundObject Bound { get; init; }
 
     public IRoutingEngine Engine { get; init; }
-
 }
 
 public class AppContext : IAppContext
@@ -19,8 +18,7 @@ public class AppContext : IAppContext
 
     public AutocIndex Autoc { get; init; }
 
-    public BoundResponse Bound { get; init; }
+    public BoundObject Bound { get; init; }
 
     public IRoutingEngine Engine { get; init; }
-
 }

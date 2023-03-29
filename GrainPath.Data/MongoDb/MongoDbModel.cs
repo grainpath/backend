@@ -15,7 +15,7 @@ internal sealed class MongoDbModel : IModel
 
     public AutocIndex GetAutoc() => Autoc.Act(_database);
 
-    public BoundResponse GetBound() => Bound.Act(_database);
+    public BoundObject GetBound() => Bound.Act(_database);
 
     public Task<HeavyPlace> GetPlace(PlaceRequest request) => Place.Act(_database, request);
 

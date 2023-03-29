@@ -39,7 +39,7 @@ internal static class Bound
         public Limits limits { get; set; }
     }
 
-    public static BoundResponse Act(IMongoDatabase database)
+    public static BoundObject Act(IMongoDatabase database)
     {
         var limits = database
             .GetCollection<Document>(MongoDbConst.IndexCollection)
