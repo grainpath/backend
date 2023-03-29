@@ -6,14 +6,14 @@ namespace GrainPath.Application.Entities;
 public sealed class ShortestPathObject
 {
     /// <summary>
-    /// Distance of the route in <b>kilometres</b>.
+    /// Distance of the route in <b>meters</b>.
     /// </summary>
     [Required]
     [Range(0, double.MaxValue)]
     public double? distance { get; set; }
 
     /// <summary>
-    /// Duration of the route in <b>minutes</b>
+    /// Duration of the route in <b>seconds</b>.
     /// </summary>
     [Required]
     [Range(0, double.MaxValue)]

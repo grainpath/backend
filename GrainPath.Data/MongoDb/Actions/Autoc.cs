@@ -28,7 +28,7 @@ internal static class Autoc
     public static AutocIndex Act(IMongoDatabase database)
     {
         var doc = database
-            .GetCollection<Document>(MongoDbConst.IndexCollection)
+            .GetCollection<Document>(MongoDbConst.INDEX_COLLECTION)
             .Find(doc => doc.id == "keywords")
             .FirstOrDefault(); // synchronous!
 

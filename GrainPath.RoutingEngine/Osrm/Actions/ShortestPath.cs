@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using GeoJSON.Text.Geometry;
 using GrainPath.Application.Entities;
-using GrainPath.Application.Interfaces;
 
 namespace GrainPath.RoutingEngine.Osrm.Actions;
 
@@ -15,10 +14,19 @@ internal static class ShortestPath
 {
     private sealed class Route
     {
+        /// <summary>
+        /// Distance of a route in <b>meters</b>.
+        /// </summary>
         public double? distance { get; set; }
 
+        /// <summary>
+        /// Duration of a route in <b>seconds</b>.
+        /// </summary>
         public double? duration { get; set; }
 
+        /// <summary>
+        /// Shape of a route as GeoJSON object.
+        /// </summary>
         public LineString geometry { get; set; }
     }
 
@@ -34,12 +42,12 @@ internal static class ShortestPath
     private static readonly string _prefix = @"/route/v1/foot/";
     private static readonly string _suffix = @"?geometries=geojson&skip_waypoints=true";
 
-    public static async Task<ShortObject> Act(string addr, List<WebPoint> sequence)
+    public static async Task<(ShortestPathObject, ErrorObject)> Act(string addr, List<WebPoint> sequence)
     {
         var sview = sequence.Select(p => p.lon.ToString() + ',' + p.lat.ToString());
         var query = addr + _prefix + string.Join(';', sview) + _suffix;
 
-        var report = (HttpStatusCode code) => $"Osrm server answered with status code ${code}.";
+        var report = (HttpStatusCode code) => $"Routing server answered with status code ${code}.";
 
         /**
          * Osrm http request could return 200 or 400. We consider other status
@@ -47,55 +55,38 @@ internal static class ShortestPath
          * See http://project-osrm.org/docs/v5.24.0/api/#responses
          */
 
-        // http request
+        // http request, procedure maybe changed later
 
         HttpResponseMessage res;
 
         try {
             res = await new HttpClient().GetAsync(query);
-        } catch (Exception ex) { return new() { status = RoutingEngineStatus.UN, message = ex.Message }; }
-
-        if (res.StatusCode == HttpStatusCode.BadRequest) {
-            return new() { status = RoutingEngineStatus.NF, message = report(res.StatusCode) };
         }
+        catch (Exception ex) { return (null, new() { message = ex.Message }); }
 
-        if (res.StatusCode != HttpStatusCode.OK) {
-            return new() { status = RoutingEngineStatus.UN, message = report(res.StatusCode) };
-        }
+        if (res.StatusCode == HttpStatusCode.BadRequest) { return (null, null); }
+
+        if (res.IsSuccessStatusCode) { return (null, new() { message = report(res.StatusCode) }); }
 
         var body = await res.Content.ReadAsStringAsync();
 
-        // deserialize body
-
-        Answer ans;
+        // assume well-formed answer object
 
         try {
-            ans = JsonSerializer.Deserialize<Answer>(body);
-        } catch (Exception ex) { return new() { status = RoutingEngineStatus.NF, message = ex.Message }; }
+            var ans = JsonSerializer.Deserialize<Answer>(body);
 
-        if (ans.code != "Ok" || ans.routes is null || ans.routes.Count == 0) {
-            return new() { status = RoutingEngineStatus.NF, message = ans.message };
-        }
+            if (ans.code != "Ok" || ans.routes.Count == 0) { return (null, null); }
 
-        var route = ans.routes.First();
+            var route = ans.routes.First();
 
-        if (route.distance is null || route.duration is null || route.geometry is null) {
-            return new() { status = RoutingEngineStatus.NF, message = "Empty distance, or duration, or geometry." };
-        }
-
-        // construct object
-
-        return new()
-        {
-            status = RoutingEngineStatus.OK,
-            response = new()
-            {
+            return (new() {
                 distance = route.distance.Value,
                 duration = route.duration.Value,
                 polyline = route.geometry.Coordinates
                     .Select(p => new WebPoint() { lon = p.Longitude, lat = p.Latitude })
                     .ToList()
-            }
-        };
+            }, null);
+        }
+        catch (Exception ex) { return (null, new() { message = ex.Message }); }
     }
 }

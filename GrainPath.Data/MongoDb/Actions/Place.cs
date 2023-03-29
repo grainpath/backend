@@ -6,11 +6,11 @@ namespace GrainPath.Data.MongoDb.Actions;
 
 internal static class Place
 {
-    public static Task<HeavyPlace> Act(IMongoDatabase database, PlaceRequest request)
+    public static Task<HeavyPlace> Act(IMongoDatabase database, string id)
     {
         return database
-            .GetCollection<HeavyPlace>(MongoDbConst.GrainCollection)
-            .Find(grain => grain.id == request.id)
+            .GetCollection<HeavyPlace>(MongoDbConst.GRAIN_COLLECTION)
+            .Find(grain => grain.id == id)
             .FirstOrDefaultAsync();
     }
 }

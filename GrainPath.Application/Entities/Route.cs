@@ -3,20 +3,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GrainPath.Application.Entities;
 
-public sealed class StackRequest
+public sealed class RouteRequest
 {
     /// <summary>
-    /// Coordinates of a pivot point.
+    /// Starting point.
     /// </summary>
     [Required]
-    public WebPoint center { get; set; }
+    public WebPoint source { get; set; }
 
     /// <summary>
-    /// Radius around the center in <b>meters</b>.
+    /// Destination point.
     /// </summary>
     [Required]
-    [Range(0, 12_000)]
-    public double? radius { get; set; }
+    public WebPoint target { get; set; }
+
+    /// <summary>
+    /// Maximum walking distance in <b>meters</b>.
+    /// </summary>
+    [Required]
+    [Range(0, 30_000)]
+    public double? distance { get; set; }
 
     /// <summary>
     /// Search conditions with a keyword and optional features.
@@ -26,8 +32,14 @@ public sealed class StackRequest
     public List<KeywordCondition> conditions { get; set; }
 }
 
-public sealed class StackResponse
+public sealed class RouteObject
 {
+    /// <summary>
+    /// Connect source, target, and waypoints in-between.
+    /// </summary>
+    [Required]
+    public ShortestPathObject path { get; set; }
+
     /// <summary>
     /// Places satisfying given conditions.
     /// </summary>

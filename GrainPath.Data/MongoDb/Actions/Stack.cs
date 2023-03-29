@@ -20,7 +20,7 @@ internal static class Stack
 
     public static async Task<List<FilteredPlace>> Act(IMongoDatabase database, StackRequest request)
     {
-        var l = Math.Max(20, 100 / request.conditions.Count);
+        var l = Math.Max(MongoDbConst.BUCKET_SIZE, MongoDbConst.REQUEST_SIZE / request.conditions.Count);
 
         var b = Builders<HeavyPlace>.Filter
             .Near(p => p.position, GeoJson.Point(GeoJson.Position(request.center.lon.Value, request.center.lat.Value)), maxDistance: request.radius * 1000.0);
@@ -30,8 +30,8 @@ internal static class Stack
         foreach (var cond in request.conditions) {
 
             var places = await database
-                .GetCollection<HeavyPlace>(MongoDbConst.GrainCollection)
-                .Find(b & FilterConstructor.condition2filter(cond))
+                .GetCollection<HeavyPlace>(MongoDbConst.GRAIN_COLLECTION)
+                .Find(b & FilterConstructor.ConditionToFilter(cond))
                 .Limit(l)
                 .ToListAsync();
 

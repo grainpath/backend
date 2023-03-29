@@ -42,7 +42,7 @@ internal static class Bound
     public static BoundObject Act(IMongoDatabase database)
     {
         var limits = database
-            .GetCollection<Document>(MongoDbConst.IndexCollection)
+            .GetCollection<Document>(MongoDbConst.INDEX_COLLECTION)
             .Find(doc => doc.id == "limits")
             .FirstOrDefault() // synchronous!
             .limits;

@@ -14,7 +14,7 @@ using EE = Expression<Func<HeavyPlace, object>>;
 using EB = Expression<Func<HeavyPlace, bool?>>;
 using EC = Expression<Func<HeavyPlace, IEnumerable<string>>>;
 using ET = Expression<Func<HeavyPlace, string>>;
-using EN = Expression<Func<HeavyPlace, int?>>;
+using EN = Expression<Func<HeavyPlace, double?>>;
 
 internal static class FilterDefinitionExtensions
 {
@@ -49,7 +49,7 @@ internal static class FilterConstructor
     ///<summary>
     /// Construct database-specific filter out of the provided keyword condition.
     ///</summary>
-    public static F condition2filter(KeywordCondition condition)
+    public static F ConditionToFilter(KeywordCondition condition)
     {
         var filters = condition.filters;
         var b = Builders<HeavyPlace>.Filter;

@@ -17,7 +17,7 @@ internal sealed class MongoDbModel : IModel
 
     public BoundObject GetBound() => Bound.Act(_database);
 
-    public Task<HeavyPlace> GetPlace(PlaceRequest request) => Place.Act(_database, request);
+    public Task<HeavyPlace> GetPlace(PlaceRequest request) => Place.Act(_database, request.id);
 
     public Task<List<FilteredPlace>> GetStack(StackRequest request) => Stack.Act(_database, request);
 }

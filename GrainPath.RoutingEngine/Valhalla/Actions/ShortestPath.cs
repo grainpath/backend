@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
-using GrainPath.Application.Interfaces;
 
 namespace GrainPath.RoutingEngine.Valhalla.Actions;
 
@@ -29,7 +27,7 @@ internal static class ShortestPath
     private sealed class Summary
     {
         /// <summary>
-        /// Distance of a route in <b>specified units</b> (kilometers).
+        /// Distance of a route in <b>specified units (kilometers)</b>.
         /// </summary>
         public double? length { get; set; }
 
@@ -95,108 +93,57 @@ internal static class ShortestPath
 
     private static string _prefix = "/route?json=";
 
-    public static async Task<ShortObject> Act(string addr, List<WebPoint> sequence)
+    public static async Task<(ShortestPathObject, ErrorObject)> Act(string addr, List<WebPoint> sequence)
     {
         var suffix = new Query() { locations = sequence };
         var query = addr + _prefix + JsonSerializer.Serialize(suffix);
 
-        var report = (HttpStatusCode code) => $"Valhalla server answered with status code ${code}.";
+        var report = (HttpStatusCode code) => $"Routing server answered with status code ${code}.";
 
         /**
          * Valhalla turn-by-turn API follows the Http specification, see documentation at
          * https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#http-status-codes-and-conditions
          */
 
-        // http request
+        // http request, procedure maybe changed later
 
         HttpResponseMessage res;
 
         try {
             res = await new HttpClient().GetAsync(query);
-        } catch (Exception ex) { return new() { status = RoutingEngineStatus.UN, message = ex.Message }; }
-
-        var p = new HttpStatusCode[]
-        {
-            HttpStatusCode.BadRequest,
-            HttpStatusCode.NotFound,
-            HttpStatusCode.MethodNotAllowed,
-            HttpStatusCode.InternalServerError,
-            HttpStatusCode.NotImplemented
-
-        }.Aggregate(false, (prev, next) => { return prev || res.StatusCode == next; });
-
-        if (p) { return new() { status = RoutingEngineStatus.NF, message = report(res.StatusCode) }; }
-
-        if (res.StatusCode != HttpStatusCode.OK) {
-            return new() { status = RoutingEngineStatus.UN, message = report(res.StatusCode) };
         }
+        catch (Exception ex) { return (null, new() { message = ex.Message }); }
+
+        if (res.StatusCode == HttpStatusCode.BadRequest) { return (null, null); }
+
+        if (!res.IsSuccessStatusCode) { return (null, new() { message = report(res.StatusCode) }); }
 
         var body = await res.Content.ReadAsStringAsync();
 
-        // deserialize body
-
-        Answer ans;
+        // assume well-formed answer object
 
         try {
-            ans = JsonSerializer.Deserialize<Answer>(body);
-        } catch (Exception ex) { return new() { status = RoutingEngineStatus.NF, message = ex.Message }; }
+            var ans = JsonSerializer.Deserialize<Answer>(body);
 
-        if (ans.trip is null) { return new() { status = RoutingEngineStatus.NF, message = "Got empty Answer object." }; }
+            var shape = new List<WebPoint>();
 
-        if (ans.trip.status is null || ans.trip.status != 0) {
-            return new()
-            {
-                status = RoutingEngineStatus.NF,
-                message = "Got missing or malformed status on trip object." + Environment.NewLine + "[message] " + ans.trip.status_message
-            };
-        }
+            for (int i = 0; i < ans.trip.legs.Count; ++ i) {
 
-        if (ans.trip.summary is null || ans.trip.summary.length is null || ans.trip.summary.time is null) {
-            return new()
-            {
-                status = RoutingEngineStatus.NF,
-                message = "Got missing or malformed summary on trip object."
-            };
-        }
+                var partial = ans.trip.legs[i].shape;
 
-        if (ans.trip.legs is null || ans.trip.legs.Count == 0) {
-            return new()
-            {
-                status = RoutingEngineStatus.NF,
-                message = "Got missing or empty list of legs"
-            };
-        }
-
-        // deserialize shape
-
-        var shape = new List<WebPoint>();
-
-        for (int i = 0; i < ans.trip.legs.Count; ++ i) {
-
-            var partial = ans.trip.legs[i].shape;
-
-            if (partial is null) {
-                return new() { status = RoutingEngineStatus.NF, message = "Got a leg with missing shape." };
-            }
-
-            foreach (var point in decode(partial)) {
-                if (shape.Count == 0 || point.lon != shape[^1].lon || point.lat != shape[^1].lat) {
-                    shape.Add(point);
+                foreach (var point in decode(partial)) {
+                    if (shape.Count == 0 || point.lon != shape[^1].lon || point.lat != shape[^1].lat) {
+                        shape.Add(point);
+                    }
                 }
             }
-        }
 
-        // construct object
-
-        return new()
-        {
-            status = RoutingEngineStatus.OK,
-            response = new()
-            {
-                distance = ans.trip.summary.length.Value * 1000.0,
+            return (new() {
+                distance = ans.trip.summary.length.Value * 1000,
                 duration = ans.trip.summary.time.Value,
                 polyline = shape
-            }
-        };
+            }, null);
+        }
+        catch (Exception ex) { return (null, new() { message = ex.Message }); }
     }
 }
