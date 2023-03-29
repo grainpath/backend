@@ -1,8 +1,9 @@
 using System.Net.Mime;
-using GrainPath.Application.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
+using BoundResponse = GrainPath.Application.Entities.BoundObject;
 
 namespace GrainPath.Api.Controllers;
 

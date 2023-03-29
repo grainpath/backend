@@ -12,6 +12,7 @@ public sealed class AutocRequest
     public int count { get; set; }
 
     [Required]
+    [MinLength(1)]
     public string prefix { get; set; }
 }
 

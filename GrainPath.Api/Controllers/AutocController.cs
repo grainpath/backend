@@ -1,9 +1,10 @@
-using System.Collections.Generic;
 using System.Net.Mime;
 using GrainPath.Application.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
+using AutocResponse = System.Collections.Generic.List<GrainPath.Application.Entities.AutocItem>;
 
 namespace GrainPath.Api.Controllers;
 
@@ -23,7 +24,7 @@ public sealed class AutocController : ControllerBase
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<List<AutocItem>> Post(AutocRequest request)
+    public ActionResult<AutocResponse> Post(AutocRequest request)
     {
         return Ok(_context.Autoc.TopK(request.prefix, request.count));
     }

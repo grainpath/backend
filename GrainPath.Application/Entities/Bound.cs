@@ -1,5 +1,6 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
+using CollectBound = System.Collections.Generic.List<string>;
 
 namespace GrainPath.Application.Entities;
 
@@ -12,16 +13,16 @@ public sealed class NumericBound
     public int max { get; set; }
 }
 
-public sealed class BoundResponse
+public sealed class BoundObject
 {
     [Required]
-    public List<string> clothes { get; set; }
+    public CollectBound clothes { get; set; }
 
     [Required]
-    public List<string> cuisine { get; set; }
+    public CollectBound cuisine { get; set; }
 
     [Required]
-    public List<string> rental { get; set; }
+    public CollectBound rental { get; set; }
 
     [Required]
     public NumericBound rank { get; set; }
