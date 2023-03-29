@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace GrainPath.Application.Entities;
 
@@ -22,6 +21,7 @@ public class LightPlace
     public WebPoint location { get; set; }
 
     [Required]
+    [MinLength(1)]
     public SortedSet<string> keywords { get; set; }
 }
 
@@ -73,7 +73,7 @@ public sealed class PlacePayment
 }
 
 [BsonIgnoreExtraElements]
-public class PlaceFeatures
+public sealed class PlaceFeatures
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<WebPoint> polygon { get; set; }
@@ -155,7 +155,7 @@ public class PlaceFeatures
 }
 
 [BsonIgnoreExtraElements]
-public class PlaceLinked
+public sealed class PlaceLinked
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string osm { get; set; }
@@ -174,10 +174,10 @@ public class PlaceLinked
 }
 
 [BsonIgnoreExtraElements]
-public class HeavyPlace : LightPlace
+public sealed class HeavyPlace : LightPlace
 {
     [JsonIgnore]
-    public GeoJsonPoint<GeoJson2DCoordinates> position { get; set; }
+    public GeoJsonPoint position { get; set; }
 
     public PlaceLinked linked { get; set; }
 

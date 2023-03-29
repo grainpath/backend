@@ -24,6 +24,8 @@ internal static class RequestVerifier
 
     public static bool Verify(PlaceRequest request) => ObjectId.TryParse(request.id, out _);
 
+    public static bool Verify(ShortRequest request) => request.waypoints.Count < 2;
+
     public static bool Verify(StackRequest request) => verify(request.conditions);
 
     public static bool Verify(RouteRequest request) => verify(request.conditions);

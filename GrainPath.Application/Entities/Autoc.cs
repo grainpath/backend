@@ -43,3 +43,9 @@ public sealed class AutocIndex
             .ToList();
     }
 }
+
+public sealed class AutocResponse
+{
+    [Required]
+    public List<AutocItem> items { get; set; }
+}

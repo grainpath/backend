@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using GrainPath.Api.Helpers;
@@ -28,7 +27,7 @@ public sealed class StackController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<List<FilteredPlace>>> PostAsync(StackRequest request)
+    public async Task<ActionResult<StackResponse>> PostAsync(StackRequest request)
     {
         try {
             return RequestVerifier.Verify(request)

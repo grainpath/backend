@@ -1,10 +1,12 @@
 using System.Net.Mime;
 using System.Threading.Tasks;
+using GrainPath.Api.Helpers;
 using GrainPath.Application.Entities;
-using GrainPath.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
+using ShortResponse = GrainPath.Application.Entities.ShortestPathObject;
 
 namespace GrainPath.Api.Controllers;
 
@@ -29,17 +31,15 @@ public sealed class ShortController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ShortResponse>> PostAsync(ShortRequest request)
     {
-        if (request.waypoints.Count < 2) { return BadRequest(); }
+        if (!RequestVerifier.Verify(request)) { return BadRequest(); }
 
-        var obj = await _context.Engine.GetShortestPath(request.waypoints);
+        var (s, e) = await _context.Engine.GetShortestPath(request.waypoints);
 
-        if (obj.status != RoutingEngineStatus.OK) { _logger.LogError(obj.message); }
+        if (e is not null) {
+            _logger.LogError(e.message);
+            return StatusCode(500);
+        }
 
-        return obj.status switch
-        {
-            RoutingEngineStatus.OK => Ok(obj.response),
-            RoutingEngineStatus.NF => NotFound(),
-            _                      => StatusCode(500)
-        };
+        return (s is not null) ? Ok(s) : NotFound();
     }
 }

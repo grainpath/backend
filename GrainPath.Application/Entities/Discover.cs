@@ -3,18 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GrainPath.Application.Entities;
 
-public class KeywordNumericFilter
+public sealed class KeywordNumericFilter
 {
     [Required]
-    [Range(0, int.MaxValue)]
-    public int min { get; set; }
+    [Range(0, double.MaxValue)]
+    public double? min { get; set; }
 
     [Required]
-    [Range(0, int.MaxValue)]
-    public int max { get; set; }
+    [Range(0, double.MaxValue)]
+    public double? max { get; set; }
 }
 
-public class KeywordCollectFilter
+public sealed class KeywordCollectFilter
 {
     [Required]
     public SortedSet<string> includes { get; set; }
@@ -23,8 +23,10 @@ public class KeywordCollectFilter
     public SortedSet<string> excludes { get; set; }
 }
 
-public class KeywordFilters
+public sealed class KeywordFilters
 {
+    // existens
+
     public object image { get; set; }
 
     public object description { get; set; }
@@ -42,6 +44,8 @@ public class KeywordFilters
     public object charge { get; set; }
 
     public object opening_hours { get; set; }
+
+    // booleans
 
     public bool? fee { get; set; }
 
@@ -61,14 +65,20 @@ public class KeywordFilters
 
     public bool? wheelchair { get; set; }
 
+    // numerics
+
     public KeywordNumericFilter rank { get; set; }
 
     public KeywordNumericFilter capacity { get; set; }
 
     public KeywordNumericFilter minimum_age { get; set; }
 
+    // textuals
+
     [MinLength(1)]
     public string name { get; set; }
+
+    // collects
 
     public KeywordCollectFilter clothes { get; set; }
 
@@ -77,11 +87,24 @@ public class KeywordFilters
     public KeywordCollectFilter rental { get; set; }
 }
 
-public class KeywordCondition
+public sealed class KeywordCondition
 {
+    /// <summary>
+    /// Consider only objects identified as a <b>keyword</b>.
+    /// </summary>
     [Required]
     public string keyword { get; set; }
 
+    /// <summary>
+    /// Additional filters introduced by a user.
+    /// </summary>
     [Required]
     public KeywordFilters filters { get; set; }
+
+    /// <summary>
+    /// Importance of a particular condition.
+    /// </summary>
+    [Required]
+    [Range(1, 5)]
+    public double? priority { get; set; }
 }

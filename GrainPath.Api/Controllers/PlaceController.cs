@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using PlaceResponse = GrainPath.Application.Entities.HeavyPlace;
+
 namespace GrainPath.Api.Controllers;
 
 [ApiController]
@@ -28,7 +30,7 @@ public sealed class PlaceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<HeavyPlace>> PostAsync(PlaceRequest request)
+    public async Task<ActionResult<PlaceResponse>> PostAsync(PlaceRequest request)
     {
         try {
             if (!RequestVerifier.Verify(request)) { return BadRequest(); }

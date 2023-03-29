@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using AutocResponse = System.Collections.Generic.List<GrainPath.Application.Entities.AutocItem>;
-
 namespace GrainPath.Api.Controllers;
 
 [ApiController]
@@ -26,6 +24,6 @@ public sealed class AutocController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<AutocResponse> Post(AutocRequest request)
     {
-        return Ok(_context.Autoc.TopK(request.prefix, request.count));
+        return Ok(new AutocResponse() { items = _context.Autoc.TopK(request.prefix, request.count) });
     }
 }
