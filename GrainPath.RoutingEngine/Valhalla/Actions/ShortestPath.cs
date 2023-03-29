@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
@@ -98,32 +96,23 @@ internal static class ShortestPath
         var suffix = new Query() { locations = sequence };
         var query = addr + _prefix + JsonSerializer.Serialize(suffix);
 
-        var report = (HttpStatusCode code) => $"Routing server answered with status code ${code}.";
-
         /**
          * Valhalla turn-by-turn API follows the Http specification, see documentation at
          * https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#http-status-codes-and-conditions
          */
 
-        // http request, procedure maybe changed later
+        // http request
 
-        HttpResponseMessage res;
+        var (b, e) = await RoutingEngineFetcher.GetBody(query);
 
-        try {
-            res = await new HttpClient().GetAsync(query);
-        }
-        catch (Exception ex) { return (null, new() { message = ex.Message }); }
+        if (e is not null) { return (null, new() { message = e }); }
 
-        if (res.StatusCode == HttpStatusCode.BadRequest) { return (null, null); }
-
-        if (!res.IsSuccessStatusCode) { return (null, new() { message = report(res.StatusCode) }); }
-
-        var body = await res.Content.ReadAsStringAsync();
+        if (b is null) { return (null, null); }
 
         // assume well-formed answer object
 
         try {
-            var ans = JsonSerializer.Deserialize<Answer>(body);
+            var ans = JsonSerializer.Deserialize<Answer>(b);
 
             var shape = new List<WebPoint>();
 

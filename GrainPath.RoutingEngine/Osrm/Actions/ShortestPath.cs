@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GeoJSON.Text.Geometry;
@@ -47,33 +45,24 @@ internal static class ShortestPath
         var sview = sequence.Select(p => p.lon.ToString() + ',' + p.lat.ToString());
         var query = addr + _prefix + string.Join(';', sview) + _suffix;
 
-        var report = (HttpStatusCode code) => $"Routing server answered with status code ${code}.";
-
         /**
          * Osrm http request could return 200 or 400. We consider other status
          * codes as an evidence that the server is temporarily non-operable.
          * See http://project-osrm.org/docs/v5.24.0/api/#responses
          */
 
-        // http request, procedure maybe changed later
+        // http request
 
-        HttpResponseMessage res;
+        var (b, e) = await RoutingEngineFetcher.GetBody(query);
 
-        try {
-            res = await new HttpClient().GetAsync(query);
-        }
-        catch (Exception ex) { return (null, new() { message = ex.Message }); }
+        if (e is not null) { return (null, new() { message = e }); }
 
-        if (res.StatusCode == HttpStatusCode.BadRequest) { return (null, null); }
-
-        if (res.IsSuccessStatusCode) { return (null, new() { message = report(res.StatusCode) }); }
-
-        var body = await res.Content.ReadAsStringAsync();
+        if (b is null) { return (null, null); }
 
         // assume well-formed answer object
 
         try {
-            var ans = JsonSerializer.Deserialize<Answer>(body);
+            var ans = JsonSerializer.Deserialize<Answer>(b);
 
             if (ans.code != "Ok" || ans.routes.Count == 0) { return (null, null); }
 
