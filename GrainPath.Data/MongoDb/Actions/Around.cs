@@ -15,7 +15,7 @@ internal static class Around
         var limit = Math.Max(MongoDbConst.BUCKET_SIZE, MongoDbConst.REQUEST_SIZE / conditions.Count);
 
         var basef = Builders<HeavyPlace>.Filter
-            .NearSphere(p => p.position, GeoJson.Point(GeoJson.Position(center.lon, center.lat)), maxDistance: radius);
+            .NearSphere(p => p.position, GeoJson.Point(new GeoJson2DGeographicCoordinates(center.lon, center.lat)), maxDistance: radius);
 
         return await PlaceFinder.Fetch(database, basef, conditions, limit);
     }
