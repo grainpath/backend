@@ -91,25 +91,20 @@ internal static class ShortestPath
 
     private static string _prefix = "/route?json=";
 
-    public static async Task<(ShortestPathObject, ErrorObject)> Act(string addr, List<WebPoint> sequence)
+    /// <summary>
+    /// Construct and fetch route.
+    /// https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#http-status-codes-and-conditions
+    /// </summary>
+    public static async Task<(ShortestPathObject, ErrorObject)> Act(string addr, List<WebPoint> waypoints)
     {
-        var suffix = new Query() { locations = sequence };
+        var suffix = new Query() { locations = waypoints };
         var query = addr + _prefix + JsonSerializer.Serialize(suffix);
-
-        /**
-         * Valhalla turn-by-turn API follows the Http specification, see documentation at
-         * https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#http-status-codes-and-conditions
-         */
-
-        // http request
 
         var (b, e) = await RoutingEngineFetcher.GetBody(query);
 
         if (e is not null) { return (null, new() { message = e }); }
 
         if (b is null) { return (null, null); }
-
-        // assume well-formed answer object
 
         try {
             var ans = JsonSerializer.Deserialize<Answer>(b);

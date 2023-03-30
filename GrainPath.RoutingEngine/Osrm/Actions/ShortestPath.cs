@@ -37,29 +37,21 @@ internal static class ShortestPath
         public List<Route> routes { get; set; }
     }
 
-    private static readonly string _prefix = @"/route/v1/foot/";
-    private static readonly string _suffix = @"?geometries=geojson&skip_waypoints=true";
+    private static readonly string _prefix = "/route/v1/foot/";
+    private static readonly string _suffix = "?geometries=geojson&skip_waypoints=true";
 
-    public static async Task<(ShortestPathObject, ErrorObject)> Act(string addr, List<WebPoint> sequence)
+    public static async Task<(ShortestPathObject, ErrorObject)> Act(string addr, List<WebPoint> waypoints)
     {
-        var sview = sequence.Select(p => p.lon.ToString() + ',' + p.lat.ToString());
-        var query = addr + _prefix + string.Join(';', sview) + _suffix;
-
         /**
-         * Osrm http request could return 200 or 400. We consider other status
-         * codes as an evidence that the server is temporarily non-operable.
-         * See http://project-osrm.org/docs/v5.24.0/api/#responses
+         * http://project-osrm.org/docs/v5.24.0/api/#responses
+         * http://project-osrm.org/docs/v5.24.0/api/#route-service
          */
 
-        // http request
-
-        var (b, e) = await RoutingEngineFetcher.GetBody(query);
+        var (b, e) = await RoutingEngineFetcher.GetBody(OsrmQueryConstructor.Route(addr, waypoints));
 
         if (e is not null) { return (null, new() { message = e }); }
 
         if (b is null) { return (null, null); }
-
-        // assume well-formed answer object
 
         try {
             var ans = JsonSerializer.Deserialize<Answer>(b);

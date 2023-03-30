@@ -28,5 +28,5 @@ public sealed class ShortestPathObject
 
 public sealed class DistanceMatrixObject
 {
-    // TODO: complete distance matrix object
+    public List<List<double>> distances { get; set; }
 }

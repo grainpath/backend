@@ -12,9 +12,9 @@ public sealed class ValhallaRoutingEngine : IRoutingEngine
 
     public ValhallaRoutingEngine(string addr) { _addr = addr; }
 
-    public async Task<(ShortestPathObject, ErrorObject)> GetShortestPath(List<WebPoint> sequence)
-        => await ShortestPath.Act(_addr, sequence);
+    public async Task<(ShortestPathObject, ErrorObject)> GetShortestPath(List<WebPoint> waypoints)
+        => await ShortestPath.Act(_addr, waypoints);
 
-    public async Task<(DistanceMatrixObject, ErrorObject)> GetDistanceMatrix()
-        => await DistanceMatrix.Act();
+    public async Task<(DistanceMatrixObject, ErrorObject)> GetDistanceMatrix(List<WebPoint> points)
+        => await DistanceMatrix.Act(_addr, points);
 }
