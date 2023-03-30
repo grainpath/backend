@@ -11,7 +11,7 @@ namespace GrainPath.Data.MongoDb.Actions;
 
 internal static class Within
 {
-    public static async Task<List<FilteredPlace>> Act(IMongoDatabase database, List<GeodeticPoint> polygon, List<KeywordCondition> conditions)
+    public static async Task<List<FilteredPlace>> Act(IMongoDatabase database, List<WgsPoint> polygon, List<KeywordCondition> conditions)
     {
         var limit = Math.Max(MongoDbConst.BUCKET_SIZE, MongoDbConst.REQUEST_SIZE / conditions.Count);
 

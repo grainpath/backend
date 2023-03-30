@@ -28,7 +28,7 @@ public sealed class CartesianPoint
 /// <summary>
 /// Representation of a point on an ellipsoidal body.
 /// </summary>
-public sealed class GeodeticPoint
+public sealed class WgsPoint
 {
     /// <summary>
     /// Longitude.
@@ -40,35 +40,12 @@ public sealed class GeodeticPoint
     /// </summary>
     public double lat { get; }
 
-    public GeodeticPoint(double lon, double lat)
+    public WgsPoint(double lon, double lat)
     {
         this.lon = lon; this.lat = lat;
     }
 
     public override string ToString() => $"{{ Lon: {lon}, Lat: {lat} }}";
-}
-
-/// <summary>
-/// Representation of a geodetic points projected onto 2D flat space.
-/// </summary>
-public sealed class ProjectedPoint
-{
-    /// <summary>
-    /// Easting.
-    /// </summary>
-    public double eas { get; set; }
-
-    /// <summary>
-    /// Northing.
-    /// </summary>
-    public double nor { get; set; }
-
-    public ProjectedPoint(double eas, double nor)
-    {
-        this.eas = eas; this.nor = nor;
-    }
-
-    public override string ToString() => $"{{ Eas: {eas}, Nor: {nor} }}";
 }
 
 /// <summary>
@@ -85,7 +62,7 @@ public sealed class WebPoint
     [Range(-85.06, 85.06)]
     public double? lat { get; set; }
 
-    public GeodeticPoint AsGeodetic() => new(lon.Value, lat.Value);
+    public WgsPoint AsWgs() => new(lon.Value, lat.Value);
 
     public CartesianPoint AsCartesian() => new(lon.Value, lat.Value);
 }

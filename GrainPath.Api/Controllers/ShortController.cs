@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using GrainPath.Api.Helpers;
@@ -33,12 +34,10 @@ public sealed class ShortController : ControllerBase
     {
         if (!RequestVerifier.Verify(request)) { return BadRequest(); }
 
-        var (s, e) = await _context.Engine.GetShortestPath(request.waypoints);
+        var points = request.waypoints.Select(w => w.AsWgs()).ToList();
+        var (s, e) = await _context.Engine.GetShortestPath(points);
 
-        if (e is not null) {
-            _logger.LogError(e.message);
-            return StatusCode(500);
-        }
+        if (e is not null) { _logger.LogError(e.message); return StatusCode(500); }
 
         return (s is not null) ? Ok(s) : NotFound();
     }

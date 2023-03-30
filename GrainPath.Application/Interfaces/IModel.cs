@@ -28,12 +28,12 @@ public interface IModel
     /// <param name="center">Geodetic point on Earth.</param>
     /// <param name="radius">Radius of a circle around a point (in meters).</param>
     /// <param name="conditions">Specific conditions.</param>
-    public Task<List<FilteredPlace>> GetAround(GeodeticPoint center, double radius, List<KeywordCondition> conditions);
+    public Task<List<FilteredPlace>> GetAround(WgsPoint center, double radius, List<KeywordCondition> conditions);
 
     /// <summary>
     /// Find places within a given polygon, and satisfying specific conditions.
     /// </summary>
     /// <param name="polygon">Closed polygon.</param>
     /// <param name="conditions">Specific conditions.</param>
-    public Task<List<FilteredPlace>> GetWithin(List<GeodeticPoint> polygon, List<KeywordCondition> conditions);
+    public Task<List<FilteredPlace>> GetWithin(List<WgsPoint> polygon, List<KeywordCondition> conditions);
 }
