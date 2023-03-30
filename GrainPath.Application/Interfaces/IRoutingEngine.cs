@@ -6,7 +6,7 @@ namespace GrainPath.Application.Interfaces;
 
 public interface IRoutingEngine
 {
-    public Task<(ShortestPathObject, ErrorObject)> GetShortestPath(List<WebPoint> waypoints);
+    public Task<(ShortestPathObject, ErrorObject)> GetShortestPath(List<WgsPoint> waypoints);
 
-    public Task<(DistanceMatrixObject, ErrorObject)> GetDistanceMatrix(List<WebPoint> points);
+    public Task<(DistanceMatrixObject, ErrorObject)> GetDistanceMatrix(List<WgsPoint> waypoints);
 }

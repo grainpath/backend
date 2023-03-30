@@ -18,7 +18,7 @@ internal static class DistanceMatrix
         public List<List<double>> distances { get; set; }
     }
 
-    public static async Task<(DistanceMatrixObject, ErrorObject)> Act(string addr, List<WebPoint> waypoints)
+    public static async Task<(DistanceMatrixObject, ErrorObject)> Act(string addr, List<WgsPoint> waypoints)
     {
         /**
          * http://project-osrm.org/docs/v5.24.0/api/#responses

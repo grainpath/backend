@@ -8,15 +8,6 @@ namespace GrainPath.RoutingEngine.Valhalla.Actions;
 
 internal static class ShortestPath
 {
-    private sealed class Query
-    {
-        public string units => "kilometers";
-
-        public string costing => "pedestrian";
-
-        public List<WebPoint> locations { get; set; }
-    }
-
     private sealed class Leg
     {
         public string shape { get; set; }
@@ -95,12 +86,9 @@ internal static class ShortestPath
     /// Construct and fetch route.
     /// https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#http-status-codes-and-conditions
     /// </summary>
-    public static async Task<(ShortestPathObject, ErrorObject)> Act(string addr, List<WebPoint> waypoints)
+    public static async Task<(ShortestPathObject, ErrorObject)> Act(string addr, List<WgsPoint> waypoints)
     {
-        var suffix = new Query() { locations = waypoints };
-        var query = addr + _prefix + JsonSerializer.Serialize(suffix);
-
-        var (b, e) = await RoutingEngineFetcher.GetBody(query);
+        var (b, e) = await RoutingEngineFetcher.GetBody(ValhallaQueryConstructor.Route(addr, waypoints));
 
         if (e is not null) { return (null, new() { message = e }); }
 
