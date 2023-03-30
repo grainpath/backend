@@ -31,7 +31,7 @@ public sealed class StackController : ControllerBase
     {
         try {
             return RequestVerifier.Verify(request)
-                ? Ok(await _context.Model.GetStack(request))
+                ? Ok(await _context.Model.GetAround(request.center.AsGeodetic(), request.radius.Value, request.conditions))
                 : BadRequest();
         }
         catch (Exception ex) {

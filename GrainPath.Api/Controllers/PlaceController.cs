@@ -35,7 +35,7 @@ public sealed class PlaceController : ControllerBase
         try {
             if (!RequestVerifier.Verify(request)) { return BadRequest(); }
 
-            var grain = await _context.Model.GetPlace(request);
+            var grain = await _context.Model.GetPlace(request.id);
             return grain is not null ? Ok(grain) : NotFound();
         }
         catch (Exception ex) {

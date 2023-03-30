@@ -6,11 +6,34 @@ namespace GrainPath.Application.Interfaces;
 
 public interface IModel
 {
+    /// <summary>
+    /// Construct an index used for autocomplete functionality.
+    /// </summary>
     public AutocIndex GetAutoc();
 
+    /// <summary>
+    /// Get valid bounds for a certain conditions.
+    /// </summary>
     public BoundObject GetBound();
 
-    public Task<HeavyPlace> GetPlace(PlaceRequest request);
+    /// <summary>
+    /// Fetch place by id.
+    /// </summary>
+    /// <param name="id">Id as per stored in the database.</param>
+    public Task<HeavyPlace> GetPlace(string id);
 
-    public Task<List<FilteredPlace>> GetStack(StackRequest request);
+    /// <summary>
+    /// Find places around a point satisfying specific conditions.
+    /// </summary>
+    /// <param name="center">Geodetic point on Earth.</param>
+    /// <param name="radius">Radius of a circle around a point (in meters).</param>
+    /// <param name="conditions">Specific conditions.</param>
+    public Task<List<FilteredPlace>> GetAround(GeodeticPoint center, double radius, List<KeywordCondition> conditions);
+
+    /// <summary>
+    /// Find places within a given polygon, and satisfying specific conditions.
+    /// </summary>
+    /// <param name="polygon">Closed polygon.</param>
+    /// <param name="conditions">Specific conditions.</param>
+    public Task<List<FilteredPlace>> GetWithin(List<GeodeticPoint> polygon, List<KeywordCondition> conditions);
 }

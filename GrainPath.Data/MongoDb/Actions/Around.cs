@@ -1,0 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using GrainPath.Application.Entities;
+using GrainPath.Data.MongoDb.Helpers;
+using MongoDB.Driver;
+using MongoDB.Driver.GeoJsonObjectModel;
+
+namespace GrainPath.Data.MongoDb.Actions;
+
+internal static class Around
+{
+    public static async Task<List<FilteredPlace>> Act(IMongoDatabase database, GeodeticPoint center, double radius, List<KeywordCondition> conditions)
+    {
+        var limit = Math.Max(MongoDbConst.BUCKET_SIZE, MongoDbConst.REQUEST_SIZE / conditions.Count);
+
+        var basef = Builders<HeavyPlace>.Filter
+            .NearSphere(p => p.position, GeoJson.Point(GeoJson.Position(center.lon, center.lat)), maxDistance: radius);
+
+        return await PlaceFinder.Fetch(database, basef, conditions, limit);
+    }
+}

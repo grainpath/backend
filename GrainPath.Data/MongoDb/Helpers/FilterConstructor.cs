@@ -6,7 +6,7 @@ using GrainPath.Application.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace GrainPath.Data.MongoDb;
+namespace GrainPath.Data.MongoDb.Helpers;
 
 using B = FilterDefinitionBuilder<HeavyPlace>;
 using F = FilterDefinition<HeavyPlace>;
