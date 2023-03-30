@@ -8,11 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
+    <PackageReference Include="NetTopologySuite" Version="2.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GrainPath.Domain\GrainPath.Domain.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\PruningRadixTrie\PruningRadixTrie.csproj" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="GrainPath.Test" />
   </ItemGroup>
 
 </Project>
