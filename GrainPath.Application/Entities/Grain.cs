@@ -18,7 +18,7 @@ public class LightPlace
     public string name { get; set; }
 
     [Required]
-    public WebPoint location { get; set; }
+    public WgsPoint location { get; set; }
 
     [Required]
     [MinLength(1)]
@@ -76,7 +76,7 @@ public sealed class PlacePayment
 public sealed class PlaceFeatures
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<WebPoint> polygon { get; set; }
+    public List<WgsPoint> polygon { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string name { get; set; }

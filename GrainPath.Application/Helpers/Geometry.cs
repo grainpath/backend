@@ -84,7 +84,7 @@ internal static class Spherical
     /// Calculate midpoint (use <b>ONLY</b> for small distances).
     /// </summary>
     private static WgsPoint Midpoint(WgsPoint p1, WgsPoint p2)
-        => new WgsPoint((p1.lon + p2.lon) / 2, (p1.lat + p2.lat) / 2);
+        => new((p1.lon + p2.lon) / 2.0, (p1.lat + p2.lat) / 2.0);
 
     /// <summary>
     /// Calculate great-circle distance (use <b>ONLY</b> for small distances).

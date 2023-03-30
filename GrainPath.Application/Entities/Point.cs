@@ -3,49 +3,19 @@ using System.ComponentModel.DataAnnotations;
 namespace GrainPath.Application.Entities;
 
 /// <summary>
-/// Representation of a point embedded in two-dimensional Cartesian space.
-/// </summary>
-public sealed class CartesianPoint
-{
-    /// <summary>
-    /// X-offset from the origin.
-    /// </summary>
-    public double x { get; }
-
-    /// <summary>
-    /// Y-offset from the origin.
-    /// </summary>
-    public double y { get; }
-
-    public CartesianPoint(double x, double y)
-    {
-        this.x = x; this.y = y;
-    }
-
-    public override string ToString() => $"{{ X: {x}, Y: {y} }}";
-}
-
-/// <summary>
 /// Representation of a point on an ellipsoidal body.
 /// </summary>
 public sealed class WgsPoint
 {
-    /// <summary>
-    /// Longitude.
-    /// </summary>
+    [Required]
+    [Range(-180.0, 180.0)]
     public double lon { get; }
 
-    /// <summary>
-    /// Latitude.
-    /// </summary>
+    [Required]
+    [Range(-85.06, 85.06)]
     public double lat { get; }
 
-    public WgsPoint(double lon, double lat)
-    {
-        this.lon = lon; this.lat = lat;
-    }
-
-    public override string ToString() => $"{{ Lon: {lon}, Lat: {lat} }}";
+    public WgsPoint(double lon, double lat) { this.lon = lon; this.lat = lat; }
 }
 
 /// <summary>
@@ -62,7 +32,7 @@ public sealed class WebPoint
     [Range(-85.06, 85.06)]
     public double? lat { get; set; }
 
-    public WgsPoint AsWgs() => new(lon.Value, lat.Value);
+    public WebPoint(double? lon, double? lat) { this.lon = lon; this.lat = lat; }
 
-    public CartesianPoint AsCartesian() => new(lon.Value, lat.Value);
+    public WgsPoint AsWgs() => new(lon.Value, lat.Value);
 }

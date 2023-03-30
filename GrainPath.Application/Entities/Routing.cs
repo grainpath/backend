@@ -23,7 +23,7 @@ public sealed class ShortestPathObject
     /// Ordered sequence of points representing connected linestring.
     /// </summary>
     [Required]
-    public List<WebPoint> polyline { get; set; }
+    public List<WgsPoint> polyline { get; set; }
 }
 
 public sealed class DistanceMatrixObject
