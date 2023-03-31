@@ -34,12 +34,12 @@ public sealed class RouteController : ControllerBase
     {
         if (!RequestVerifier.Verify(request)) { return BadRequest(); }
 
-        var (r, e) = await RouteFinder.Find(
+        var (route, err) = await RouteFinder.Find(
             _context.Model, _context.Engine, request.source.AsWgs(),
             request.target.AsWgs(), request.distance.Value, request.conditions);
 
-        if (e is not null) { _logger.LogError(e.message); return StatusCode(500); }
+        if (err is not null) { _logger.LogError(err.message); return StatusCode(500); }
 
-        return (r is not null) ? Ok(r) : NotFound();
+        return (route is not null) ? Ok(route) : NotFound();
     }
 }

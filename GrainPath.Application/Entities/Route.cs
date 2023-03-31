@@ -41,8 +41,8 @@ public sealed class RouteObject
     public ShortestPathObject path { get; set; }
 
     /// <summary>
-    /// Places satisfying given conditions.
+    /// Ordered sequence of places satisfying given conditions.
     /// </summary>
     [Required]
-    public List<FilteredPlace> places { get; set; }
+    public List<FilteredPlace> order { get; set; }
 }
