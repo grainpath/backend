@@ -64,7 +64,7 @@ internal static class ShortestPath
                 distance = route.distance.Value,
                 duration = route.duration.Value,
                 polyline = route.geometry.Coordinates
-                    .Select(p => new WebPoint() { lon = p.Longitude, lat = p.Latitude })
+                    .Select(p => new WgsPoint(p.Longitude, p.Latitude))
                     .ToList()
             }, null);
         }

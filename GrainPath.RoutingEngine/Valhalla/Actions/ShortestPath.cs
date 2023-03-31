@@ -45,7 +45,7 @@ internal static class ShortestPath
     /// <summary>
     /// Based on <see href="https://valhalla.github.io/valhalla/decoding/"/>.
     /// </summary>
-    private static List<WebPoint> decode(string polyline)
+    private static List<WgsPoint> decode(string polyline)
     {
         int i = 0;
         double precision = 1.0 / 1e6;
@@ -64,7 +64,7 @@ internal static class ShortestPath
             return prev + ((result & 1) == 1 ? ~(result >> 1) : result >> 1);
         };
 
-        var points = new List<WebPoint>();
+        var points = new List<WgsPoint>();
         int lastLon = 0, lastLat = 0;
 
         while (i < polyline.Length) {
@@ -72,7 +72,7 @@ internal static class ShortestPath
             int lon = deserialize(lastLon);
             int lat = deserialize(lastLat);
 
-            points.Add(new() { lon = lon * precision, lat = lat * precision });
+            points.Add(new(lon * precision, lat * precision));
             lastLon = lon;
             lastLat = lat;
         }
@@ -97,7 +97,7 @@ internal static class ShortestPath
         try {
             var ans = JsonSerializer.Deserialize<Answer>(b);
 
-            var shape = new List<WebPoint>();
+            var shape = new List<WgsPoint>();
 
             for (int i = 0; i < ans.trip.legs.Count; ++ i) {
 
