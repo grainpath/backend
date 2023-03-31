@@ -9,6 +9,8 @@ internal static class ValhallaQueryConstructor
     private sealed class PedestrianOptions
     {
         public bool shortest { get; set; } = true;
+
+        public bool disable_hierarchy_pruning { get; set; } = true;
     }
 
     private sealed class CostingOptions
