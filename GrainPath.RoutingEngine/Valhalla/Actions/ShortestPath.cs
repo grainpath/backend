@@ -111,7 +111,7 @@ internal static class ShortestPath
             }
 
             return (new() {
-                distance = ans.trip.summary.length.Value * 1000,
+                distance = ans.trip.summary.length.Value * 1000.0,
                 duration = ans.trip.summary.time.Value,
                 polyline = shape
             }, null);

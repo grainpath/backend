@@ -8,16 +8,17 @@ namespace GrainPath.RoutingEngine.Osrm.Actions;
 
 internal static class DistanceMatrix
 {
-    private static readonly string _prefix = "/table/v1/foot/";
-    private static readonly string _suffix = "?annotations=distance&skip_waypoints=true";
-
     private sealed class Answer
     {
         public string code { get; set; }
 
-        public List<List<double>> distances { get; set; }
+        public List<List<double>> durations { get; set; }
     }
 
+    /// <summary>
+    /// Find durations of fastest paths between all pairs of points.
+    /// </summary>
+    /// <returns>Distance matrix in seconds.</returns>
     public static async Task<(DistanceMatrixObject, ErrorObject)> Act(string addr, List<WgsPoint> waypoints)
     {
         /**
@@ -36,7 +37,7 @@ internal static class DistanceMatrix
 
             if (ans.code != "Ok") { return (null, null); }
 
-            return (new() { distances = ans.distances }, null);
+            return (new() { distances = ans.durations }, null);
         }
         catch (Exception ex) { return (null, new() { message = ex.Message }); }
     }

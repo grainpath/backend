@@ -13,15 +13,22 @@ internal static class DistanceMatrix
     {
         internal sealed class Item
         {
+            /// <summary>
+            /// Distance in kilometers.
+            /// </summary>
             public double distance { get; set; }
         }
 
         public List<List<Item>> sources_to_targets { get; set; }
     }
 
-    public static async Task<(DistanceMatrixObject, ErrorObject)> Act(string addr, List<WgsPoint> points)
+    /// <summary>
+    /// Find shortest paths between all pairs of points.
+    /// </summary>
+    /// <returns>Distance matrix object in meters.</returns>
+    public static async Task<(DistanceMatrixObject, ErrorObject)> Act(string addr, List<WgsPoint> waypoints)
     {
-        var (b, e) = await RoutingEngineFetcher.GetBody(ValhallaQueryConstructor.Table(addr, points));
+        var (b, e) = await RoutingEngineFetcher.GetBody(ValhallaQueryConstructor.Table(addr, waypoints));
 
         if (e is not null) { return (null, new() { message = e }); }
 
@@ -31,7 +38,7 @@ internal static class DistanceMatrix
             var ans = JsonSerializer.Deserialize<Answer>(b);
 
             return (new() {
-                distances = ans.sources_to_targets.Select(row => row.Select(col => col.distance).ToList()).ToList()
+                distances = ans.sources_to_targets.Select(row => row.Select(col => col.distance * 1000.0).ToList()).ToList()
             }, null);
         }
         catch (Exception ex) { return (null, new() { message = ex.Message }); }
