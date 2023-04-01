@@ -4,7 +4,7 @@ using GrainPath.Application.Entities;
 
 namespace GrainPath.Application.Solvers;
 
-internal sealed class RandomHeuristic : ISolver
+internal sealed class RandomSolver : ISolver
 {
     public List<FilteredPlace> Decide(List<FilteredPlace> places, double distance, List<KeywordCondition> conditions, List<List<double>> matrix)
     {
@@ -18,6 +18,7 @@ internal sealed class RandomHeuristic : ISolver
         {
             idx = rnd.Next(idx, places.Count);
             res.Add(places[idx]);
+            ++idx;
         }
 
         return res;

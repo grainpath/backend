@@ -80,8 +80,6 @@ internal static class ShortestPath
         return points;
     }
 
-    private static string _prefix = "/route?json=";
-
     /// <summary>
     /// Construct and fetch route.
     /// https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#http-status-codes-and-conditions

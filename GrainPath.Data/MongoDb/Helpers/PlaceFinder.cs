@@ -10,16 +10,9 @@ namespace GrainPath.Data.MongoDb.Helpers;
 
 internal static class PlaceFinder
 {
-    private class PlaceComparer : IEqualityComparer<FilteredPlace>
-    {
-        public bool Equals(FilteredPlace l, FilteredPlace r) => l.place.id == r.place.id;
-
-        public int GetHashCode([DisallowNull] FilteredPlace obj) => throw new System.NotImplementedException();
-    }
-
     public static async Task<List<FilteredPlace>> Fetch(IMongoDatabase database, FilterDefinition<HeavyPlace> basef, List<KeywordCondition> conditions, int limit)
     {
-        var r = new HashSet<FilteredPlace>(new PlaceComparer());
+        var r = new Dictionary<string, FilteredPlace>();
 
         foreach (var cond in conditions) {
 
@@ -35,13 +28,13 @@ internal static class PlaceFinder
                 .Select(p => new FilteredPlace() { place = p, satisfy = new() { cond.keyword } });
 
             foreach (var item in items) {
-                if (r.TryGetValue(item, out var val)) {
+                if (r.TryGetValue(item.place.id, out var val)) {
                     val.satisfy.Add(cond.keyword);
                 }
-                else { r.Add(item); }
+                else { r.Add(item.place.id, item); }
             }
         }
 
-        return r.ToList();
+        return r.Values.ToList();
     }
 }

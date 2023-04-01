@@ -11,9 +11,9 @@ namespace GrainPath.Application.Handlers;
 public static class RouteFinder
 {
     /// <summary>
-    /// Construct <b>ordered</b> sequence of waypoints.
+    /// Concatenate waypoints into properly ordered sequence.
     /// </summary>
-    private static List<WgsPoint> GetWaypoints(WgsPoint source, WgsPoint target, IEnumerable<WgsPoint> places)
+    private static List<WgsPoint> concat(WgsPoint source, WgsPoint target, IEnumerable<WgsPoint> places)
     {
         var waypoints = new List<WgsPoint>() { source };
         waypoints.AddRange(places);
@@ -36,7 +36,7 @@ public static class RouteFinder
 
         // distance matrix
 
-        var (mat, err1) = await engine.GetDistanceMatrix(GetWaypoints(source, target, places.Select(p => p.place.location)));
+        var (mat, err1) = await engine.GetDistanceMatrix(concat(source, target, places.Select(p => p.place.location)));
 
         if (err1 is not null) { return (null, err1); }
 
@@ -50,7 +50,7 @@ public static class RouteFinder
 
         // construct polyline
 
-        var (path, err2) = await engine.GetShortestPath(GetWaypoints(source, target, order.Select(p => p.place.location)));
+        var (path, err2) = await engine.GetShortestPath(concat(source, target, order.Select(p => p.place.location)));
 
         if (err2 is not null) { return (null, err2); }
 
