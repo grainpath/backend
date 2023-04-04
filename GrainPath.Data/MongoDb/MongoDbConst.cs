@@ -10,7 +10,7 @@ internal static class MongoDbConst
 
     public static string INDEX_COLLECTION { get; } = "index";
 
-    public static int BUCKET_SIZE { get; } = 20;
+    public static int BUCKET_SIZE { get; } = 25;
 
     public static int REQUEST_SIZE { get; } = 100;
 }

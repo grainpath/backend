@@ -18,7 +18,7 @@ internal static class DistanceMatrix
     /// <summary>
     /// Find durations of fastest paths between all pairs of points.
     /// </summary>
-    /// <returns>Distance matrix in seconds.</returns>
+    /// <returns>Distance matrix in meters.</returns>
     public static async Task<(DistanceMatrixObject, ErrorObject)> Act(string addr, List<WgsPoint> waypoints)
     {
         /**
@@ -36,6 +36,14 @@ internal static class DistanceMatrix
             var ans = JsonSerializer.Deserialize<Answer>(b);
 
             if (ans.code != "Ok") { return (null, null); }
+
+            var coeff = 5000.0 / 3600.0;
+
+            for (int r = 0; r < ans.durations.Count; ++r) {
+                for (int c = 0; c < ans.durations.Count; ++c) {
+                    ans.durations[r][c] *= coeff;
+                }
+            }
 
             return (new() { distances = ans.durations }, null);
         }

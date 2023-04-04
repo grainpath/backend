@@ -100,11 +100,4 @@ public sealed class KeywordCondition
     /// </summary>
     [Required]
     public KeywordFilters filters { get; set; }
-
-    /// <summary>
-    /// Importance of a particular condition.
-    /// </summary>
-    [Required]
-    [Range(1, 5)]
-    public double? priority { get; set; }
 }

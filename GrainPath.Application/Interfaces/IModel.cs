@@ -35,5 +35,5 @@ public interface IModel
     /// </summary>
     /// <param name="polygon">Closed polygon.</param>
     /// <param name="conditions">Specific conditions.</param>
-    public Task<List<FilteredPlace>> GetWithin(List<WgsPoint> polygon, List<KeywordCondition> conditions);
+    public Task<List<FilteredPlace>> GetNearestWithin(List<WgsPoint> polygon, WgsPoint centroid, double radius, List<KeywordCondition> conditions);
 }

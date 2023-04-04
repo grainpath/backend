@@ -71,6 +71,12 @@ internal static class Spherical
     private static double LatRadDif(WgsPoint p1, WgsPoint p2) => DegToRad(Math.Abs(p1.lat - p2.lat));
 
     /// <summary>
+    /// Calculate midpoint (use <b>ONLY</b> for small distances).
+    /// </summary>
+    public static WgsPoint Midpoint(WgsPoint p1, WgsPoint p2)
+        => new((p1.lon + p2.lon) / 2.0, (p1.lat + p2.lat) / 2.0);
+
+    /// <summary>
     /// Calculate angle in counter-clockwise direction.
     /// </summary>
     /// <returns>Angle in radians.</returns>
@@ -79,12 +85,6 @@ internal static class Spherical
         var lat = DegToRad(Midpoint(p1, p2).lat);
         return Math.Atan((DegToRad(p2.lat - p1.lat) * LatRadCost(lat)) / (DegToRad(p2.lon - p1.lon) * LonRadCost(lat)));
     }
-
-    /// <summary>
-    /// Calculate midpoint (use <b>ONLY</b> for small distances).
-    /// </summary>
-    private static WgsPoint Midpoint(WgsPoint p1, WgsPoint p2)
-        => new((p1.lon + p2.lon) / 2.0, (p1.lat + p2.lat) / 2.0);
 
     /// <summary>
     /// Calculate great-circle distance (use <b>ONLY</b> for small distances).

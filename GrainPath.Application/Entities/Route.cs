@@ -46,3 +46,10 @@ public sealed class RouteObject
     [Required]
     public List<FilteredPlace> order { get; set; }
 }
+
+public sealed class RouteResponse
+{
+    [Required]
+    [MinLength(1)]
+    public List<RouteObject> routes { get; set; }
+}

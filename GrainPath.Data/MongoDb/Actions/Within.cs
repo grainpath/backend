@@ -11,12 +11,17 @@ namespace GrainPath.Data.MongoDb.Actions;
 
 internal static class Within
 {
-    public static async Task<List<FilteredPlace>> Act(IMongoDatabase database, List<WgsPoint> polygon, List<KeywordCondition> conditions)
+    public static async Task<List<FilteredPlace>> Act(IMongoDatabase database, List<WgsPoint> polygon, WgsPoint centroid, double distance, List<KeywordCondition> conditions)
     {
         var limit = Math.Max(MongoDbConst.BUCKET_SIZE, MongoDbConst.REQUEST_SIZE / conditions.Count);
 
-        var basef = Builders<HeavyPlace>.Filter
+        var base1 = Builders<HeavyPlace>.Filter
+            .Near(p => p.position, GeoJson.Point(new GeoJson2DGeographicCoordinates(centroid.lon, centroid.lat)), maxDistance: distance);
+
+        var base2 = Builders<HeavyPlace>.Filter
             .GeoWithin(p => p.position, GeoJson.Polygon(polygon.Select(point => new GeoJson2DGeographicCoordinates(point.lon, point.lat)).ToArray()));
+
+        var basef = base1 & base2;
 
         return await PlaceFinder.Fetch(database, basef, conditions, limit);
     }
