@@ -73,7 +73,7 @@ public sealed class PlacePayment
 }
 
 [BsonIgnoreExtraElements]
-public sealed class PlaceFeatures
+public sealed class PlaceAttributes
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<WgsPoint> polygon { get; set; }
@@ -161,6 +161,9 @@ public sealed class PlaceLinked
     public string osm { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string mapycz { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string wikidata { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -181,7 +184,7 @@ public sealed class HeavyPlace : LightPlace
 
     public PlaceLinked linked { get; set; }
 
-    public PlaceFeatures features { get; set; }
+    public PlaceAttributes attributes { get; set; }
 }
 
 [BsonIgnoreExtraElements]

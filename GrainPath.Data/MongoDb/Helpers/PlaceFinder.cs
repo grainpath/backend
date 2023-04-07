@@ -19,7 +19,7 @@ internal static class PlaceFinder
             var docs = await database
                 .GetCollection<HeavyPlace>(MongoDbConst.GRAIN_COLLECTION)
                 .Find(basef & FilterConstructor.ConditionToFilter(cond))
-                .Project(Builders<HeavyPlace>.Projection.Exclude(p => p.linked).Exclude(p => p.features).Exclude(p => p.position))
+                .Project(Builders<HeavyPlace>.Projection.Exclude(p => p.linked).Exclude(p => p.attributes).Exclude(p => p.position))
                 .Limit(limit)
                 .ToListAsync();
 

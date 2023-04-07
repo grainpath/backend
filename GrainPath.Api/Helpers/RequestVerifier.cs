@@ -14,7 +14,8 @@ internal static class RequestVerifier
 
         // invalid numeric condition
         foreach(var con in conditions) {
-            foreach (var ncon in new[] { con.filters.rank, con.filters.capacity, con.filters.minimum_age }) {
+            var nums = con.filters.numerics;
+            foreach (var ncon in new[] { nums.rank, nums.capacity, nums.minimum_age }) {
                 p |= ncon is not null && ncon.max < ncon.min;
             }
         }

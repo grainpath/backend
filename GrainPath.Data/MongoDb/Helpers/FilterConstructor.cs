@@ -24,13 +24,13 @@ internal static class FilterDefinitionExtensions
     public static F boolean(this F f, B b, bool? x, EB e)
         => (x is null) ? f : f & b.Eq(e, x);
 
-    public static F numeric(this F f, B b, KeywordNumericFilter x, EN e)
+    public static F numeric(this F f, B b, KeywordFilterNumeric x, EN e)
         => (x is null) ? f : f & b.Gte(e, x.min) & b.Lte(e, x.max);
 
     public static F textual(this F f, B b, string x, ET e)
         => (x is null) ? f : f & b.StringIn(e, new BsonRegularExpression(Regex.Escape(x), "i"));
 
-    public static F collect(this F f, B b, KeywordCollectFilter x, EC e)
+    public static F collect(this F f, B b, KeywordFilterCollect x, EC e)
     {
         f = (x is null || x.includes.Count == 0)
             ? f
@@ -59,39 +59,39 @@ internal static class FilterConstructor
         f = f & b.AnyEq(o => o.keywords, condition.keyword);
 
         f = f
-            .existen(b, filters.image, p => p.features.image)
-            .existen(b, filters.description, p => p.features.description)
-            .existen(b, filters.website, p => p.features.website)
-            .existen(b, filters.address, p => p.features.address)
-            .existen(b, filters.payment, p => p.features.payment)
-            .existen(b, filters.email, p => p.features.email)
-            .existen(b, filters.phone, p => p.features.phone)
-            .existen(b, filters.charge, p => p.features.charge)
-            .existen(b, filters.opening_hours, p => p.features.opening_hours);
+            .existen(b, filters.existens.image, p => p.attributes.image)
+            .existen(b, filters.existens.description, p => p.attributes.description)
+            .existen(b, filters.existens.website, p => p.attributes.website)
+            .existen(b, filters.existens.address, p => p.attributes.address)
+            .existen(b, filters.existens.payment, p => p.attributes.payment)
+            .existen(b, filters.existens.email, p => p.attributes.email)
+            .existen(b, filters.existens.phone, p => p.attributes.phone)
+            .existen(b, filters.existens.charge, p => p.attributes.charge)
+            .existen(b, filters.existens.opening_hours, p => p.attributes.opening_hours);
 
         f = f
-            .boolean(b, filters.fee, p => p.features.fee)
-            .boolean(b, filters.delivery, p => p.features.delivery)
-            .boolean(b, filters.drinking_water, p => p.features.drinking_water)
-            .boolean(b, filters.internet_access, p => p.features.internet_access)
-            .boolean(b, filters.shower, p => p.features.shower)
-            .boolean(b, filters.smoking, p => p.features.smoking)
-            .boolean(b, filters.takeaway, p => p.features.takeaway)
-            .boolean(b, filters.toilets, p => p.features.toilets)
-            .boolean(b, filters.wheelchair, p => p.features.wheelchair);
+            .boolean(b, filters.booleans.fee, p => p.attributes.fee)
+            .boolean(b, filters.booleans.delivery, p => p.attributes.delivery)
+            .boolean(b, filters.booleans.drinking_water, p => p.attributes.drinking_water)
+            .boolean(b, filters.booleans.internet_access, p => p.attributes.internet_access)
+            .boolean(b, filters.booleans.shower, p => p.attributes.shower)
+            .boolean(b, filters.booleans.smoking, p => p.attributes.smoking)
+            .boolean(b, filters.booleans.takeaway, p => p.attributes.takeaway)
+            .boolean(b, filters.booleans.toilets, p => p.attributes.toilets)
+            .boolean(b, filters.booleans.wheelchair, p => p.attributes.wheelchair);
 
         f = f
-            .numeric(b, filters.rank, p => p.features.rank)
-            .numeric(b, filters.capacity, p => p.features.capacity)
-            .numeric(b, filters.minimum_age, p => p.features.minimum_age);
+            .numeric(b, filters.numerics.rank, p => p.attributes.rank)
+            .numeric(b, filters.numerics.capacity, p => p.attributes.capacity)
+            .numeric(b, filters.numerics.minimum_age, p => p.attributes.minimum_age);
 
         f = f
-            .textual(b, filters.name, p => p.features.name);
+            .textual(b, filters.textuals.name, p => p.attributes.name);
 
         f = f
-            .collect(b, filters.rental, p => p.features.rental)
-            .collect(b, filters.clothes, p => p.features.clothes)
-            .collect(b, filters.cuisine, p => p.features.cuisine);
+            .collect(b, filters.collects.rental, p => p.attributes.rental)
+            .collect(b, filters.collects.clothes, p => p.attributes.clothes)
+            .collect(b, filters.collects.cuisine, p => p.attributes.cuisine);
 
         return f;
     }

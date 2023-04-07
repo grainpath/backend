@@ -16,7 +16,7 @@ internal static class Within
         var limit = Math.Max(MongoDbConst.BUCKET_SIZE, MongoDbConst.REQUEST_SIZE / conditions.Count);
 
         var base1 = Builders<HeavyPlace>.Filter
-            .Near(p => p.position, GeoJson.Point(new GeoJson2DGeographicCoordinates(centroid.lon, centroid.lat)), maxDistance: distance);
+            .NearSphere(p => p.position, GeoJson.Point(new GeoJson2DGeographicCoordinates(centroid.lon, centroid.lat)), maxDistance: distance);
 
         var base2 = Builders<HeavyPlace>.Filter
             .GeoWithin(p => p.position, GeoJson.Polygon(polygon.Select(point => new GeoJson2DGeographicCoordinates(point.lon, point.lat)).ToArray()));
