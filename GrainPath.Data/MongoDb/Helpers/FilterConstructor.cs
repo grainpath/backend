@@ -67,13 +67,13 @@ internal static class FilterConstructor
             .existen(b, filters.existens.email, p => p.attributes.email)
             .existen(b, filters.existens.phone, p => p.attributes.phone)
             .existen(b, filters.existens.charge, p => p.attributes.charge)
-            .existen(b, filters.existens.opening_hours, p => p.attributes.opening_hours);
+            .existen(b, filters.existens.openingHours, p => p.attributes.openingHours);
 
         f = f
             .boolean(b, filters.booleans.fee, p => p.attributes.fee)
             .boolean(b, filters.booleans.delivery, p => p.attributes.delivery)
-            .boolean(b, filters.booleans.drinking_water, p => p.attributes.drinking_water)
-            .boolean(b, filters.booleans.internet_access, p => p.attributes.internet_access)
+            .boolean(b, filters.booleans.drinkingWater, p => p.attributes.drinkingWater)
+            .boolean(b, filters.booleans.internetAccess, p => p.attributes.internetAccess)
             .boolean(b, filters.booleans.shower, p => p.attributes.shower)
             .boolean(b, filters.booleans.smoking, p => p.attributes.smoking)
             .boolean(b, filters.booleans.takeaway, p => p.attributes.takeaway)
@@ -83,7 +83,7 @@ internal static class FilterConstructor
         f = f
             .numeric(b, filters.numerics.rank, p => p.attributes.rank)
             .numeric(b, filters.numerics.capacity, p => p.attributes.capacity)
-            .numeric(b, filters.numerics.minimum_age, p => p.attributes.minimum_age);
+            .numeric(b, filters.numerics.minimumAge, p => p.attributes.minimumAge);
 
         f = f
             .textual(b, filters.textuals.name, p => p.attributes.name);

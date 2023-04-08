@@ -21,7 +21,7 @@ public sealed class KeywordFilterExistens
 
     public object charge { get; set; }
 
-    public object opening_hours { get; set; }
+    public object openingHours { get; set; }
 }
 
 public sealed class KeywordFilterBooleans
@@ -30,9 +30,9 @@ public sealed class KeywordFilterBooleans
 
     public bool? delivery { get; set; }
 
-    public bool? drinking_water { get; set; }
+    public bool? drinkingWater { get; set; }
 
-    public bool? internet_access { get; set; }
+    public bool? internetAccess { get; set; }
 
     public bool? shower { get; set; }
 
@@ -62,7 +62,7 @@ public sealed class KeywordFilterNumerics
 
     public KeywordFilterNumeric capacity { get; set; }
 
-    public KeywordFilterNumeric minimum_age { get; set; }
+    public KeywordFilterNumeric minimumAge { get; set; }
 }
 
 public sealed class KeywordFilterTextuals
@@ -113,6 +113,7 @@ public sealed class KeywordCondition
     /// Consider only objects identified as a <b>keyword</b>.
     /// </summary>
     [Required]
+    [MinLength(1)]
     public string keyword { get; set; }
 
     /// <summary>

@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using GrainPath.Domain.Entities;
+
+namespace GrainPath.Domain.Heuristics;
 
 /// <summary>
 /// Implements standard 2-Opt heuristic for TSP on <b>open</b> route. The first
@@ -19,18 +22,22 @@ internal sealed class TwoOptHeuristic
 
         for (int i = 0; i < sequence.Count - 1; ++i) { dist += matrix.Distance(i, i + 1); }
 
-        do {
+        do
+        {
             ++iters;
             change = false;
 
-            for (int i = 0; i < sequence.Count - 3; ++i) {
-                for (int j = i + 1; j < sequence.Count - 2; ++j) {
+            for (int i = 0; i < sequence.Count - 3; ++i)
+            {
+                for (int j = i + 1; j < sequence.Count - 2; ++j)
+                {
                     double diff =
                         - matrix.Distance(sequence[i    ], sequence[i + 1])
                         - matrix.Distance(sequence[j    ], sequence[j + 1])
                         + matrix.Distance(sequence[i    ], sequence[j    ])
                         + matrix.Distance(sequence[i + 1], sequence[j + 1]);
-                    if (diff < 0) {
+                    if (diff < 0)
+                    {
                         dist += diff; change = true; sequence.Reverse(i + 1, j - i);
                     }
                 }

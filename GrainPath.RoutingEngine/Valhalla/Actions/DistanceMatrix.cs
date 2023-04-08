@@ -34,10 +34,12 @@ internal static class DistanceMatrix
 
         if (b is null) { return (null, null); }
 
-        try {
+        try
+        {
             var ans = JsonSerializer.Deserialize<Answer>(b);
 
-            return (new() {
+            return (new()
+            {
                 distances = ans.sources_to_targets.Select(row => row.Select(col => col.distance * 1000.0).ToList()).ToList()
             }, null);
         }

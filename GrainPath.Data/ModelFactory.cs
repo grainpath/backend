@@ -9,14 +9,16 @@ internal static class MongoDbModelFactory
 {
     private static readonly MongoClient _client;
 
-    static MongoDbModelFactory() {
+    static MongoDbModelFactory()
+    {
         var conn = Environment.GetEnvironmentVariable(MongoDbConst.CONNECTION);
         _client = new MongoClient(new MongoUrl(conn));
     }
 
     public static IModel GetInstance()
     {
-        try {
+        try
+        {
             return new MongoDbModel(_client.GetDatabase(MongoDbConst.DATABASE));
         }
         catch { throw new Exception("Failed to get database instance from the given connection string."); }

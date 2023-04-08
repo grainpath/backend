@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+namespace GrainPath.RoutingEngine;
+
 internal static class RoutingEngineFetcher
 {
     public static async Task<(string, string)> GetBody(string query)
@@ -11,7 +13,8 @@ internal static class RoutingEngineFetcher
 
         HttpResponseMessage res;
 
-        try {
+        try
+        {
             res = await new HttpClient().GetAsync(query);
         }
         catch (Exception ex) { return (null, ex.Message); }

@@ -29,7 +29,8 @@ public static class RouteFinder
     {
         var pois = new List<Poi>();
 
-        for (int i = 0; i < places.Count; ++i) {
+        for (int i = 0; i < places.Count; ++i)
+        {
             foreach (var sat in places[i].satisfy) { pois.Add(new Poi(i + 1, sat)); }
         }
 
@@ -44,7 +45,8 @@ public static class RouteFinder
     {
         var places = new List<FilteredPlace>();
 
-        for (int i = 1; i < route.Sequence.Length - 1; ++i) {
+        for (int i = 1; i < route.Sequence.Length - 1; ++i)
+        {
             places.Add(filters[route.Sequence[i]]);
         }
 
@@ -61,7 +63,7 @@ public static class RouteFinder
         // find feasible places
 
         var ellipse = Spherical.BoundingEllipse(source, target, distance);
-        var filters = await model.GetNearestWithin(ellipse, Spherical.Midpoint(source, target),distance / 2.0, conditions);
+        var filters = await model.GetNearestWithin(ellipse, Spherical.Midpoint(source, target), distance / 2.0, conditions);
 
         var locs = Concat(source, filters.Select(f => f.place.location), target);
 
@@ -87,7 +89,8 @@ public static class RouteFinder
 
         var polylines = new List<ShortestPathObject>();
 
-        for (var i = 0; i < routes.Count; ++i) {
+        for (var i = 0; i < routes.Count; ++i)
+        {
             var (path, err2) = await engine.GetShortestPath(routes[i].Sequence.Select(w => locs[w]).ToList());
 
             if (err2 is not null) { return (null, err2); }
@@ -99,7 +102,8 @@ public static class RouteFinder
 
         var objs = new List<RouteObject>();
 
-        for (var i = 0; i < routes.Count; ++i) {
+        for (var i = 0; i < routes.Count; ++i)
+        {
             objs.Add(new() { path = polylines[i], order = GetPlaces(routes[i], filters) });
         }
 

@@ -12,7 +12,7 @@ public class LightPlace
     [BsonId]
     [Required]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string id { get; set; }
+    public string grainId { get; set; }
 
     [Required]
     public string name { get; set; }
@@ -44,7 +44,7 @@ public sealed class PlaceAddress
     public string house { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string postal_code { get; set; }
+    public string postalCode { get; set; }
 }
 
 [BsonIgnoreExtraElements]
@@ -106,7 +106,7 @@ public sealed class PlaceAttributes
     public List<string> charge { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<string> opening_hours { get; set; }
+    public List<string> openingHours { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool? fee { get; set; }
@@ -115,10 +115,10 @@ public sealed class PlaceAttributes
     public bool? delivery { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public bool? drinking_water { get; set; }
+    public bool? drinkingWater { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public bool? internet_access { get; set; }
+    public bool? internetAccess { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool? shower { get; set; }
@@ -142,7 +142,7 @@ public sealed class PlaceAttributes
     public int? capacity { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? minimum_age { get; set; }
+    public int? minimumAge { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public SortedSet<string> clothes { get; set; }

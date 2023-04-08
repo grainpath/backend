@@ -53,8 +53,8 @@ internal static class ShortestPath
         var deserialize = (int prev) =>
         {
             int b, shift = 0, result = 0;
-            do {
-
+            do
+            {
                 b = polyline[i++] - 63;
                 result |= (b & 0x1f) << shift;
                 shift += 5;
@@ -67,8 +67,8 @@ internal static class ShortestPath
         var points = new List<WgsPoint>();
         int lastLon = 0, lastLat = 0;
 
-        while (i < polyline.Length) {
-
+        while (i < polyline.Length)
+        {
             int lon = deserialize(lastLon);
             int lat = deserialize(lastLat);
 
@@ -92,23 +92,27 @@ internal static class ShortestPath
 
         if (b is null) { return (null, null); }
 
-        try {
+        try
+        {
             var ans = JsonSerializer.Deserialize<Answer>(b);
 
             var shape = new List<WgsPoint>();
 
-            for (int i = 0; i < ans.trip.legs.Count; ++ i) {
-
+            for (int i = 0; i < ans.trip.legs.Count; ++i)
+            {
                 var partial = ans.trip.legs[i].shape;
 
-                foreach (var point in decode(partial)) {
-                    if (shape.Count == 0 || point.lon != shape[^1].lon || point.lat != shape[^1].lat) {
+                foreach (var point in decode(partial))
+                {
+                    if (shape.Count == 0 || point.lon != shape[^1].lon || point.lat != shape[^1].lat)
+                    {
                         shape.Add(point);
                     }
                 }
             }
 
-            return (new() {
+            return (new()
+            {
                 distance = ans.trip.summary.length.Value * 1000.0,
                 duration = ans.trip.summary.time.Value,
                 polyline = shape

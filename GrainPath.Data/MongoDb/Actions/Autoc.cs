@@ -34,7 +34,8 @@ internal static class Autoc
 
         var result = new AutocIndex();
 
-        foreach (var item in doc.keywords) {
+        foreach (var item in doc.keywords)
+        {
             result.Add(item.label, item.attributes, item.count);
         }
 

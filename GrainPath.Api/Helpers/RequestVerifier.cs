@@ -13,9 +13,11 @@ internal static class RequestVerifier
         var p = new HashSet<string>(conditions.Select(c => c.keyword)).Count < conditions.Count;
 
         // invalid numeric condition
-        foreach(var con in conditions) {
+        foreach (var con in conditions)
+        {
             var nums = con.filters.numerics;
-            foreach (var ncon in new[] { nums.rank, nums.capacity, nums.minimum_age }) {
+            foreach (var ncon in new[] { nums.rank, nums.capacity, nums.minimumAge })
+            {
                 p |= ncon is not null && ncon.max < ncon.min;
             }
         }
@@ -23,7 +25,7 @@ internal static class RequestVerifier
         return !p;
     }
 
-    public static bool Verify(PlaceRequest request) => ObjectId.TryParse(request.id, out _);
+    public static bool Verify(PlaceRequest request) => ObjectId.TryParse(request.grainId, out _);
 
     public static bool Verify(ShortRequest request) => request.waypoints.Count < 2;
 

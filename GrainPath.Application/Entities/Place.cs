@@ -5,5 +5,5 @@ namespace GrainPath.Application.Entities;
 public sealed class PlaceRequest
 {
     [Required]
-    public string id { get; set; }
+    public string grainId { get; set; }
 }

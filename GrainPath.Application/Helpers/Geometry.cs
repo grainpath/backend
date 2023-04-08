@@ -129,7 +129,8 @@ internal static class Spherical
         var lr = DegToRad(m.lat);
         var cs = new Coordinate[e2.Coordinates.Length];
 
-        for (var i = 0; i < cs.Length; ++i) {
+        for (var i = 0; i < cs.Length; ++i)
+        {
             var pt = e2.Coordinates[i];
             cs[i] = new Coordinate(
                 Spherical.RadToDeg(pt.X / Spherical.LonRadLen(lr)),

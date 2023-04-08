@@ -24,10 +24,12 @@ internal static class IfHeuristic
     {
         var fs = new Dictionary<string, int>();
 
-        foreach (var k in ks) {
+        foreach (var k in ks)
+        {
             fs[k] = 0;
 
-            foreach (var p in ps) {
+            foreach (var p in ps)
+            {
                 if (k == p.Keyword) { ++fs[k]; }
             }
         }
@@ -50,9 +52,12 @@ internal static class IfHeuristic
         double disIncr = double.MaxValue;
         int poiIndex = -1, seqIndex = -1;
 
-        for (var p = 0; p < pois.Count; ++p) {
-            if (keyword == pois[p].Keyword) {
-                for (int i = 0; i < sequence.Count - 1; ++i) {
+        for (var p = 0; p < pois.Count; ++p)
+        {
+            if (keyword == pois[p].Keyword)
+            {
+                for (int i = 0; i < sequence.Count - 1; ++i)
+                {
                     var dis_next = matrix.Distance(sequence[i], pois[p].Order)
                                  + matrix.Distance(pois[p].Order, sequence[i + 1]);
 
@@ -73,18 +78,22 @@ internal static class IfHeuristic
         var rs = new List<Route>();
         var ks = KeywordOrder(keywords, pois);
 
-        while (rs.Count < CNT) {
+        while (rs.Count < CNT)
+        {
             var route = new Route(matrix);
             var disPrev = matrix.Distance(0, matrix.Dim - 1);
 
             // insert only keywords with feasible candidate
 
-            foreach (var keyword in ks) {
+            foreach (var keyword in ks)
+            {
                 var (poiIndex, seqIndex, disIncr) = Candidate(keyword, route.Sequence, pois, matrix);
 
-                if (poiIndex >= 0) {
+                if (poiIndex >= 0)
+                {
                     var disNext = disPrev - matrix.Distance(route.Sequence[seqIndex], route.Sequence[seqIndex + 1]) + disIncr;
-                    if (disNext <= distance) {
+                    if (disNext <= distance)
+                    {
                         disPrev = disNext;
                         pois[poiIndex].Erase();
                         route.Insert(poiIndex, keyword, seqIndex);

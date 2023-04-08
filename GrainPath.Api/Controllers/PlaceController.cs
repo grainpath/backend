@@ -32,13 +32,15 @@ public sealed class PlaceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<PlaceResponse>> PostAsync(PlaceRequest request)
     {
-        try {
+        try
+        {
             if (!RequestVerifier.Verify(request)) { return BadRequest(); }
 
-            var grain = await _context.Model.GetPlace(request.id);
+            var grain = await _context.Model.GetPlace(request.grainId);
             return grain is not null ? Ok(grain) : NotFound();
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             _logger.LogError(ex.Message);
             return StatusCode(500);
         }

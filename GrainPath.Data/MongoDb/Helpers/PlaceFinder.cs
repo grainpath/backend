@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
@@ -14,8 +13,8 @@ internal static class PlaceFinder
     {
         var r = new Dictionary<string, FilteredPlace>();
 
-        foreach (var cond in conditions) {
-
+        foreach (var cond in conditions)
+        {
             var docs = await database
                 .GetCollection<HeavyPlace>(MongoDbConst.GRAIN_COLLECTION)
                 .Find(basef & FilterConstructor.ConditionToFilter(cond))
@@ -27,11 +26,13 @@ internal static class PlaceFinder
                 .Select(d => BsonSerializer.Deserialize<LightPlace>(d))
                 .Select(p => new FilteredPlace() { place = p, satisfy = new() { cond.keyword } });
 
-            foreach (var item in items) {
-                if (r.TryGetValue(item.place.id, out var val)) {
+            foreach (var item in items)
+            {
+                if (r.TryGetValue(item.place.grainId, out var val))
+                {
                     val.satisfy.Add(cond.keyword);
                 }
-                else { r.Add(item.place.id, item); }
+                else { r.Add(item.place.grainId, item); }
             }
         }
 

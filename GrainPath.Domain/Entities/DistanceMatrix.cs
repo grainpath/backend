@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+namespace GrainPath.Domain.Entities;
+
 /// <summary>
 /// Simple wrapper over distance matrix to avoid undesired modifications.
 /// </summary>

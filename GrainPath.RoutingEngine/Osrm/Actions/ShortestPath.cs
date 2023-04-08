@@ -50,14 +50,16 @@ internal static class ShortestPath
 
         if (b is null) { return (null, null); }
 
-        try {
+        try
+        {
             var ans = JsonSerializer.Deserialize<Answer>(b);
 
             if (ans.code != "Ok" || ans.routes.Count == 0) { return (null, null); }
 
             var route = ans.routes.First();
 
-            return (new() {
+            return (new()
+            {
                 distance = route.distance.Value,
                 duration = route.duration.Value,
                 polyline = route.geometry.Coordinates

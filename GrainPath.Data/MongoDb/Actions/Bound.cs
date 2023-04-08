@@ -15,7 +15,7 @@ internal static class Bound
         public string label { get; set; }
     }
 
-    private sealed class Limits
+    private sealed class Bounds
     {
         public List<CollectBound> rental { get; set; }
 
@@ -27,7 +27,7 @@ internal static class Bound
 
         public NumericBound capacity { get; set; }
 
-        public NumericBound minimum_age { get; set; }
+        public NumericBound minimumAge { get; set; }
     }
 
     private sealed class Document
@@ -36,25 +36,25 @@ internal static class Bound
         // [BsonRepresentation(BsonType.ObjectId)]
         public string id { get; set; }
 
-        public Limits limits { get; set; }
+        public Bounds bounds { get; set; }
     }
 
     public static BoundObject Act(IMongoDatabase database)
     {
-        var limits = database
+        var bounds = database
             .GetCollection<Document>(MongoDbConst.INDEX_COLLECTION)
-            .Find(doc => doc.id == "limits")
+            .Find(doc => doc.id == "bounds")
             .FirstOrDefault() // synchronous!
-            .limits;
+            .bounds;
 
         return new ()
         {
-            rental = limits.rental.Select(item => item.label).ToList(),
-            clothes = limits.clothes.Select(item => item.label).ToList(),
-            cuisine = limits.cuisine.Select(item => item.label).ToList(),
-            rank = limits.rank,
-            capacity = limits.capacity,
-            minimum_age = limits.minimum_age,
+            rental = bounds.rental.Select(item => item.label).ToList(),
+            clothes = bounds.clothes.Select(item => item.label).ToList(),
+            cuisine = bounds.cuisine.Select(item => item.label).ToList(),
+            rank = bounds.rank,
+            capacity = bounds.capacity,
+            minimumAge = bounds.minimumAge,
         };
     }
 }

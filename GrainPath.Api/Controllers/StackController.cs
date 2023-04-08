@@ -29,12 +29,14 @@ public sealed class StackController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<StackResponse>> PostAsync(StackRequest request)
     {
-        try {
+        try
+        {
             return RequestVerifier.Verify(request)
                 ? Ok(await _context.Model.GetAround(request.center.AsWgs(), request.radius.Value, request.conditions))
                 : BadRequest();
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             _logger.LogError(ex.Message);
             return StatusCode(500);
         }

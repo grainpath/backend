@@ -31,5 +31,5 @@ public sealed class BoundObject
     public NumericBound capacity { get; set; }
 
     [Required]
-    public NumericBound minimum_age { get; set; }
+    public NumericBound minimumAge { get; set; }
 }

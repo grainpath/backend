@@ -32,19 +32,21 @@ internal static class DistanceMatrix
 
         if (b is null) { return (null, null); }
 
-        try {
+        try
+        {
             var ans = JsonSerializer.Deserialize<Answer>(b);
 
             if (ans.code != "Ok") { return (null, null); }
 
             var coeff = 5000.0 / 3600.0;
 
-            for (int r = 0; r < ans.durations.Count; ++r) {
-                for (int c = 0; c < ans.durations.Count; ++c) {
+            for (int r = 0; r < ans.durations.Count; ++r)
+            {
+                for (int c = 0; c < ans.durations.Count; ++c)
+                {
                     ans.durations[r][c] *= coeff;
                 }
             }
-
             return (new() { distances = ans.durations }, null);
         }
         catch (Exception ex) { return (null, new() { message = ex.Message }); }
