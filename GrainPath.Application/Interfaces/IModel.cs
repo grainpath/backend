@@ -9,18 +9,18 @@ public interface IModel
     /// <summary>
     /// Construct an index used for autocomplete functionality.
     /// </summary>
-    public AutocIndex GetAutoc();
+    public AutocsIndex GetAutocs();
 
     /// <summary>
     /// Get valid bounds for a certain conditions.
     /// </summary>
-    public BoundObject GetBound();
+    public BoundsObject GetBounds();
 
     /// <summary>
-    /// Fetch place by id.
+    /// Fetch entity (place with attributes) by id.
     /// </summary>
-    /// <param name="grainId">Id as per stored in the database.</param>
-    public Task<HeavyPlace> GetPlace(string grainId);
+    /// <param name="placeId">Id as per stored in the database.</param>
+    public Task<Entity> GetEntity(string placeId);
 
     /// <summary>
     /// Find places around a point satisfying specific conditions.

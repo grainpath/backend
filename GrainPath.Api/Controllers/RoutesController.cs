@@ -1,24 +1,22 @@
-using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using GrainPath.Api.Helpers;
 using GrainPath.Application.Entities;
+using GrainPath.Application.Handlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using ShortResponse = GrainPath.Application.Entities.ShortestPathObject;
-
 namespace GrainPath.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/short")]
-public sealed class ShortController : ControllerBase
+[Route("api/v1/routes")]
+public sealed class RouteController : ControllerBase
 {
     private readonly IAppContext _context;
-    private readonly ILogger<ShortController> _logger;
+    private readonly ILogger<RouteController> _logger;
 
-    public ShortController(IAppContext context, ILogger<ShortController> logger)
+    public RouteController(IAppContext context, ILogger<RouteController> logger)
     {
         _context = context; _logger = logger;
     }
@@ -30,15 +28,16 @@ public sealed class ShortController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ShortResponse>> PostAsync(ShortRequest request)
+    public async Task<ActionResult<RoutesResponse>> PostAsync(RoutesRequest request)
     {
         if (!RequestVerifier.Verify(request)) { return BadRequest(); }
 
-        var points = request.waypoints.Select(w => w.AsWgs()).ToList();
-        var (s, e) = await _context.Engine.GetShortestPath(points);
+        var (routes, err) = await RouteFinder.Find(
+            _context.Model, _context.Engine, request.source.AsWgs(),
+            request.target.AsWgs(), request.distance.Value, request.conditions);
 
-        if (e is not null) { _logger.LogError(e.message); return StatusCode(500); }
+        if (err is not null) { _logger.LogError(err.message); return StatusCode(500); }
 
-        return (s is not null) ? Ok(s) : NotFound();
+        return (routes is not null) ? Ok(routes) : NotFound();
     }
 }

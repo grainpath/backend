@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GrainPath.Application.Entities;
 
-public sealed class ShortRequest
+public sealed class DirectRequest
 {
     /// <summary>
     /// <b>Ordered</b> sequence of waypoints to be visited.

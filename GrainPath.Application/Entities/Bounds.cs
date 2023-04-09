@@ -13,7 +13,7 @@ public sealed class NumericBound
     public int max { get; set; }
 }
 
-public sealed class BoundObject
+public sealed class BoundsObject
 {
     [Required]
     public CollectBound clothes { get; set; }

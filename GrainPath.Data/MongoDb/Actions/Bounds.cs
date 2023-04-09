@@ -6,7 +6,7 @@ using MongoDB.Driver;
 
 namespace GrainPath.Data.MongoDb.Actions;
 
-internal static class Bound
+internal static class BoundsAction
 {
     private sealed class CollectBound
     {
@@ -39,7 +39,7 @@ internal static class Bound
         public Bounds bounds { get; set; }
     }
 
-    public static BoundObject Act(IMongoDatabase database)
+    public static BoundsObject Act(IMongoDatabase database)
     {
         var bounds = database
             .GetCollection<Document>(MongoDbConst.INDEX_COLLECTION)
@@ -47,7 +47,7 @@ internal static class Bound
             .FirstOrDefault() // synchronous!
             .bounds;
 
-        return new ()
+        return new()
         {
             rental = bounds.rental.Select(item => item.label).ToList(),
             clothes = bounds.clothes.Select(item => item.label).ToList(),

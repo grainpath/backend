@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GrainPath.Application.Entities;
 
-public sealed class AutocRequest
+public sealed class AutocsRequest
 {
     [Required]
     [Range(1, int.MaxValue)]
@@ -25,7 +25,7 @@ public sealed class AutocItem
     public List<string> attributes { get; set; }
 }
 
-public sealed class AutocIndex
+public sealed class AutocsIndex
 {
     private readonly PruningRadixTrie.PruningRadixTrie _trie = new();
     private readonly Dictionary<string, List<string>> _attributes = new();
@@ -44,7 +44,7 @@ public sealed class AutocIndex
     }
 }
 
-public sealed class AutocResponse
+public sealed class AutocsResponse
 {
     [Required]
     public List<AutocItem> items { get; set; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GrainPath.Application.Entities;
 
-public sealed class StackRequest
+public sealed class PlacesRequest
 {
     /// <summary>
     /// Coordinates of a pivot point.
@@ -26,7 +26,7 @@ public sealed class StackRequest
     public List<KeywordCondition> conditions { get; set; }
 }
 
-public sealed class StackResponse
+public sealed class PlacesResponse
 {
     /// <summary>
     /// Places satisfying given conditions.

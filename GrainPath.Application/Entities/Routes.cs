@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GrainPath.Application.Entities;
 
-public sealed class RouteRequest
+public sealed class RoutesRequest
 {
     /// <summary>
     /// Starting point.
@@ -47,7 +47,7 @@ public sealed class RouteObject
     public List<FilteredPlace> order { get; set; }
 }
 
-public sealed class RouteResponse
+public sealed class RoutesResponse
 {
     [Required]
     [MinLength(1)]

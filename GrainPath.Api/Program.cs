@@ -33,8 +33,8 @@ public class Program
             return new()
             {
                 Model = model,
-                Autoc = model.GetAutoc(),
-                Bound = model.GetBound(),
+                Autocs = model.GetAutocs(),
+                Bounds = model.GetBounds(),
                 Engine = RoutingEngineFactory.GetInstance()
             };
         });

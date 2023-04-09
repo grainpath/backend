@@ -13,15 +13,15 @@ internal sealed class MongoDbModel : IModel
 
     public MongoDbModel(IMongoDatabase database) { _database = database; }
 
-    public AutocIndex GetAutoc() => Autoc.Act(_database);
+    public AutocsIndex GetAutocs() => AutocsAction.Act(_database);
 
-    public BoundObject GetBound() => Bound.Act(_database);
+    public BoundsObject GetBounds() => BoundsAction.Act(_database);
 
-    public Task<HeavyPlace> GetPlace(string grainId) => Place.Act(_database, grainId);
+    public Task<Entity> GetEntity(string placeId) => EntityAction.Act(_database, placeId);
 
     public Task<List<FilteredPlace>> GetAround(WgsPoint center, double radius, List<KeywordCondition> conditions)
-        => Around.Act(_database, center, radius, conditions);
+        => AroundAction.Act(_database, center, radius, conditions);
 
     public Task<List<FilteredPlace>> GetNearestWithin(List<WgsPoint> polygon, WgsPoint centroid, double distance, List<KeywordCondition> conditions)
-        => Within.Act(_database, polygon, centroid, distance, conditions);
+        => WithinAction.Act(_database, polygon, centroid, distance, conditions);
 }

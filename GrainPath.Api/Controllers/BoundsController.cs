@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using BoundResponse = GrainPath.Application.Entities.BoundObject;
+using BoundsResponse = GrainPath.Application.Entities.BoundsObject;
 
 namespace GrainPath.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/bound")]
-public sealed class BoundController : ControllerBase
+[Route("api/v1/bounds")]
+public sealed class BoundsController : ControllerBase
 {
     private readonly IAppContext _context;
-    private readonly ILogger<BoundController> _logger;
+    private readonly ILogger<BoundsController> _logger;
 
-    public BoundController(IAppContext context, ILogger<BoundController> logger)
+    public BoundsController(IAppContext context, ILogger<BoundsController> logger)
     {
         _context = context; _logger = logger;
     }
@@ -22,8 +22,8 @@ public sealed class BoundController : ControllerBase
     [HttpPost]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<BoundResponse> Post()
+    public ActionResult<BoundsResponse> Post()
     {
-        return Ok(_context.Bound);
+        return Ok(_context.Bounds);
     }
 }

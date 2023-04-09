@@ -7,13 +7,13 @@ using Microsoft.Extensions.Logging;
 namespace GrainPath.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/autoc")]
-public sealed class AutocController : ControllerBase
+[Route("api/v1/autocs")]
+public sealed class AutocsController : ControllerBase
 {
     private readonly IAppContext _context;
-    private readonly ILogger<AutocController> _logger;
+    private readonly ILogger<AutocsController> _logger;
 
-    public AutocController(IAppContext context, ILogger<AutocController> logger)
+    public AutocsController(IAppContext context, ILogger<AutocsController> logger)
     {
         _context = context; _logger = logger;
     }
@@ -22,8 +22,8 @@ public sealed class AutocController : ControllerBase
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<AutocResponse> Post(AutocRequest request)
+    public ActionResult<AutocsResponse> Post(AutocsRequest request)
     {
-        return Ok(new AutocResponse() { items = _context.Autoc.TopK(request.prefix, request.count) });
+        return Ok(new AutocsResponse() { items = _context.Autocs.TopK(request.prefix, request.count) });
     }
 }

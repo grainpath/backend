@@ -8,13 +8,13 @@ using MongoDB.Driver;
 
 namespace GrainPath.Data.MongoDb.Helpers;
 
-using B = FilterDefinitionBuilder<HeavyPlace>;
-using F = FilterDefinition<HeavyPlace>;
-using EE = Expression<Func<HeavyPlace, object>>;
-using EB = Expression<Func<HeavyPlace, bool?>>;
-using EC = Expression<Func<HeavyPlace, IEnumerable<string>>>;
-using ET = Expression<Func<HeavyPlace, string>>;
-using EN = Expression<Func<HeavyPlace, double?>>;
+using B = FilterDefinitionBuilder<Entity>;
+using F = FilterDefinition<Entity>;
+using EE = Expression<Func<Entity, object>>;
+using EB = Expression<Func<Entity, bool?>>;
+using EC = Expression<Func<Entity, IEnumerable<string>>>;
+using ET = Expression<Func<Entity, string>>;
+using EN = Expression<Func<Entity, double?>>;
 
 internal static class FilterDefinitionExtensions
 {
@@ -52,7 +52,7 @@ internal static class FilterConstructor
     public static F ConditionToFilter(KeywordCondition condition)
     {
         var filters = condition.filters;
-        var b = Builders<HeavyPlace>.Filter;
+        var b = Builders<Entity>.Filter;
 
         var f = b.Empty;
 

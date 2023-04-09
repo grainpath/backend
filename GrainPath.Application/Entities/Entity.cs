@@ -1,32 +1,18 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace GrainPath.Application.Entities;
 
-[BsonIgnoreExtraElements]
-public class LightPlace
+public sealed class EntityRequest
 {
-    [BsonId]
     [Required]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string grainId { get; set; }
-
-    [Required]
-    public string name { get; set; }
-
-    [Required]
-    public WgsPoint location { get; set; }
-
-    [Required]
-    [MinLength(1)]
-    public SortedSet<string> keywords { get; set; }
+    public string placeId { get; set; }
 }
 
 [BsonIgnoreExtraElements]
-public sealed class PlaceAddress
+public sealed class EntityAddress
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string country { get; set; }
@@ -48,7 +34,7 @@ public sealed class PlaceAddress
 }
 
 [BsonIgnoreExtraElements]
-public sealed class PlacePayment
+public sealed class EntityPayment
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool? cash { get; set; }
@@ -73,7 +59,7 @@ public sealed class PlacePayment
 }
 
 [BsonIgnoreExtraElements]
-public sealed class PlaceAttributes
+public sealed class EntityAttributes
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<WgsPoint> polygon { get; set; }
@@ -91,10 +77,10 @@ public sealed class PlaceAttributes
     public string website { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PlaceAddress address { get; set; }
+    public EntityAddress address { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PlacePayment payment { get; set; }
+    public EntityPayment payment { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string email { get; set; }
@@ -136,13 +122,13 @@ public sealed class PlaceAttributes
     public bool? wheelchair { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? rank { get; set; }
+    public double? rank { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? capacity { get; set; }
+    public double? capacity { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? minimumAge { get; set; }
+    public double? minimumAge { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public SortedSet<string> clothes { get; set; }
@@ -155,7 +141,7 @@ public sealed class PlaceAttributes
 }
 
 [BsonIgnoreExtraElements]
-public sealed class PlaceLinked
+public sealed class EntityLinked
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string osm { get; set; }
@@ -177,29 +163,12 @@ public sealed class PlaceLinked
 }
 
 [BsonIgnoreExtraElements]
-public sealed class HeavyPlace : LightPlace
+public sealed class Entity : Place
 {
     [JsonIgnore]
     public GeoJsonPoint position { get; set; }
 
-    public PlaceLinked linked { get; set; }
+    public EntityLinked linked { get; set; }
 
-    public PlaceAttributes attributes { get; set; }
-}
-
-[BsonIgnoreExtraElements]
-public sealed class FilteredPlace
-{
-    ///<summary>
-    /// Simplified place representation as given in the database.
-    ///</summary>
-    [Required]
-    public LightPlace place { get; set; }
-
-    ///<summary>
-    /// Contains a list of filters satisfied by the place.
-    ///</summary>
-    [Required]
-    [MinLength(1)]
-    public SortedSet<string> satisfy { get; set; }
+    public EntityAttributes attributes { get; set; }
 }

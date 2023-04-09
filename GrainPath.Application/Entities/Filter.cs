@@ -3,25 +3,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GrainPath.Application.Entities;
 
+public sealed class KeywordFilterExisten {}
+
 public sealed class KeywordFilterExistens
 {
-    public object image { get; set; }
+    public KeywordFilterExisten image { get; set; }
 
-    public object description { get; set; }
+    public KeywordFilterExisten description { get; set; }
 
-    public object website { get; set; }
+    public KeywordFilterExisten website { get; set; }
 
-    public object address { get; set; }
+    public KeywordFilterExisten address { get; set; }
 
-    public object payment { get; set; }
+    public KeywordFilterExisten payment { get; set; }
 
-    public object email { get; set; }
+    public KeywordFilterExisten email { get; set; }
 
-    public object phone { get; set; }
+    public KeywordFilterExisten phone { get; set; }
 
-    public object charge { get; set; }
+    public KeywordFilterExisten charge { get; set; }
 
-    public object openingHours { get; set; }
+    public KeywordFilterExisten openingHours { get; set; }
 }
 
 public sealed class KeywordFilterBooleans

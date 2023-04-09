@@ -25,11 +25,11 @@ internal static class RequestVerifier
         return !p;
     }
 
-    public static bool Verify(PlaceRequest request) => ObjectId.TryParse(request.grainId, out _);
+    public static bool Verify(EntityRequest request) => ObjectId.TryParse(request.placeId, out _);
 
-    public static bool Verify(ShortRequest request) => request.waypoints.Count < 2;
+    public static bool Verify(DirectRequest request) => request.waypoints.Count < 2;
 
-    public static bool Verify(StackRequest request) => verify(request.conditions);
+    public static bool Verify(PlacesRequest request) => verify(request.conditions);
 
-    public static bool Verify(RouteRequest request) => verify(request.conditions);
+    public static bool Verify(RoutesRequest request) => verify(request.conditions);
 }

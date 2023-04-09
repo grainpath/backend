@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace GrainPath.Data.MongoDb.Actions;
 
-internal static class Autoc
+internal static class AutocsAction
 {
     private sealed class Item
     {
@@ -25,14 +25,14 @@ internal static class Autoc
         public List<Item> keywords { get; set; }
     }
 
-    public static AutocIndex Act(IMongoDatabase database)
+    public static AutocsIndex Act(IMongoDatabase database)
     {
         var doc = database
             .GetCollection<Document>(MongoDbConst.INDEX_COLLECTION)
             .Find(doc => doc.id == "keywords")
             .FirstOrDefault(); // synchronous!
 
-        var result = new AutocIndex();
+        var result = new AutocsIndex();
 
         foreach (var item in doc.keywords)
         {

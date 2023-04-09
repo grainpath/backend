@@ -7,18 +7,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using PlaceResponse = GrainPath.Application.Entities.HeavyPlace;
-
 namespace GrainPath.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/place")]
-public sealed class PlaceController : ControllerBase
+[Route("api/v1/places")]
+public sealed class PlacesController : ControllerBase
 {
     private readonly IAppContext _context;
-    private readonly ILogger<PlaceController> _logger;
+    private readonly ILogger<PlacesController> _logger;
 
-    public PlaceController(IAppContext context, ILogger<PlaceController> logger)
+    public PlacesController(IAppContext context, ILogger<PlacesController> logger)
     {
         _context = context; _logger = logger;
     }
@@ -28,16 +26,14 @@ public sealed class PlaceController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PlaceResponse>> PostAsync(PlaceRequest request)
+    public async Task<ActionResult<PlacesResponse>> PostAsync(PlacesRequest request)
     {
         try
         {
-            if (!RequestVerifier.Verify(request)) { return BadRequest(); }
-
-            var grain = await _context.Model.GetPlace(request.grainId);
-            return grain is not null ? Ok(grain) : NotFound();
+            return RequestVerifier.Verify(request)
+                ? Ok(await _context.Model.GetAround(request.center.AsWgs(), request.radius.Value, request.conditions))
+                : BadRequest();
         }
         catch (Exception ex)
         {
