@@ -22,21 +22,7 @@ public class Place
     [Required]
     [MinLength(1)]
     public SortedSet<string> keywords { get; set; }
-}
 
-[BsonIgnoreExtraElements]
-public sealed class SelectedPlace
-{
-    ///<summary>
-    /// Place representation as given in the database.
-    ///</summary>
     [Required]
-    public Place place { get; set; }
-
-    ///<summary>
-    /// Contains a list of filters satisfied by the place.
-    ///</summary>
-    [Required]
-    [MinLength(1)]
-    public SortedSet<string> selected { get; set; }
+    public SortedSet<string> selected { get; set; } = new();
 }

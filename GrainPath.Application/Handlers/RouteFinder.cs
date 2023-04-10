@@ -25,7 +25,7 @@ public static class RouteFinder
     /// Convert list of filtered places into a list of indexed keywords
     /// starting from index 1, because 0 is occupied by the source.
     /// </summary>
-    private static List<Poi> GetPois(List<SelectedPlace> places)
+    private static List<Poi> GetPois(List<Place> places)
     {
         var pois = new List<Poi>();
 
@@ -41,9 +41,9 @@ public static class RouteFinder
     /// Get places out of the route sequence. Skip first and last items,
     /// (source and target).
     /// </summary>
-    private static List<SelectedPlace> GetPlaces(Route route, List<SelectedPlace> filters)
+    private static List<Place> GetPlaces(Route route, List<Place> filters)
     {
-        var places = new List<SelectedPlace>();
+        var places = new List<Place>();
 
         for (int i = 1; i < route.Sequence.Length - 1; ++i)
         {
@@ -63,9 +63,9 @@ public static class RouteFinder
         // find feasible places
 
         var ellipse = Spherical.BoundingEllipse(source, target, distance);
-        var filters = await model.GetNearestWithin(ellipse, Spherical.Midpoint(source, target), distance / 2.0, conditions);
+        var selects = await model.GetNearestWithin(ellipse, Spherical.Midpoint(source, target), distance / 2.0, conditions);
 
-        var locs = Concat(source, filters.Select(f => f.place.location), target);
+        var locs = Concat(source, selects.Select(place => place.location), target);
 
         // construct distance matrix
 
@@ -79,7 +79,7 @@ public static class RouteFinder
 
         // construct routes
 
-        var pois = Concat(new Poi(0, string.Empty), GetPois(filters), new Poi(matrix.Dim - 1, string.Empty));
+        var pois = Concat(new Poi(0, string.Empty), GetPois(selects), new Poi(matrix.Dim - 1, string.Empty));
 
         var routes = SolverFactory
             .GetInstance()
@@ -104,7 +104,7 @@ public static class RouteFinder
 
         for (var i = 0; i < routes.Count; ++i)
         {
-            objs.Add(new() { path = polylines[i], order = GetPlaces(routes[i], filters) });
+            objs.Add(new() { path = polylines[i], order = GetPlaces(routes[i], selects) });
         }
 
         return (objs, null);
