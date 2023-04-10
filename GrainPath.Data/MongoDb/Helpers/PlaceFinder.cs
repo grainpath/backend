@@ -28,11 +28,11 @@ internal static class PlaceFinder
 
             foreach (var p in ps)
             {
-                if (r.TryGetValue(p.placeId, out var place))
+                if (r.TryGetValue(p.grainId, out var place))
                 {
                     place.selected.Add(cond.keyword);
                 }
-                else { r.Add(p.placeId, p); }
+                else { r.Add(p.grainId, p); }
             }
         }
 

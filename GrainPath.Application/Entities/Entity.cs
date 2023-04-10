@@ -8,7 +8,7 @@ namespace GrainPath.Application.Entities;
 public sealed class EntityRequest
 {
     [Required]
-    public string placeId { get; set; }
+    public string grainId { get; set; }
 }
 
 [BsonIgnoreExtraElements]

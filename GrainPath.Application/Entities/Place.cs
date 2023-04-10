@@ -11,7 +11,7 @@ public class Place
     [BsonId]
     [Required]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string placeId { get; set; }
+    public string grainId { get; set; }
 
     [Required]
     public string name { get; set; }

@@ -17,7 +17,7 @@ internal sealed class MongoDbModel : IModel
 
     public BoundsObject GetBounds() => BoundsAction.Act(_database);
 
-    public Task<Entity> GetEntity(string placeId) => EntityAction.Act(_database, placeId);
+    public Task<Entity> GetEntity(string grainId) => EntityAction.Act(_database, grainId);
 
     public Task<List<Place>> GetAround(WgsPoint center, double radius, List<KeywordCondition> conditions)
         => AroundAction.Act(_database, center, radius, conditions);

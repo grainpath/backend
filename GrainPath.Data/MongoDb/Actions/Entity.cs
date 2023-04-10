@@ -6,11 +6,11 @@ namespace GrainPath.Data.MongoDb.Actions;
 
 internal static class EntityAction
 {
-    public static Task<Entity> Act(IMongoDatabase database, string placeId)
+    public static Task<Entity> Act(IMongoDatabase database, string grainId)
     {
         return database
             .GetCollection<Entity>(MongoDbConst.GRAIN_COLLECTION)
-            .Find(grain => grain.placeId == placeId)
+            .Find(grain => grain.grainId == grainId)
             .FirstOrDefaultAsync();
     }
 }

@@ -19,8 +19,8 @@ public interface IModel
     /// <summary>
     /// Fetch entity (place with attributes) by id.
     /// </summary>
-    /// <param name="placeId">Id as per stored in the database.</param>
-    public Task<Entity> GetEntity(string placeId);
+    /// <param name="grainId">Id as per stored in the database.</param>
+    public Task<Entity> GetEntity(string grainId);
 
     /// <summary>
     /// Find places around a point satisfying specific conditions.
