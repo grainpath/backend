@@ -38,19 +38,19 @@ public static class RouteFinder
     }
 
     /// <summary>
-    /// Get places out of the route sequence. Skip first and last items,
+    /// Extract waypoints out of the route sequence. Skip first and last items,
     /// (source and target).
     /// </summary>
-    private static List<Place> GetPlaces(Route route, List<Place> filters)
+    private static List<Place> GetWaypoints(Route route, List<Place> filters)
     {
-        var places = new List<Place>();
+        var waypoints = new List<Place>();
 
         for (int i = 1; i < route.Sequence.Length - 1; ++i)
         {
-            places.Add(filters[route.Sequence[i]]);
+            waypoints.Add(filters[route.Sequence[i]]);
         }
 
-        return places;
+        return waypoints;
     }
 
     /// <summary>
@@ -104,7 +104,7 @@ public static class RouteFinder
 
         for (var i = 0; i < routes.Count; ++i)
         {
-            objs.Add(new() { path = polylines[i], order = GetPlaces(routes[i], selects) });
+            objs.Add(new() { path = polylines[i], waypoints = GetWaypoints(routes[i], selects) });
         }
 
         return (objs, null);
