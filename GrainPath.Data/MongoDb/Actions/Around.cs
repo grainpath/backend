@@ -10,7 +10,7 @@ namespace GrainPath.Data.MongoDb.Actions;
 
 internal static class AroundAction
 {
-    public static async Task<List<FilteredPlace>> Act(IMongoDatabase database, WgsPoint center, double radius, List<KeywordCondition> conditions)
+    public static async Task<List<SelectedPlace>> Act(IMongoDatabase database, WgsPoint center, double radius, List<KeywordCondition> conditions)
     {
         var limit = Math.Max(MongoDbConst.BUCKET_SIZE, MongoDbConst.REQUEST_SIZE / conditions.Count);
 

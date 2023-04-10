@@ -9,9 +9,9 @@ namespace GrainPath.Data.MongoDb.Helpers;
 
 internal static class PlaceFinder
 {
-    public static async Task<List<FilteredPlace>> Fetch(IMongoDatabase database, FilterDefinition<Entity> basef, List<KeywordCondition> conditions, int limit)
+    public static async Task<List<SelectedPlace>> Fetch(IMongoDatabase database, FilterDefinition<Entity> basef, List<KeywordCondition> conditions, int limit)
     {
-        var r = new Dictionary<string, FilteredPlace>();
+        var r = new Dictionary<string, SelectedPlace>();
 
         foreach (var cond in conditions)
         {
@@ -24,13 +24,13 @@ internal static class PlaceFinder
 
             var items = docs
                 .Select(d => BsonSerializer.Deserialize<Place>(d))
-                .Select(p => new FilteredPlace() { place = p, satisfy = new() { cond.keyword } });
+                .Select(p => new SelectedPlace() { place = p, selected = new() { cond.keyword } });
 
             foreach (var item in items)
             {
                 if (r.TryGetValue(item.place.placeId, out var val))
                 {
-                    val.satisfy.Add(cond.keyword);
+                    val.selected.Add(cond.keyword);
                 }
                 else { r.Add(item.place.placeId, item); }
             }

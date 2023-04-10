@@ -19,9 +19,9 @@ internal sealed class MongoDbModel : IModel
 
     public Task<Entity> GetEntity(string placeId) => EntityAction.Act(_database, placeId);
 
-    public Task<List<FilteredPlace>> GetAround(WgsPoint center, double radius, List<KeywordCondition> conditions)
+    public Task<List<SelectedPlace>> GetAround(WgsPoint center, double radius, List<KeywordCondition> conditions)
         => AroundAction.Act(_database, center, radius, conditions);
 
-    public Task<List<FilteredPlace>> GetNearestWithin(List<WgsPoint> polygon, WgsPoint centroid, double distance, List<KeywordCondition> conditions)
+    public Task<List<SelectedPlace>> GetNearestWithin(List<WgsPoint> polygon, WgsPoint centroid, double distance, List<KeywordCondition> conditions)
         => WithinAction.Act(_database, polygon, centroid, distance, conditions);
 }

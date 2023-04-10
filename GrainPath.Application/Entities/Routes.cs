@@ -44,7 +44,7 @@ public sealed class RouteObject
     /// Ordered sequence of places satisfying given conditions.
     /// </summary>
     [Required]
-    public List<FilteredPlace> order { get; set; }
+    public List<SelectedPlace> order { get; set; }
 }
 
 public sealed class RoutesResponse

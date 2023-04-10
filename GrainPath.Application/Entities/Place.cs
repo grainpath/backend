@@ -25,10 +25,10 @@ public class Place
 }
 
 [BsonIgnoreExtraElements]
-public sealed class FilteredPlace
+public sealed class SelectedPlace
 {
     ///<summary>
-    /// Simplified place representation as given in the database.
+    /// Place representation as given in the database.
     ///</summary>
     [Required]
     public Place place { get; set; }
@@ -38,5 +38,5 @@ public sealed class FilteredPlace
     ///</summary>
     [Required]
     [MinLength(1)]
-    public SortedSet<string> satisfy { get; set; }
+    public SortedSet<string> selected { get; set; }
 }

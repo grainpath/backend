@@ -25,13 +25,13 @@ public static class RouteFinder
     /// Convert list of filtered places into a list of indexed keywords
     /// starting from index 1, because 0 is occupied by the source.
     /// </summary>
-    private static List<Poi> GetPois(List<FilteredPlace> places)
+    private static List<Poi> GetPois(List<SelectedPlace> places)
     {
         var pois = new List<Poi>();
 
         for (int i = 0; i < places.Count; ++i)
         {
-            foreach (var sat in places[i].satisfy) { pois.Add(new Poi(i + 1, sat)); }
+            foreach (var sat in places[i].selected) { pois.Add(new Poi(i + 1, sat)); }
         }
 
         return pois;
@@ -41,9 +41,9 @@ public static class RouteFinder
     /// Get places out of the route sequence. Skip first and last items,
     /// (source and target).
     /// </summary>
-    private static List<FilteredPlace> GetPlaces(Route route, List<FilteredPlace> filters)
+    private static List<SelectedPlace> GetPlaces(Route route, List<SelectedPlace> filters)
     {
-        var places = new List<FilteredPlace>();
+        var places = new List<SelectedPlace>();
 
         for (int i = 1; i < route.Sequence.Length - 1; ++i)
         {

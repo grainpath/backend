@@ -32,5 +32,5 @@ public sealed class PlacesResponse
     /// Places satisfying given conditions.
     /// </summary>
     [Required]
-    public List<FilteredPlace> places { get; set; }
+    public List<SelectedPlace> places { get; set; }
 }
