@@ -64,7 +64,7 @@ public sealed class EntityAttributes
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<WgsPoint> polygon { get; set; }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonIgnore]
     public string name { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
