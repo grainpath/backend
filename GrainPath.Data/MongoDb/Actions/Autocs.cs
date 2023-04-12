@@ -13,7 +13,7 @@ internal static class AutocsAction
 
         public string label { get; set; }
 
-        public List<string> attributes { get; set; }
+        public List<string> attributeList { get; set; }
     }
 
     private sealed class Document
@@ -36,7 +36,7 @@ internal static class AutocsAction
 
         foreach (var item in doc.keywords)
         {
-            result.Add(item.label, item.attributes, item.count);
+            result.Add(item.label, item.attributeList, item.count);
         }
 
         return result;

@@ -22,16 +22,16 @@ public sealed class AutocItem
     public string keyword { get; set; }
 
     [Required]
-    public List<string> attributes { get; set; }
+    public List<string> attributeList { get; set; }
 }
 
 public sealed class AutocsIndex
 {
     private readonly PruningRadixTrie.PruningRadixTrie _trie = new();
-    private readonly Dictionary<string, List<string>> _attributes = new();
+    private readonly Dictionary<string, List<string>> _attributeLists = new();
 
-    public void Add(string term, List<string> attributes, long freq) {
-        _attributes[term] = attributes;
+    public void Add(string term, List<string> attributeList, long freq) {
+        _attributeLists[term] = attributeList;
         _trie.AddTerm(term, freq);
     }
 
@@ -39,7 +39,7 @@ public sealed class AutocsIndex
     {
         return _trie
             .GetTopkTermsForPrefix(prefix, count, out _)
-            .Select((pair) => new AutocItem() { keyword = pair.term, attributes = _attributes[pair.term] })
+            .Select((pair) => new AutocItem() { keyword = pair.term, attributeList = _attributeLists[pair.term] })
             .ToList();
     }
 }
