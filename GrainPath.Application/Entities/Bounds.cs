@@ -25,7 +25,7 @@ public sealed class BoundsObject
     public CollectBound rental { get; set; }
 
     [Required]
-    public NumericBound rank { get; set; }
+    public NumericBound rating { get; set; }
 
     [Required]
     public NumericBound capacity { get; set; }

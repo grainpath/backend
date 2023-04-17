@@ -23,7 +23,7 @@ internal static class BoundsAction
 
         public List<CollectBound> cuisine { get; set; }
 
-        public NumericBound rank { get; set; }
+        public NumericBound rating { get; set; }
 
         public NumericBound capacity { get; set; }
 
@@ -52,7 +52,7 @@ internal static class BoundsAction
             rental = bounds.rental.Select(item => item.label).ToList(),
             clothes = bounds.clothes.Select(item => item.label).ToList(),
             cuisine = bounds.cuisine.Select(item => item.label).ToList(),
-            rank = bounds.rank,
+            rating = bounds.rating,
             capacity = bounds.capacity,
             minimumAge = bounds.minimumAge,
         };
