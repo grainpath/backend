@@ -122,7 +122,7 @@ public sealed class EntityAttributes
     public bool? wheelchair { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public double? rank { get; set; }
+    public double? rating { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public double? capacity { get; set; }

@@ -16,7 +16,7 @@ internal static class RequestVerifier
         foreach (var con in conditions)
         {
             var nums = con.filters.numerics;
-            foreach (var ncon in new[] { nums.rank, nums.capacity, nums.minimumAge })
+            foreach (var ncon in new[] { nums.rating, nums.capacity, nums.minimumAge })
             {
                 p |= ncon is not null && ncon.max < ncon.min;
             }

@@ -81,7 +81,7 @@ internal static class FilterConstructor
             .boolean(b, filters.booleans.wheelchair, p => p.attributes.wheelchair);
 
         f = f
-            .numeric(b, filters.numerics.rank, p => p.attributes.rank)
+            .numeric(b, filters.numerics.rating, p => p.attributes.rating)
             .numeric(b, filters.numerics.capacity, p => p.attributes.capacity)
             .numeric(b, filters.numerics.minimumAge, p => p.attributes.minimumAge);
 

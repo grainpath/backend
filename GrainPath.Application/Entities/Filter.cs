@@ -60,7 +60,7 @@ public sealed class KeywordFilterNumeric
 
 public sealed class KeywordFilterNumerics
 {
-    public KeywordFilterNumeric rank { get; set; }
+    public KeywordFilterNumeric rating { get; set; }
 
     public KeywordFilterNumeric capacity { get; set; }
 
