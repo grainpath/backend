@@ -38,6 +38,6 @@ public sealed class RouteController : ControllerBase
 
         if (err is not null) { _logger.LogError(err.message); return StatusCode(500); }
 
-        return (routes is not null) ? Ok(routes) : NotFound();
+        return (routes is not null) ? Ok(new RoutesResponse() { routes = routes }) : NotFound();
     }
 }
