@@ -26,7 +26,6 @@ public sealed class RouteController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<RoutesResponse>> PostAsync(RoutesRequest request)
     {
@@ -38,6 +37,6 @@ public sealed class RouteController : ControllerBase
 
         if (err is not null) { _logger.LogError(err.message); return StatusCode(500); }
 
-        return (routes is not null) ? Ok(new RoutesResponse() { routes = routes }) : NotFound();
+        return Ok(new RoutesResponse() { routes = ((routes is not null) ? routes : new()) });
     }
 }
