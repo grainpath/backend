@@ -7,18 +7,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using DirectResponse = GrainPath.Application.Entities.ShortestPathObject;
+using DirecsResponse = GrainPath.Application.Entities.ShortestPathObject;
 
 namespace GrainPath.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/direct")]
-public sealed class DirectController : ControllerBase
+[Route("api/v1/direcs")]
+public sealed class DirecsController : ControllerBase
 {
     private readonly IAppContext _context;
-    private readonly ILogger<DirectController> _logger;
+    private readonly ILogger<DirecsController> _logger;
 
-    public DirectController(IAppContext context, ILogger<DirectController> logger)
+    public DirecsController(IAppContext context, ILogger<DirecsController> logger)
     {
         _context = context; _logger = logger;
     }
@@ -30,7 +30,7 @@ public sealed class DirectController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<DirectResponse>> PostAsync(DirectRequest request)
+    public async Task<ActionResult<DirecsResponse>> PostAsync(DirecsRequest request)
     {
         if (!RequestVerifier.Verify(request)) { return BadRequest(); }
 

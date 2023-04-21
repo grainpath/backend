@@ -27,7 +27,7 @@ internal static class RequestVerifier
 
     public static bool Verify(EntityRequest request) => ObjectId.TryParse(request.grainId, out _);
 
-    public static bool Verify(DirectRequest request) => request.waypoints.Count < 2;
+    public static bool Verify(DirecsRequest request) => request.waypoints.Count < 2;
 
     public static bool Verify(PlacesRequest request) => verify(request.conditions);
 
