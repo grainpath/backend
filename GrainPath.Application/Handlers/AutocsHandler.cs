@@ -9,7 +9,5 @@ public static class AutocsHandler
     /// <param name="prefix">Keywords associated with found items must have the passed prefix.</param>
     /// <param name="count">Maximum number of fetched items.</param>
     public static List<AutocItem> GetItems(AutocsIndex index, string prefix, int count)
-    {
-        return index.TopK(prefix, count);
-    }
+        => index.TopK(prefix, count);
 }

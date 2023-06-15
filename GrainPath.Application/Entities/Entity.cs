@@ -5,12 +5,6 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace GrainPath.Application.Entities;
 
-public sealed class EntityRequest
-{
-    [Required]
-    public string grainId { get; set; }
-}
-
 [BsonIgnoreExtraElements]
 public sealed class EntityAddress
 {
@@ -122,10 +116,16 @@ public sealed class EntityAttributes
     public bool? wheelchair { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public double? year { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public double? rating { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public double? capacity { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public double? elevation { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public double? minimumAge { get; set; }
@@ -171,4 +171,16 @@ public sealed class Entity : Place
     public EntityLinked linked { get; set; }
 
     public EntityAttributes attributes { get; set; }
+}
+
+public sealed class EntityRequest
+{
+    [Required]
+    public string grainId { get; set; }
+}
+
+public sealed class EntityResponse
+{
+    [Required]
+    public Entity entity { get; set; }
 }
