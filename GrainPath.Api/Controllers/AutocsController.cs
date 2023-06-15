@@ -18,12 +18,26 @@ public sealed class AutocsController : ControllerBase
         _context = context; _logger = logger;
     }
 
+    /// <summary>
+    /// Obtain autocomplete items based on count and prefix.
+    /// </summary>
+    /// <remarks>
+    ///     POST /autocs
+    ///     {
+    ///         "count": 3
+    ///         "prefix": "mus"
+    ///     }
+    /// </remarks>
+    /// <response code="200">Returns object with a list of items.</response>
     [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<AutocsResponse> Post(AutocsRequest request)
     {
-        return Ok(new AutocsResponse() { items = _context.Autocs.TopK(request.prefix, request.count) });
+        return new AutocsResponse()
+        {
+            items = AutocsHandler.GetItems(_context.Autocs, request.prefix, request.count)
+        };
     }
 }

@@ -5,17 +5,6 @@ using System.Linq;
 
 namespace GrainPath.Application.Entities;
 
-public sealed class AutocsRequest
-{
-    [Required]
-    [Range(1, int.MaxValue)]
-    public int count { get; set; }
-
-    [Required]
-    [MinLength(1)]
-    public string prefix { get; set; }
-}
-
 public sealed class AutocItem
 {
     [Required]
@@ -42,6 +31,16 @@ public sealed class AutocsIndex
             .Select((pair) => new AutocItem() { keyword = pair.term, attributeList = _attributeLists[pair.term] })
             .ToList();
     }
+}
+
+public sealed class AutocsRequest
+{
+    [Required]
+    [Range(1, int.MaxValue)]
+    public int count { get; set; }
+
+    [Required]
+    public string prefix { get; set; }
 }
 
 public sealed class AutocsResponse

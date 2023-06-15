@@ -7,10 +7,10 @@ namespace GrainPath.Application.Entities;
 public sealed class NumericBound
 {
     [Required]
-    public int min { get; set; }
+    public double min { get; set; }
 
     [Required]
-    public int max { get; set; }
+    public double max { get; set; }
 }
 
 public sealed class BoundsObject
@@ -25,11 +25,25 @@ public sealed class BoundsObject
     public CollectBound rental { get; set; }
 
     [Required]
+    public NumericBound year { get; set; }
+
+    [Required]
     public NumericBound rating { get; set; }
 
     [Required]
     public NumericBound capacity { get; set; }
 
     [Required]
+    public NumericBound elevation { get; set; }
+
+    [Required]
     public NumericBound minimumAge { get; set; }
+}
+
+public sealed class BoundsRequest { }
+
+public sealed class BoundsResponse
+{
+    [Required]
+    public BoundsObject bounds { get; set; }
 }
