@@ -10,14 +10,14 @@ public sealed class ShortestPathObject
     /// </summary>
     [Required]
     [Range(0, double.MaxValue)]
-    public double? distance { get; set; }
+    public double distance { get; set; }
 
     /// <summary>
     /// Duration of the route in <b>seconds</b>.
     /// </summary>
     [Required]
     [Range(0, double.MaxValue)]
-    public double? duration { get; set; }
+    public double duration { get; set; }
 
     /// <summary>
     /// Ordered sequence of points representing connected linestring.

@@ -12,7 +12,7 @@ internal sealed class OsrmRoutingEngine : IRoutingEngine
 
     internal OsrmRoutingEngine(string addr) { _addr = addr; }
 
-    public async Task<(ShortestPathObject, ErrorObject)> GetShortestPath(List<WgsPoint> waypoints)
+    public async Task<(List<ShortestPathObject>, ErrorObject)> GetShortestPath(List<WgsPoint> waypoints)
         => await OsrmShortestPath.Get(_addr, waypoints);
 
     public async Task<(DistanceMatrixObject, ErrorObject)> GetDistanceMatrix(List<WgsPoint> waypoints)

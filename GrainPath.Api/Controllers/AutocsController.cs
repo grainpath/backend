@@ -19,7 +19,7 @@ public sealed class AutocsController : ControllerBase
     }
 
     /// <summary>
-    /// Obtain autocomplete items based on count and prefix.
+    /// Get a list of autocomplete items based on count and prefix.
     /// </summary>
     /// <remarks>
     ///     POST /autocs
@@ -28,7 +28,7 @@ public sealed class AutocsController : ControllerBase
     ///         "prefix": "mus"
     ///     }
     /// </remarks>
-    /// <response code="200">Returns object with a list of items.</response>
+    /// <response code="200">Returns object with a (possibly empty) list of items.</response>
     [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]

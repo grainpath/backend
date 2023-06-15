@@ -12,3 +12,9 @@ public sealed class DirecsRequest
     [MinLength(2)]
     public List<WebPoint> waypoints { get; set; }
 }
+
+public sealed class DirecsResponse
+{
+    [Required]
+    public List<ShortestPathObject> direcs { get; set; }
+}

@@ -46,8 +46,8 @@ internal static class OsrmShortestPath
     /// </summary>
     /// <param name="addr">base URL of the service</param>
     /// <param name="waypoints">list of WGS84 points</param>
-    /// <returns>shortest path object or error message</returns>
-    public static async Task<(ShortestPathObject, ErrorObject)> Get(string addr, List<WgsPoint> waypoints)
+    /// <returns>list of shortest path objects or error message</returns>
+    public static async Task<(List<ShortestPathObject>, ErrorObject)> Get(string addr, List<WgsPoint> waypoints)
     {
         var (b, e) = await OsrmFetcher
             .GetBody(OsrmQueryConstructor.Route(addr, waypoints));
@@ -58,18 +58,18 @@ internal static class OsrmShortestPath
         {
             var ans = JsonSerializer.Deserialize<Answer>(b);
 
-            if (ans.code != "Ok" || ans.routes.Count == 0) { return (null, null); }
+            if (ans.code != "Ok") { return (null, null); }
 
-            var route = ans.routes.First();
-
-            return (new()
+            var routes = ans.routes.Select(r => new ShortestPathObject()
             {
-                distance = route.distance.HasValue ? route.distance.Value : 0.0,
-                duration = route.duration.HasValue ? route.duration.Value : 0.0,
-                polyline = route.geometry.Coordinates
+                distance = r.distance.HasValue ? r.distance.Value : 0.0,
+                duration = r.duration.HasValue ? r.duration.Value : 0.0,
+                polyline = r.geometry.Coordinates
                     .Select(p => new WgsPoint(p.Longitude, p.Latitude))
                     .ToList()
-            }, null);
+            }).ToList();
+
+            return (routes, null);
         }
         catch (Exception ex) { return (null, new() { message = ex.Message }); }
     }
