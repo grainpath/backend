@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
+using GrainPath.Application.Entities;
+
+namespace GrainPath.RoutingEngine.Osrm;
+
+internal static class OsrmDistanceMatrix
+{
+    private sealed class Answer
+    {
+        public string code { get; set; }
+
+        public List<List<double>> durations { get; set; }
+    }
+
+    /// <summary>
+    /// Request distance of the fastest paths between all pairs of waypoints.
+    /// <list>
+    /// <item>http://project-osrm.org/docs/v5.24.0/api/#responses</item>
+    /// <item>http://project-osrm.org/docs/v5.24.0/api/#table-service</item>
+    /// </list>
+    /// </summary>
+    /// <param name="addr">base URL of the service</param>
+    /// <param name="waypoints">list of WGS84 points</param>
+    /// <returns>distance matrix in meters</returns>
+    public static async Task<(DistanceMatrixObject, ErrorObject)> Get(string addr, List<WgsPoint> waypoints)
+    {
+        var (b, e) = await OsrmFetcher
+            .GetBody(OsrmQueryConstructor.Table(addr, waypoints));
+
+        if (b is null) { return (null, e is null ? null : new() { message = e }); }
+
+        try
+        {
+            var ans = JsonSerializer.Deserialize<Answer>(b);
+
+            if (ans.code != "Ok" || ans.durations is null) { return (null, null); }
+
+            var coeff = 5000.0 / 3600.0;
+
+            for (int r = 0; r < ans.durations.Count; ++r)
+            {
+                for (int c = 0; c < ans.durations.Count; ++c)
+                {
+                    ans.durations[r][c] *= coeff;
+                }
+            }
+            return (new() { distances = ans.durations }, null);
+        }
+        catch (Exception ex) { return (null, new() { message = ex.Message }); }
+    }
+}

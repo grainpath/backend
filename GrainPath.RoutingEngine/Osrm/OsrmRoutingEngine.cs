@@ -6,15 +6,15 @@ using GrainPath.RoutingEngine.Osrm.Actions;
 
 namespace GrainPath.RoutingEngine.Osrm;
 
-public sealed class OsrmRoutingEngine : IRoutingEngine
+internal sealed class OsrmRoutingEngine : IRoutingEngine
 {
     private readonly string _addr;
 
-    public OsrmRoutingEngine(string addr) { _addr = addr; }
+    internal OsrmRoutingEngine(string addr) { _addr = addr; }
 
     public async Task<(ShortestPathObject, ErrorObject)> GetShortestPath(List<WgsPoint> waypoints)
-        => await ShortestPath.Act(_addr, waypoints);
+        => await OsrmShortestPath.Get(_addr, waypoints);
 
     public async Task<(DistanceMatrixObject, ErrorObject)> GetDistanceMatrix(List<WgsPoint> waypoints)
-        => await DistanceMatrix.Act(_addr, waypoints);
+        => await OsrmDistanceMatrix.Get(_addr, waypoints);
 }

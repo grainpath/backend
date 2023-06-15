@@ -8,7 +8,7 @@ using GrainPath.Application.Entities;
 
 namespace GrainPath.RoutingEngine.Osrm.Actions;
 
-internal static class ShortestPath
+internal static class OsrmShortestPath
 {
     private sealed class Route
     {
@@ -37,18 +37,22 @@ internal static class ShortestPath
         public List<Route> routes { get; set; }
     }
 
-    public static async Task<(ShortestPathObject, ErrorObject)> Act(string addr, List<WgsPoint> waypoints)
+    /// <summary>
+    /// Request the traversal and the distance of the shortest path from an OSRM instance.
+    /// <list>
+    /// <item>http://project-osrm.org/docs/v5.24.0/api/#responses</item>
+    /// <item>http://project-osrm.org/docs/v5.24.0/api/#route-service</item>
+    /// </list>
+    /// </summary>
+    /// <param name="addr">base URL of the service</param>
+    /// <param name="waypoints">list of WGS84 points</param>
+    /// <returns>shortest path object or error message</returns>
+    public static async Task<(ShortestPathObject, ErrorObject)> Get(string addr, List<WgsPoint> waypoints)
     {
-        /**
-         * http://project-osrm.org/docs/v5.24.0/api/#responses
-         * http://project-osrm.org/docs/v5.24.0/api/#route-service
-         */
+        var (b, e) = await OsrmFetcher
+            .GetBody(OsrmQueryConstructor.Route(addr, waypoints));
 
-        var (b, e) = await RoutingEngineFetcher.GetBody(OsrmQueryConstructor.Route(addr, waypoints));
-
-        if (e is not null) { return (null, new() { message = e }); }
-
-        if (b is null) { return (null, null); }
+        if (b is null) { return (null, e is null ? null : new() { message = e }); }
 
         try
         {
@@ -60,8 +64,8 @@ internal static class ShortestPath
 
             return (new()
             {
-                distance = route.distance.Value,
-                duration = route.duration.Value,
+                distance = route.distance.HasValue ? route.distance.Value : 0.0,
+                duration = route.duration.HasValue ? route.duration.Value : 0.0,
                 polyline = route.geometry.Coordinates
                     .Select(p => new WgsPoint(p.Longitude, p.Latitude))
                     .ToList()
