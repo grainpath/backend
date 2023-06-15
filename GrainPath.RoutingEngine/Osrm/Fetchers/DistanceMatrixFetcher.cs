@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
+using GrainPath.RoutingEngine.Osrm.Helpers;
 
-namespace GrainPath.RoutingEngine.Osrm;
+namespace GrainPath.RoutingEngine.Osrm.Fetchers;
 
-internal static class OsrmDistanceMatrix
+internal static class DistanceMatrixFetcher
 {
     private sealed class Answer
     {
@@ -25,10 +26,10 @@ internal static class OsrmDistanceMatrix
     /// <param name="addr">base URL of the service</param>
     /// <param name="waypoints">list of WGS84 points</param>
     /// <returns>distance matrix in meters</returns>
-    public static async Task<(DistanceMatrixObject, ErrorObject)> Get(string addr, List<WgsPoint> waypoints)
+    public static async Task<(DistanceMatrixObject, ErrorObject)> Fetch(string addr, List<WgsPoint> waypoints)
     {
-        var (b, e) = await OsrmFetcher
-            .GetBody(OsrmQueryConstructor.Table(addr, waypoints));
+        var (b, e) = await QueryExecutor
+            .Execute(QueryConstructor.Table(addr, waypoints));
 
         if (b is null) { return (null, e is null ? null : new() { message = e }); }
 

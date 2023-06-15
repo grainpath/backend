@@ -3,18 +3,18 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace GrainPath.RoutingEngine.Osrm;
+namespace GrainPath.RoutingEngine.Osrm.Helpers;
 
-internal static class OsrmFetcher
+internal static class QueryExecutor
 {
     private static string report(HttpStatusCode code) => $"Routing machine answered with status code ${code}.";
 
     /// <summary>
-    /// General-purpose fetcher from an OSRM instance.
+    /// Executor of OSRM queries.
     /// </summary>
     /// <param name="query">well-formed query</param>
-    /// <returns>request body</returns>
-    public static async Task<(string, string)> GetBody(string query)
+    /// <returns>response body</returns>
+    public static async Task<(string, string)> Execute(string query)
     {
         HttpResponseMessage res;
 

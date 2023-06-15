@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using GrainPath.Application.Entities;
 
-namespace GrainPath.RoutingEngine.Osrm;
+namespace GrainPath.RoutingEngine.Osrm.Helpers;
 
-internal static class OsrmQueryConstructor
+internal static class QueryConstructor
 {
     private static string chain(List<WgsPoint> waypoints)
         => string.Join(';', waypoints.Select(w => w.lon.ToString() + ',' + w.lat.ToString()));

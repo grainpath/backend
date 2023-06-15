@@ -5,10 +5,11 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using GeoJSON.Text.Geometry;
 using GrainPath.Application.Entities;
+using GrainPath.RoutingEngine.Osrm.Helpers;
 
-namespace GrainPath.RoutingEngine.Osrm.Actions;
+namespace GrainPath.RoutingEngine.Osrm.Fetchers;
 
-internal static class OsrmShortestPath
+internal static class ShortestPathFetcher
 {
     private sealed class Route
     {
@@ -47,10 +48,10 @@ internal static class OsrmShortestPath
     /// <param name="addr">base URL of the service</param>
     /// <param name="waypoints">list of WGS84 points</param>
     /// <returns>list of shortest path objects or error message</returns>
-    public static async Task<(List<ShortestPathObject>, ErrorObject)> Get(string addr, List<WgsPoint> waypoints)
+    public static async Task<(List<ShortestPathObject>, ErrorObject)> Fetch(string addr, List<WgsPoint> waypoints)
     {
-        var (b, e) = await OsrmFetcher
-            .GetBody(OsrmQueryConstructor.Route(addr, waypoints));
+        var (b, e) = await QueryExecutor
+            .Execute(QueryConstructor.Route(addr, waypoints));
 
         if (b is null) { return (null, e is null ? null : new() { message = e }); }
 
