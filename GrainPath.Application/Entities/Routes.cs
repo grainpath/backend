@@ -3,6 +3,38 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GrainPath.Application.Entities;
 
+public sealed class RouteObject
+{
+    /// <summary>
+    /// Connect source, target, and waypoints in-between.
+    /// </summary>
+    [Required]
+    public ShortestPathObject path { get; set; }
+
+    /// <summary>
+    /// Ordered sequence of places satisfying given conditions.
+    /// </summary>
+    [Required]
+    public List<Place> waypoints { get; set; }
+}
+
+public sealed class PrecedenceEdge
+{
+    /// <summary>
+    /// Category from.
+    /// </summary>
+    [Required]
+    [Range(0, int.MaxValue)]
+    public int? fr;
+
+    /// <summary>
+    /// Category to.
+    /// </summary>
+    [Required]
+    [Range(0, int.MaxValue)]
+    public int? to;
+}
+
 public sealed class RoutesRequest
 {
     /// <summary>
@@ -25,31 +57,21 @@ public sealed class RoutesRequest
     public double? distance { get; set; }
 
     /// <summary>
-    /// Search conditions with a keyword and optional features.
+    /// Categories of objects that the user is interested in.
     /// </summary>
     [Required]
     [MinLength(1)]
-    public List<KeywordCondition> conditions { get; set; }
-}
-
-public sealed class RouteObject
-{
-    /// <summary>
-    /// Connect source, target, and waypoints in-between.
-    /// </summary>
-    [Required]
-    public ShortestPathObject path { get; set; }
+    public List<Category> categories { get; set; }
 
     /// <summary>
-    /// Ordered sequence of places satisfying given conditions.
+    /// Order on categories imposed by the user.
     /// </summary>
     [Required]
-    public List<Place> waypoints { get; set; }
+    public List<PrecedenceEdge> precedence { get; set; }
 }
 
 public sealed class RoutesResponse
 {
     [Required]
-    [MinLength(1)]
     public List<RouteObject> routes { get; set; }
 }
