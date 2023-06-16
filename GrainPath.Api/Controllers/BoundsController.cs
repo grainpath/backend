@@ -34,7 +34,7 @@ public sealed class BoundsController : ControllerBase
     {
         return new BoundsResponse()
         {
-            bounds = BoundsHandler.GetBounds(_context.Bounds)
+            bounds = BoundsHandler.Handle(_context.Bounds)
         };
     }
 }

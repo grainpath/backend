@@ -37,7 +37,7 @@ public sealed class AutocsController : ControllerBase
     {
         return new AutocsResponse()
         {
-            items = AutocsHandler.GetItems(_context.Autocs, request.prefix, request.count)
+            items = AutocsHandler.Handle(_context.Autocs, request.prefix, request.count)
         };
     }
 }

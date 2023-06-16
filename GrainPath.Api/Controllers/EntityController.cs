@@ -43,11 +43,11 @@ public sealed class PlaceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<EntityResponse>> PostAsync(EntityRequest request)
     {
+        if (!EntityVerifier.Verify(request)) { return BadRequest(); }
+
         try
         {
-            if (!RequestVerifier.Verify(request)) { return BadRequest(); }
-
-            var grain = await EntityHandler.GetEntity(_context.Model, request.grainId);
+            var grain = await EntityHandler.Handle(_context.Model, request.grainId);
 
             return grain is not null ? new EntityResponse() { entity = grain } : NotFound();
         }

@@ -28,9 +28,8 @@ public sealed class DirecsController : ControllerBase
     ///     POST /direcs
     ///     {
     ///         "waypoints": [
-    ///             { "lon": , "lat":  }
-    ///             { "lon": , "lat":  }
-    ///             { "lon": , "lat":  }
+    ///             { "lon": 0.0, "lat": 0.0 }
+    ///             { "lon": 1.0, "lat": 1.0 }
     ///         ]
     ///     }
     /// </remarks>
@@ -45,9 +44,9 @@ public sealed class DirecsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<DirecsResponse>> PostAsync(DirecsRequest request)
     {
-        if (!RequestVerifier.Verify(request)) { return BadRequest(); }
+        // The length is verified by [MinLength(2)] defined on the type.
 
-        var (direcs, err) = await DirecsHandler.GetDirecs(_context.Engine, request.waypoints);
+        var (direcs, err) = await DirecsHandler.Handle(_context.Engine, request.waypoints);
 
         if (err is not null) { _logger.LogError(err.message); return StatusCode(500); }
 
