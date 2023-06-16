@@ -22,7 +22,7 @@ public sealed class PlaceController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    /// Get an entity by Id.
     /// </summary>
     /// <remarks>
     ///     POST /entity
