@@ -12,24 +12,24 @@ public sealed class PlacesRequest
     public WebPoint center { get; set; }
 
     /// <summary>
-    /// Radius around the center in <b>meters</b>.
+    /// Radius around the center (in meters).
     /// </summary>
     [Required]
     [Range(0, 12_000)]
     public double? radius { get; set; }
 
     /// <summary>
-    /// Search conditions with a keyword and optional features.
+    /// Categories with a keyword and optional features.
     /// </summary>
     [Required]
     [MinLength(1)]
-    public List<KeywordCondition> conditions { get; set; }
+    public List<Category> categories { get; set; }
 }
 
 public sealed class PlacesResponse
 {
     /// <summary>
-    /// Places satisfying given conditions.
+    /// Places satisfying given categories.
     /// </summary>
     [Required]
     public List<Place> places { get; set; }
