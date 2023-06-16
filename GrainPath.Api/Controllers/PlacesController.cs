@@ -3,6 +3,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using GrainPath.Api.Helpers;
 using GrainPath.Application.Entities;
+using GrainPath.Application.Handlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -68,8 +69,10 @@ public sealed class PlacesController : ControllerBase
 
         try
         {
-            var places = await _context.Model.GetAround(request.center.AsWgs(), request.radius.Value, request.categories);
-            return new PlacesResponse() { places = places };
+            return new PlacesResponse()
+            {
+                places = await PlacesHandler.Handle(_context.Model, request.center.AsWgs(), request.radius.Value, request.categories)
+            };
         }
         catch (Exception ex)
         {

@@ -44,7 +44,7 @@ public sealed class DirecsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<DirecsResponse>> PostAsync(DirecsRequest request)
     {
-        // The length is verified by [MinLength(2)] attribute defined on the type.
+        // The length is verified by [MinLength] attribute defined on the type.
 
         var (direcs, err) = await DirecsHandler.Handle(_context.Engine, request.waypoints);
 
