@@ -6,18 +6,16 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Utilities;
 
-namespace GrainPath.Application.Helpers.Geometry;
+namespace GrainPath.Application.Algorithms;
 
 internal static class Spherical
 {
     /// <summary>
-    /// Arithmetic mean radius.
+    /// Sphere radius used by Web Mercator.
     /// <list>
-    ///   <item><see href="https://en.wikipedia.org/wiki/Earth_radius#Arithmetic_mean_radius"/></item>
-    ///   <item><see href="https://en.wikipedia.org/wiki/Earth_radius#Published_values"/></item>
     /// </list>
     /// </summary>
-    private static double EarthMeanRadius => 6_371_008.8;
+    private static double EarthMeanRadius => 6_378_137.0;
 
     private static readonly double _deg2rad = Math.PI / 180.0;
     private static readonly double _rad2deg = 180.0 / Math.PI;
@@ -71,13 +69,13 @@ internal static class Spherical
     private static double LatRadDif(WgsPoint p1, WgsPoint p2) => DegToRad(Math.Abs(p1.lat - p2.lat));
 
     /// <summary>
-    /// Calculate midpoint (use <b>ONLY</b> for small distances).
+    /// Approximate midpoint (use <b>ONLY</b> for small distances).
     /// </summary>
     public static WgsPoint Midpoint(WgsPoint p1, WgsPoint p2)
         => new((p1.lon + p2.lon) / 2.0, (p1.lat + p2.lat) / 2.0);
 
     /// <summary>
-    /// Calculate angle in counter-clockwise direction.
+    /// Calculate an angle in the counter-clockwise direction.
     /// </summary>
     /// <returns>Angle in radians.</returns>
     private static double RotAngle(WgsPoint p1, WgsPoint p2)
@@ -87,7 +85,7 @@ internal static class Spherical
     }
 
     /// <summary>
-    /// Calculate great-circle distance (use <b>ONLY</b> for small distances).
+    /// Approximate the great-circle distance (use <b>ONLY</b> for small distances).
     /// </summary>
     /// <returns>Distance in meters.</returns>
     private static double GreatCircleDistance(WgsPoint p1, WgsPoint p2)
@@ -100,8 +98,8 @@ internal static class Spherical
     }
 
     /// <summary>
-    /// Construct bounding ellipse given foci and maximum distance. Foci are
-    /// guaranteed to be within an ellipse even though the distance is not enough.
+    /// Construct a bounding ellipse given foci and a maximum distance. Foci are
+    /// guaranteed to be within the ellipse even if the distance is not enough.
     /// </summary>
     /// <param name="f1">Focus 1</param>
     /// <param name="f2">Focus 2</param>
@@ -111,7 +109,7 @@ internal static class Spherical
         var m = Spherical.Midpoint(f1, f2);
         var c = Spherical.GreatCircleDistance(f1, f2) / 2.0;
 
-        // construct bounding ellipse with center at the origin
+        // construct a bounding ellipse with the center at the origin (0, 0)
 
         var a = ((distance > (2.0 * c)) ? distance : (2.0 * c + 250.0)) / 2.0;
         var b = Math.Sqrt(a * a - c * c);
