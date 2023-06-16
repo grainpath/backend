@@ -4,9 +4,9 @@ using GrainPath.Application.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 
-namespace GrainPath.Data.MongoDb.Actions;
+namespace GrainPath.Data.MongoDb.Fetchers;
 
-internal static class BoundsAction
+internal static class BoundsFetcher
 {
     private sealed class CollectBound
     {
@@ -23,9 +23,13 @@ internal static class BoundsAction
 
         public List<CollectBound> cuisine { get; set; }
 
+        public NumericBound year { get; set; }
+
         public NumericBound rating { get; set; }
 
         public NumericBound capacity { get; set; }
+
+        public NumericBound elevation { get; set; }
 
         public NumericBound minimumAge { get; set; }
     }
@@ -39,7 +43,7 @@ internal static class BoundsAction
         public Bounds bounds { get; set; }
     }
 
-    public static BoundsObject Act(IMongoDatabase database)
+    public static BoundsObject Fetch(IMongoDatabase database)
     {
         var bounds = database
             .GetCollection<Document>(MongoDbConst.INDEX_COLLECTION)
@@ -52,9 +56,11 @@ internal static class BoundsAction
             rental = bounds.rental.Select(item => item.label).ToList(),
             clothes = bounds.clothes.Select(item => item.label).ToList(),
             cuisine = bounds.cuisine.Select(item => item.label).ToList(),
+            year = bounds.year,
             rating = bounds.rating,
             capacity = bounds.capacity,
-            minimumAge = bounds.minimumAge,
+            elevation = bounds.elevation,
+            minimumAge = bounds.minimumAge
         };
     }
 }

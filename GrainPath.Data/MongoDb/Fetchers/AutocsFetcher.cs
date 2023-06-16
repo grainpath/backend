@@ -3,9 +3,9 @@ using GrainPath.Application.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 
-namespace GrainPath.Data.MongoDb.Actions;
+namespace GrainPath.Data.MongoDb.Fetchers;
 
-internal static class AutocsAction
+internal static class AutocsFetcher
 {
     private sealed class Item
     {
@@ -25,9 +25,9 @@ internal static class AutocsAction
         public List<Item> keywords { get; set; }
     }
 
-    public static AutocsIndex Act(IMongoDatabase database)
+    public static AutocsIndex Fetch(IMongoDatabase db)
     {
-        var doc = database
+        var doc = db
             .GetCollection<Document>(MongoDbConst.INDEX_COLLECTION)
             .Find(doc => doc.id == "keywords")
             .FirstOrDefault(); // synchronous!

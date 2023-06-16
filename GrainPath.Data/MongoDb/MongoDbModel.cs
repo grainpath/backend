@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Interfaces;
-using GrainPath.Data.MongoDb.Actions;
+using GrainPath.Data.MongoDb.Fetchers;
 using MongoDB.Driver;
 
 namespace GrainPath.Data.MongoDb;
@@ -13,15 +13,15 @@ internal sealed class MongoDbModel : IModel
 
     public MongoDbModel(IMongoDatabase database) { _database = database; }
 
-    public AutocsIndex GetAutocs() => AutocsAction.Act(_database);
+    public AutocsIndex GetAutocs() => AutocsFetcher.Fetch(_database);
 
-    public BoundsObject GetBounds() => BoundsAction.Act(_database);
+    public BoundsObject GetBounds() => BoundsFetcher.Fetch(_database);
 
-    public Task<Entity> GetEntity(string grainId) => EntityAction.Act(_database, grainId);
+    public Task<Entity> GetEntity(string grainId) => EntityFetcher.Fetch(_database, grainId);
 
-    public Task<List<Place>> GetAround(WgsPoint center, double radius, List<KeywordCondition> conditions)
-        => AroundAction.Act(_database, center, radius, conditions);
+    public Task<List<Place>> GetAround(WgsPoint center, double radius, List<Category> categories)
+        => AroundFetcher.Fetch(_database, center, radius, categories);
 
-    public Task<List<Place>> GetNearestWithin(List<WgsPoint> polygon, WgsPoint centroid, double distance, List<KeywordCondition> conditions)
-        => WithinAction.Act(_database, polygon, centroid, distance, conditions);
+    public Task<List<Place>> GetAroundWithin(List<WgsPoint> polygon, WgsPoint refPoint, double distance, List<Category> categories, int limit)
+        => AroundWithinFetcher.Fetch(_database, polygon, refPoint, distance, categories, limit);
 }
