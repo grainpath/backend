@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using GrainPath.Application.Entities;
+using GrainPath.Application.Handlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
