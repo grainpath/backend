@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
+using GrainPath.Application.Interfaces;
 using GrainPath.RoutingEngine.Osrm.Helpers;
 
 namespace GrainPath.RoutingEngine.Osrm.Fetchers;
@@ -26,7 +27,7 @@ internal static class DistanceMatrixFetcher
     /// <param name="addr">base URL of the service</param>
     /// <param name="waypoints">list of WGS84 points</param>
     /// <returns>distance matrix in meters</returns>
-    public static async Task<(DistanceMatrixObject, ErrorObject)> Fetch(string addr, List<WgsPoint> waypoints)
+    public static async Task<(IDistanceMatrix, ErrorObject)> Fetch(string addr, List<WgsPoint> waypoints)
     {
         var (b, e) = await QueryExecutor
             .Execute(QueryConstructor.Table(addr, waypoints));
@@ -48,7 +49,8 @@ internal static class DistanceMatrixFetcher
                     ans.durations[r][c] *= coeff;
                 }
             }
-            return (new() { distances = ans.durations }, null);
+
+            return (new OsrmDistanceMatrix(ans.durations), null);
         }
         catch (Exception ex) { return (null, new() { message = ex.Message }); }
     }
