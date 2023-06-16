@@ -52,10 +52,6 @@ public sealed class PlaceController : ControllerBase
 
             return grain is not null ? new EntityResponse() { entity = grain } : NotFound();
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode(500);
-        }
+        catch (Exception ex) { _logger.LogError(ex.Message); return StatusCode(500); }
     }
 }

@@ -74,10 +74,6 @@ public sealed class PlacesController : ControllerBase
                 places = await PlacesHandler.Handle(_context.Model, request.center.AsWgs(), request.radius.Value, request.categories)
             };
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode(500);
-        }
+        catch (Exception ex) { _logger.LogError(ex.Message); return StatusCode(500); }
     }
 }
