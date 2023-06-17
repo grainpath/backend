@@ -4,74 +4,77 @@ using System.Linq;
 namespace GrainPath.Application.Algorithms;
 
 /// <summary>
-/// Detect cycle using standard 3-color recursive procedure.
+/// Detect a cycle in a directed graph using standard 3-color recursive
+/// procedure.
 /// </summary>
-public class CycleDetector
+public sealed class CycleDetector
 {
-    private enum Color { W, G, B }
+    private enum Color { A, B, C }
 
     private class Vertex
     {
-        public int pred;
-        public Color color;
-        public Vertex() { pred = -1; color = Color.W; }
+        public Color Color;
+        public int Predecessor;
+        public Vertex() { Predecessor = -1; Color = Color.A; }
     }
 
-    private int pos = -1;
-    private readonly List<Vertex> Vs;
-    private readonly List<SortedSet<int>> Es = new();
+    private int _cycleRef = -1;
+    private readonly List<Vertex> _Vs;
+    private readonly List<SortedSet<int>> _Es = new();
 
     private bool cycle(int u)
     {
-        Vs[u].color = Color.G;
+        _Vs[u].Color = Color.B;
 
-        foreach (var v in Es[u])
+        foreach (var v in _Es[u])
         {
-            Vs[v].pred = u;
-            switch (Vs[v].color)
+            _Vs[v].Predecessor = u;
+            switch (_Vs[v].Color)
             {
-                case Color.W: return cycle(v);
-                case Color.G:
-                    pos = v;
+                case Color.A: return cycle(v);
+                case Color.B:
+                    _cycleRef = v;
                     return true;
             }
         }
 
-        Vs[u].color = Color.B;
+        _Vs[u].Color = Color.C;
         return false;
     }
 
     public CycleDetector(int order)
     {
-        Vs = Enumerable.Repeat(new Vertex(), order).ToList();
-        Es = Enumerable.Repeat(new SortedSet<int>(), order).ToList();
+        _Vs = Enumerable.Repeat(new Vertex(), order).ToList();
+        _Es = Enumerable.Repeat(new SortedSet<int>(), order).ToList();
     }
 
     /// <summary>
     /// Loops are recognized as cycles.
     /// </summary>
-    public void AddEdge(int fr, int to) => Es[fr].Add(to);
+    public void AddEdge(int fr, int to) => _Es[fr].Add(to);
 
     public List<int> Cycle()
     {
-        for (int v = 0; v < Vs.Count; ++v)
+        var res = new List<int>();
+
+        for (int u = 0; u < _Vs.Count; ++u)
         {
-            if (Vs[v].color == Color.W && cycle(v)) { break; }
+            if (_Vs[u].Color == Color.A && cycle(u)) { break; }
         }
 
-        List<int> res = null;
-
-        if (pos > -1)
+        if (_cycleRef > -1)
         {
-            var cur = pos;
+            var cur = _cycleRef;
             do
             {
                 res.Add(cur);
-                cur = Vs[cur].pred;
-            } while (cur != pos);
+                cur = _Vs[cur].Predecessor;
+            } while (cur != _cycleRef);
             res.Add(cur);
         }
 
-        return res;
+        res?.Reverse();
+
+        return res.Count > 0 ? res : null;
     }
 }
