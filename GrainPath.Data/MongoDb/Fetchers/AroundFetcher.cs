@@ -15,7 +15,8 @@ internal static class AroundFetcher
     /// <item>https://www.mongodb.com/docs/manual/reference/operator/query/nearSphere/</item>
     /// </list>
     /// </summary>
-    public static async Task<List<Place>> Fetch(IMongoDatabase database, WgsPoint center, double radius, List<Category> categories, int bucket)
+    public static async Task<List<Place>> Fetch(
+        IMongoDatabase database, WgsPoint center, double radius, List<Category> categories, int bucket)
     {
         var sphereFilter = Builders<Entity>.Filter
             .NearSphere(p => p.position, GeoJson.Point(new GeoJson2DGeographicCoordinates(center.lon, center.lat)), maxDistance: radius);
