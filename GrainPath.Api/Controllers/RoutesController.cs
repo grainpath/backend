@@ -71,10 +71,10 @@ public sealed class RouteController : ControllerBase
         if (!RoutesVerifier.Verify(request)) { return BadRequest(); }
 
         var (routes, err) = await RoutesHandler.Handle(
-            _context.Model, _context.Engine, request.source.AsWgs(),
-            request.target.AsWgs(), request.distance.Value, request.categories);
+            _context.Model, _context.Engine, request.source.AsWgs(), request.target.AsWgs(),
+            request.distance.Value, request.categories, request.precedence);
 
-        if (err is not null) { _logger.LogError(err.message); return StatusCode(500); }
+        if (err is not null) { _logger.LogError(err.Message); return StatusCode(500); }
 
         return new RoutesResponse() { routes = routes };
     }
