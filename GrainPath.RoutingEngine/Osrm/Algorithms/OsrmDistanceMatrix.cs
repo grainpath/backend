@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using GrainPath.Application.Interfaces;
 
+namespace GrainPath.RoutingEngine.Osrm.Algorithms;
+
 /// <summary>
 /// Simple wrapper over List-based distance matrix.
 /// </summary>
