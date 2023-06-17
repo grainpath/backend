@@ -10,28 +10,33 @@ namespace GrainPath.Application.Algorithms;
 
 internal static class Spherical
 {
-    /// <summary>
-    /// Sphere radius used by Web Mercator.
-    /// <list>
-    /// </list>
-    /// </summary>
-    private static double EarthMeanRadius => 6_378_137.0;
-
     private static readonly double _deg2rad = Math.PI / 180.0;
     private static readonly double _rad2deg = 180.0 / Math.PI;
 
     /// <summary>
-    /// Converts degrees to radians.
+    /// Sphere radius used by Web Mercator projection (semi-major axis).
+    /// </summary>
+    private static readonly double _earthRadius = 6_378_137.0;
+
+    /// <summary>
+    /// Calculate x^2
+    /// </summary>
+    private static double Square(double x) => x * x;
+
+    /// <summary>
+    /// Convert degrees to radians.
     /// </summary>
     private static double DegToRad(double deg) => deg * _deg2rad;
 
     /// <summary>
-    /// Converts radians to degrees.
+    /// Convert radians to degrees.
     /// </summary>
     private static double RadToDeg(double rad) => rad * _rad2deg;
 
     /// <summary>
-    /// Weight of one longitudinal radian at a certain latitude.
+    /// The ratio r / R, where R is the Earth radius and r is the radius of
+    /// a parallel at that latitude. The costs of radians have the same ratio
+    /// because of the definition of a radian.
     /// </summary>
     /// <param name="lat">Latitude in radians.</param>
     private static double LonRadCost(double lat) => Math.Cos(lat);
@@ -41,60 +46,64 @@ internal static class Spherical
     /// </summary>
     /// <param name="lat">Latitude in radians.</param>
     /// <returns>Length in meters.</returns>
-    private static double LonRadLen(double lat) => EarthMeanRadius * LonRadCost(lat);
-
-    /// <summary>
-    /// Absolute longitudinal difference.
-    /// </summary>
-    /// <returns>Difference in radians.</returns>
-    private static double LonRadDif(WgsPoint p1, WgsPoint p2) => DegToRad(Math.Abs(p1.lon - p2.lon));
+    private static double LonRadLeng(double lat) => _earthRadius * LonRadCost(lat);
 
     /// <summary>
     /// Weight of one latitudinal radian at a certain latitude.
     /// </summary>
-    /// <param name="_">Latitude in radians.</param>
-    private static double LatRadCost(double _) => 1.0;
+    /// <param name="lat">Latitude in radians.</param>
+    private static double LatRadCost(double lat) => 1.0;
 
     /// <summary>
-    /// Length of one latitudinal radian at a certai latitude.
+    /// Length of one latitudinal radian at a certain latitude.
     /// </summary>
-    /// <param name="_">Latitude in radians.</param>
+    /// <param name="lat">Latitude in radians.</param>
     /// <returns>Length in meters.</returns>
-    private static double LatRadLen(double _) => EarthMeanRadius * LatRadCost(_);
+    private static double LatRadLeng(double lat) => _earthRadius * LatRadCost(lat);
 
     /// <summary>
-    /// Calculate absolute latitude difference in radians.
+    /// Approximate the midpoint between two points on a sphere (use <b>ONLY</b> for small distances).
     /// </summary>
-    /// <returns>Difference in radians.</returns>
-    private static double LatRadDif(WgsPoint p1, WgsPoint p2) => DegToRad(Math.Abs(p1.lat - p2.lat));
-
-    /// <summary>
-    /// Approximate midpoint (use <b>ONLY</b> for small distances).
-    /// </summary>
-    public static WgsPoint Midpoint(WgsPoint p1, WgsPoint p2)
+    internal static WgsPoint Midpoint(WgsPoint p1, WgsPoint p2)
         => new((p1.lon + p2.lon) / 2.0, (p1.lat + p2.lat) / 2.0);
 
     /// <summary>
-    /// Calculate an angle in the counter-clockwise direction.
+    /// Approximate an angle in the counter-clockwise direction.
     /// </summary>
     /// <returns>Angle in radians.</returns>
-    private static double RotAngle(WgsPoint p1, WgsPoint p2)
+    internal static double RotAngle(WgsPoint p1, WgsPoint p2)
     {
         var lat = DegToRad(Midpoint(p1, p2).lat);
-        return Math.Atan((DegToRad(p2.lat - p1.lat) * LatRadCost(lat)) / (DegToRad(p2.lon - p1.lon) * LonRadCost(lat)));
+
+        // offsets on (x, y)-axis given in radians
+
+        var x = DegToRad(p2.lon - p1.lon) * LonRadCost(lat);
+        var y = DegToRad(p2.lat - p1.lat) * LatRadCost(lat);
+
+        return Math.Atan2(y, x);
     }
 
     /// <summary>
-    /// Approximate the great-circle distance (use <b>ONLY</b> for small distances).
+    /// Calculate the central angle between two given points on a sphere in
+    /// radians and multiply by the Earth radius.
+    /// 
+    /// hav(x) = sin^2 (x^2 / 2) and arcsin(x) = arctan(x / sqrt(1 - x^2)).
+    /// <list>
+    /// <item>https://www.movable-type.co.uk/scripts/latlong.html</item>
+    /// <item>https://en.wikipedia.org/wiki/Haversine_formula#Formulation</item>
+    /// </list>
     /// </summary>
-    /// <returns>Distance in meters.</returns>
-    private static double GreatCircleDistance(WgsPoint p1, WgsPoint p2)
+    /// <returns></returns>
+    internal static double HaversineDistance(WgsPoint p1, WgsPoint p2)
     {
-        var m_lat = DegToRad(Midpoint(p1, p2).lat);
-        var d_lon = LonRadDif(p1, p2) * LonRadLen(m_lat);
-        var d_lat = LatRadDif(p1, p2) * LatRadLen(m_lat);
+        var deltaLam = DegToRad(p2.lon - p1.lon);
+        var deltaPhi = DegToRad(p2.lat - p1.lat);
 
-        return Math.Sqrt(d_lon * d_lon + d_lat * d_lat);
+        var hav = Square(Math.Sin(deltaPhi / 2.0)) + Math.Cos(DegToRad(p1.lat)) * Math.Cos(DegToRad(p2.lat)) * Square(Math.Sin(deltaLam / 2.0));
+
+        var ang = 2.0 * Math.Atan2(Math.Sqrt(hav), Math.Sqrt(1 - hav));
+
+        return _earthRadius * ang;
     }
 
     /// <summary>
@@ -107,22 +116,26 @@ internal static class Spherical
     internal static List<WgsPoint> BoundingEllipse(WgsPoint f1, WgsPoint f2, double distance)
     {
         var m = Spherical.Midpoint(f1, f2);
-        var c = Spherical.GreatCircleDistance(f1, f2) / 2.0;
+        var c = Spherical.HaversineDistance(f1, f2) / 2.0;
 
-        // construct a bounding ellipse with the center at the origin (0, 0)
+        /* Construct a bounding ellipse with the center at the origin (0, 0).
+         * Coordinates of the result are in meters! */
 
-        var a = ((distance > (2.0 * c)) ? distance : (2.0 * c + 250.0)) / 2.0;
+        var a = ((distance > (2.0 * c)) ? distance : (2.0 * c + 200.0)) / 2.0;
         var b = Math.Sqrt(a * a - c * c);
 
         var factory = new GeometricShapeFactory();
         factory.Envelope = new(-a, +a, -b, +b);
         var e1 = factory.CreateEllipse();
 
-        // rotated, transformed and translated ellipse
+        // Rotated ellipse
 
         var e2 = new AffineTransformation()
             .Rotate(Spherical.RotAngle(f1, f2))
             .Transform(e1);
+
+        /* Transform the ellipse with respect to the parallel at the latitude
+         * of the midpoint. Coordinates of the result are in degrees! */
 
         var lr = DegToRad(m.lat);
         var cs = new Coordinate[e2.Coordinates.Length];
@@ -131,9 +144,11 @@ internal static class Spherical
         {
             var pt = e2.Coordinates[i];
             cs[i] = new Coordinate(
-                Spherical.RadToDeg(pt.X / Spherical.LonRadLen(lr)),
-                Spherical.RadToDeg(pt.Y / Spherical.LatRadLen(lr)));
+                Spherical.RadToDeg(pt.X / Spherical.LonRadLeng(lr)),
+                Spherical.RadToDeg(pt.Y / Spherical.LatRadLeng(lr)));
         }
+
+        // Translated ellipse
 
         var e3 = new AffineTransformation()
             .Translate(m.lon, m.lat)
