@@ -4,7 +4,7 @@ using GrainPath.Application.Interfaces;
 namespace GrainPath.RoutingEngine.Osrm.Algorithms;
 
 /// <summary>
-/// Simple wrapper over List-based distance matrix.
+/// Simple wrapper over List-based distance matrix calculated by OSRM.
 /// </summary>
 internal sealed class OsrmDistanceMatrix : IDistanceMatrix
 {
