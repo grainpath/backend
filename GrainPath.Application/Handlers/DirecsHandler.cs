@@ -17,6 +17,6 @@ public static class DirecsHandler
     public static Task<(List<ShortestPathObject>, ErrorObject)> Handle(IRoutingEngine engine, List<WebPoint> waypoints)
     {
         var points = waypoints.Select(w => w.AsWgs()).ToList();
-        return engine.FetchShortestPath(points);
+        return engine.GetShortestPath(points);
     }
 }
