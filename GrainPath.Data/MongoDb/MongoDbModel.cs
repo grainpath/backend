@@ -17,7 +17,7 @@ internal sealed class MongoDbModel : IModel
 
     public BoundsObject GetBounds() => BoundsFetcher.Fetch(_database);
 
-    public Task<Entity> GetEntity(string grainId) => EntityFetcher.Fetch(_database, grainId);
+    public Task<(Entity, ErrorObject)> GetEntity(string grainId) => EntityFetcher.Fetch(_database, grainId);
 
     public Task<List<Place>> GetAround(WgsPoint center, double radius, List<Category> categories, int bucket)
         => AroundFetcher.Fetch(_database, center, radius, categories, bucket);

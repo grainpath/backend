@@ -20,7 +20,7 @@ public interface IModel
     /// Fetch an entity by id.
     /// </summary>
     /// <param name="grainId">Id as per stored in the database.</param>
-    public Task<Entity> GetEntity(string grainId);
+    public Task<(Entity, ErrorObject)> GetEntity(string grainId);
 
     /// <summary>
     /// Find places around a point satisfying specific categories.

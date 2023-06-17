@@ -46,12 +46,10 @@ public sealed class PlaceController : ControllerBase
     {
         if (!EntityVerifier.Verify(request)) { return BadRequest(); }
 
-        try
-        {
-            var grain = await EntityHandler.Handle(_context.Model, request.grainId);
+        var (entity, err) = await EntityHandler.Handle(_context.Model, request.grainId);
 
-            return grain is not null ? new EntityResponse() { entity = grain } : NotFound();
-        }
-        catch (Exception ex) { _logger.LogError(ex.Message); return StatusCode(500); }
+        if (err is not null) { _logger.LogError(err.message); return StatusCode(500); }
+
+        return (entity is not null) ? (new EntityResponse() { entity = entity }) : NotFound();
     }
 }

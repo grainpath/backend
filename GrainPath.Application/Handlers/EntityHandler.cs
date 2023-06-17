@@ -12,6 +12,6 @@ public static class EntityHandler
     /// <summary>
     /// Get entity by id.
     /// </summary>
-    public static Task<Entity> Handle(IModel model, string grainId)
+    public static Task<(Entity, ErrorObject)> Handle(IModel model, string grainId)
         => model.GetEntity(grainId);
 }
