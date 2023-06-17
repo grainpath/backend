@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GrainPath.Domain\GrainPath.Domain.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\PruningRadixTrie\PruningRadixTrie.csproj" PrivateAssets="All" />
   </ItemGroup>
 
