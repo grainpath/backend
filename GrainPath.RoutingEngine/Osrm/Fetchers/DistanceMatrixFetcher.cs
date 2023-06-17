@@ -11,6 +11,8 @@ namespace GrainPath.RoutingEngine.Osrm.Fetchers;
 
 internal static class DistanceMatrixFetcher
 {
+    private static readonly double SPEED_COEFF = 5000.0 / 3600.0;
+
     private sealed class Answer
     {
         public string code { get; set; }
@@ -41,13 +43,11 @@ internal static class DistanceMatrixFetcher
 
             if (ans.code != "Ok" || ans.durations is null) { return (null, null); }
 
-            var coeff = 5000.0 / 3600.0;
-
             for (int r = 0; r < ans.durations.Count; ++r)
             {
                 for (int c = 0; c < ans.durations.Count; ++c)
                 {
-                    ans.durations[r][c] *= coeff;
+                    ans.durations[r][c] *= SPEED_COEFF;
                 }
             }
 
