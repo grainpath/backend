@@ -48,7 +48,7 @@ public sealed class DirecsController : ControllerBase
 
         var (direcs, err) = await DirecsHandler.Handle(_context.Engine, request.waypoints);
 
-        if (err is not null) { _logger.LogError(err.message); return StatusCode(500); }
+        if (err is not null) { _logger.LogError(err.Message); return StatusCode(500); }
 
         return new DirecsResponse() { direcs = direcs };
     }

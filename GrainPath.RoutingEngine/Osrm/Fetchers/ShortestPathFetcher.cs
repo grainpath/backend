@@ -53,7 +53,7 @@ internal static class ShortestPathFetcher
         var (b, e) = await QueryExecutor
             .Execute(QueryConstructor.Route(addr, waypoints));
 
-        if (b is null) { return (new(), e is null ? null : new() { message = e }); }
+        if (b is null) { return (new(), e is null ? null : new() { Message = e }); }
 
         try
         {
@@ -72,6 +72,6 @@ internal static class ShortestPathFetcher
 
             return (routes, null);
         }
-        catch (Exception ex) { return (new(), new() { message = ex.Message }); }
+        catch (Exception ex) { return (new(), new() { Message = ex.Message }); }
     }
 }

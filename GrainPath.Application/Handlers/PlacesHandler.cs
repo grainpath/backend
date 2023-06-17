@@ -18,7 +18,8 @@ public static class PlacesHandler
     /// Get a list of matching places. The result is capped to avoid retrieving
     /// the entire database.
     /// </summary>
-    public static Task<List<Place>> Handle(IModel model, WgsPoint center, double radius, List<Category> categories)
+    public static Task<(List<Place>, ErrorObject)> Handle(
+        IModel model, WgsPoint center, double radius, List<Category> categories)
     {
         var bucket = Math.Max(MIN_BUCKET_SIZE, TOTAL_SIZE / categories.Count);
 

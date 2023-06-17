@@ -67,13 +67,10 @@ public sealed class PlacesController : ControllerBase
     {
         if (!PlacesVerifier.Verify(request)) { return BadRequest(); }
 
-        try
-        {
-            return new PlacesResponse()
-            {
-                places = await PlacesHandler.Handle(_context.Model, request.center.AsWgs(), request.radius.Value, request.categories)
-            };
-        }
-        catch (Exception ex) { _logger.LogError(ex.Message); return StatusCode(500); }
+        var (places, err) = await PlacesHandler.Handle(_context.Model, request.center.AsWgs(), request.radius.Value, request.categories);
+
+        if (err is not null) { _logger.LogError(err.Message); return StatusCode(500); }
+
+        return new PlacesResponse() { places = places };
     }
 }

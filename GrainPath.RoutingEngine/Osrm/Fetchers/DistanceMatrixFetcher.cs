@@ -35,7 +35,7 @@ internal static class DistanceMatrixFetcher
         var (b, e) = await QueryExecutor
             .Execute(QueryConstructor.Table(addr, waypoints));
 
-        if (b is null) { return (null, e is null ? null : new() { message = e }); }
+        if (b is null) { return (null, e is null ? null : new() { Message = e }); }
 
         try
         {
@@ -53,6 +53,6 @@ internal static class DistanceMatrixFetcher
 
             return (new OsrmDistanceMatrix(ans.durations), null);
         }
-        catch (Exception ex) { return (null, new() { message = ex.Message }); }
+        catch (Exception ex) { return (null, new() { Message = ex.Message }); }
     }
 }

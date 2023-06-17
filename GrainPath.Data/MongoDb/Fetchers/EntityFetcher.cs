@@ -18,6 +18,6 @@ internal static class EntityFetcher
 
             return (entity, null);
         }
-        catch (Exception ex) { return (null, new ErrorObject() { message = ex.Message }); }
+        catch (Exception ex) { return (null, new ErrorObject() { Message = ex.Message }); }
     }
 }

@@ -48,7 +48,7 @@ public sealed class PlaceController : ControllerBase
 
         var (entity, err) = await EntityHandler.Handle(_context.Model, request.grainId);
 
-        if (err is not null) { _logger.LogError(err.message); return StatusCode(500); }
+        if (err is not null) { _logger.LogError(err.Message); return StatusCode(500); }
 
         return (entity is not null) ? (new EntityResponse() { entity = entity }) : NotFound();
     }

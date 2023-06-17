@@ -30,7 +30,7 @@ public interface IModel
     /// <param name="categories">Categories given by the user.</param>
     /// <param name="bucket">Get at most <c>limit</c> places for each category.</param>
     /// <returns>Non-null, possibly empty list of places.</returns>
-    public Task<List<Place>> GetAround(
+    public Task<(List<Place>, ErrorObject)> GetAround(
         WgsPoint center, double radius, List<Category> categories, int bucket);
 
     /// <summary>
@@ -42,6 +42,6 @@ public interface IModel
     /// <param name="categories">Categories of objects introduced by the user.</param>
     /// <param name="bucket">Get at most <c>limit</c> places for each category.</param>
     /// <returns>Non-null, possibly empty list of places.</returns>
-    public Task<List<Place>> GetAroundWithin(
+    public Task<(List<Place>, ErrorObject)> GetAroundWithin(
         List<WgsPoint> polygon, WgsPoint refPoint, double distance, List<Category> categories, int bucket);
 }
