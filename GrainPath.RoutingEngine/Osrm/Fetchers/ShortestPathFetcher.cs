@@ -46,20 +46,20 @@ internal static class ShortestPathFetcher
     /// </list>
     /// </summary>
     /// <param name="addr">base URL of the service</param>
-    /// <param name="waypoints">list of WGS84 points</param>
+    /// <param name="waypoints">list of WGS 84 points</param>
     /// <returns>list of shortest path objects or error message</returns>
     public static async Task<(List<ShortestPathObject>, ErrorObject)> Fetch(string addr, List<WgsPoint> waypoints)
     {
         var (b, e) = await QueryExecutor
             .Execute(QueryConstructor.Route(addr, waypoints));
 
-        if (b is null) { return (null, e is null ? null : new() { message = e }); }
+        if (b is null) { return (new(), e is null ? null : new() { message = e }); }
 
         try
         {
             var ans = JsonSerializer.Deserialize<Answer>(b);
 
-            if (ans.code != "Ok") { return (null, null); }
+            if (ans.code != "Ok") { return (new(), null); }
 
             var routes = ans.routes.Select(r => new ShortestPathObject()
             {
@@ -72,6 +72,6 @@ internal static class ShortestPathFetcher
 
             return (routes, null);
         }
-        catch (Exception ex) { return (null, new() { message = ex.Message }); }
+        catch (Exception ex) { return (new(), new() { message = ex.Message }); }
     }
 }

@@ -15,5 +15,6 @@ public interface IRoutingEngine
     /// Calculate polyline, distance, and duration of the fastest routes
     /// visiting waypoints in a given order.
     /// </summary>
+    /// <returns>Non-null, possibly empty list of shortest path objects.</returns>
     public Task<(List<ShortestPathObject>, ErrorObject)> GetShortestPath(List<WgsPoint> waypoints);
 }
