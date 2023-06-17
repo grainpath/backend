@@ -35,7 +35,7 @@ internal static class PlacesFetcher
 
             var places = docs
                 .Select(d => BsonSerializer.Deserialize<Place>(d))
-                .Select(p => { _ = p.selected.Add(i); return p; });
+                .Select(p => { _ = p.categories.Add(i); return p; });
 
             /* Merge the list of places with the result in case the same place
              * is associated with more than one category. */
@@ -44,7 +44,7 @@ internal static class PlacesFetcher
             {
                 if (result.TryGetValue(p.grainId, out var place))
                 {
-                    place.selected.Add(i);
+                    place.categories.Add(i);
                 }
                 else { result.Add(place.grainId, place); }
             }

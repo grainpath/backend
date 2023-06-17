@@ -24,5 +24,5 @@ public class Place
     public SortedSet<string> keywords { get; set; }
 
     [Required]
-    public SortedSet<int> selected { get; set; } = new();
+    public SortedSet<int> categories { get; set; } = new();
 }
