@@ -9,21 +9,6 @@ namespace GrainPath.Application.Solvers;
 internal static class RelaxedSolver
 {
     /// <summary>
-    /// Get a suitable input to IfHeuristic.
-    /// </summary>
-    private static List<IfPlace> GetIfPlaces(IReadOnlyList<Place> places)
-    {
-        var ifPlaces = new List<IfPlace>();
-
-        for (int i = 0; i < places.Count; ++i)
-        {
-            foreach (var c in places[i].categories) { ifPlaces.Add(new(i, c)); }
-        }
-
-        return ifPlaces;
-    }
-
-    /// <summary>
     /// IfHeuristic may return routes with repeating indices due to disjoint
     /// sets. Those can be safely removed.
     /// </summary>
@@ -41,16 +26,16 @@ internal static class RelaxedSolver
     }
 
     public static List<List<int>> Solve(
-        IReadOnlyList<Place> places, IDistanceMatrix matrix, double distance, int catsCount, int routesCount)
+        IReadOnlyList<Place> places, IDistanceMatrix matrix, double distance, int routesCount)
     {
         var routes = new List<List<int>>();
-        var ifPlaces = GetIfPlaces(places);
+        var ifPlaces = PlaceConverter.Convert(places);
 
         for (int i = 0; i < routesCount; ++i)
         {
             var ifRoute = IfHeuristic.Advise(ifPlaces, matrix, distance, places.Count);
 
-            if (ifRoute.Count <= 2) { break; } // no more good candidates remained
+            if (ifRoute.Count <= 2) { break; } // no more good places remained
 
             var (route, dict) = SimplifyIfRoute(ifRoute);
 

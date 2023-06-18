@@ -4,19 +4,12 @@ using GrainPath.Application.Interfaces;
 
 namespace GrainPath.Application.Heuristics;
 
-internal sealed class IfPlace
-{
-    public readonly int Index;
-    public readonly int Category;
-    public IfPlace(int index, int category) { Index = index; Category = category; }
-}
-
-internal sealed class IfCategoryComparer : IComparer<List<IfPlace>>
+internal sealed class IfCategoryComparer : IComparer<List<SolverPlace>>
 {
     /// <summary>
     /// Categories with less items are more relevant.
     /// </summary>
-    public int Compare(List<IfPlace> l, List<IfPlace> r) => l.Count.CompareTo(r.Count);
+    public int Compare(List<SolverPlace> l, List<SolverPlace> r) => l.Count.CompareTo(r.Count);
 }
 
 internal static class IfPlaceSeparator
@@ -24,13 +17,13 @@ internal static class IfPlaceSeparator
     /// <summary>
     /// Separate points by category.
     /// </summary>
-    private static List<List<IfPlace>> Group(IReadOnlyList<IfPlace> places)
+    private static List<List<SolverPlace>> Group(IReadOnlyList<SolverPlace> places)
     {
-        return places.Aggregate(new SortedDictionary<int, List<IfPlace>>(), (acc, place) =>
+        return places.Aggregate(new SortedDictionary<int, List<SolverPlace>>(), (acc, place) =>
         {
             if (!acc.ContainsKey(place.Category))
             {
-                acc.Add(place.Category, new List<IfPlace>());
+                acc.Add(place.Category, new List<SolverPlace>());
             }
             acc[place.Category].Add(place);
             return acc;
@@ -40,7 +33,7 @@ internal static class IfPlaceSeparator
     /// <summary>
     /// Sort categories by number of elements in ascending order.
     /// </summary>
-    private static List<List<IfPlace>> Sort(List<List<IfPlace>> categories)
+    private static List<List<SolverPlace>> Sort(List<List<SolverPlace>> categories)
     {
         categories.Sort(new IfCategoryComparer());
         return categories;
@@ -49,7 +42,7 @@ internal static class IfPlaceSeparator
     /// <summary>
     /// Group places by category and sort categories by relevancy.
     /// </summary>
-    public static List<List<IfPlace>> Separate(IReadOnlyList<IfPlace> places) => Sort(Group(places));
+    public static List<List<SolverPlace>> Separate(IReadOnlyList<SolverPlace> places) => Sort(Group(places));
 }
 
 internal static class IfCandidateFinder
@@ -58,11 +51,11 @@ internal static class IfCandidateFinder
     /// Given a certain keyword, find a pair of poi and position for insertion
     /// that gives the smallest distance increase.
     /// </summary>
-    public static (IfPlace, int, double) FindBest(
-        IReadOnlyList<int> seq, IReadOnlyList<IfPlace> cat, IDistanceMatrix matrix, double currDistance)
+    public static (SolverPlace, int, double) FindBest(
+        IReadOnlyList<int> seq, IReadOnlyList<SolverPlace> cat, IDistanceMatrix matrix, double currDistance)
     {
         int index = -1;
-        IfPlace best = null;
+        SolverPlace best = null;
         double candDistance = double.MaxValue;
 
         foreach (var place in cat)
@@ -96,12 +89,12 @@ internal static class IfHeuristic
     /// Advise a route.
     /// </summary>
     public static List<int> Advise(
-        IReadOnlyList<IfPlace> pois, IDistanceMatrix matrix, double maxDistance, int placeCount)
+        IReadOnlyList<SolverPlace> places, IDistanceMatrix matrix, double maxDistance, int placeCount)
     {
         var seq = new List<int>() { 0, placeCount - 1 };
         var distance = matrix.Distance(0, placeCount - 1);
 
-        var cats = IfPlaceSeparator.Separate(pois);
+        var cats = IfPlaceSeparator.Separate(places);
 
         foreach (var cat in cats)
         {
