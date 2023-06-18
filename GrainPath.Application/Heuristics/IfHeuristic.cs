@@ -11,47 +11,57 @@ internal sealed class IfPlace
     public IfPlace(int index, int category) { Index = index; Category = category; }
 }
 
-/// <summary>
-/// Infrequent-First Heuristic from https://doi.org/10.1145/1463434.1463449.
-/// </summary>
-internal static class IfHeuristic
+internal sealed class IfCategoryComparer : IComparer<List<IfPlace>>
 {
     /// <summary>
     /// Categories with less items are more relevant.
     /// </summary>
-    private sealed class CategoryComparer : IComparer<List<IfPlace>>
-    {
-        public int Compare(List<IfPlace> l, List<IfPlace> r) => l.Count.CompareTo(r.Count);
-    }
+    public int Compare(List<IfPlace> l, List<IfPlace> r) => l.Count.CompareTo(r.Count);
+}
 
+internal static class IfPlaceSeparator
+{
     /// <summary>
     /// Separate points by category.
     /// </summary>
-    private static List<List<IfPlace>> GetCategories(IReadOnlyList<IfPlace> places, int catsCount)
+    private static List<List<IfPlace>> Group(IReadOnlyList<IfPlace> places)
     {
-        var categories = Enumerable.Range(0, catsCount).Select(_ => new List<IfPlace>()).ToList();
-
-        foreach (var place in places) { categories[place.Category].Add(place); }
-
-        return categories;
+        return places.Aggregate(new SortedDictionary<int, List<IfPlace>>(), (acc, place) =>
+        {
+            if (!acc.ContainsKey(place.Category))
+            {
+                acc.Add(place.Category, new List<IfPlace>());
+            }
+            acc[place.Category].Add(place);
+            return acc;
+        }).Values.ToList();
     }
 
     /// <summary>
     /// Sort categories by number of elements in ascending order.
     /// </summary>
-    private static List<List<IfPlace>> SortCategories(List<List<IfPlace>> categories)
+    private static List<List<IfPlace>> Sort(List<List<IfPlace>> categories)
     {
-        categories.Sort(new CategoryComparer());
+        categories.Sort(new IfCategoryComparer());
         return categories;
     }
 
     /// <summary>
+    /// Group places by category and sort categories by relevancy.
+    /// </summary>
+    public static List<List<IfPlace>> Separate(IReadOnlyList<IfPlace> places) => Sort(Group(places));
+}
+
+internal static class IfCandidateFinder
+{
+    /// <summary>
     /// Given a certain keyword, find a pair of poi and position for insertion
     /// that gives the smallest distance increase.
     /// </summary>
-    private static (IfPlace, int, double) FindBest(IReadOnlyList<int> seq, IReadOnlyList<IfPlace> cat, IDistanceMatrix matrix, double currDistance)
+    public static (IfPlace, int, double) FindBest(
+        IReadOnlyList<int> seq, IReadOnlyList<IfPlace> cat, IDistanceMatrix matrix, double currDistance)
     {
-        int seqIndex = -1;
+        int index = -1;
         IfPlace best = null;
         double candDistance = double.MaxValue;
 
@@ -66,30 +76,36 @@ internal static class IfHeuristic
 
                 if (nextDistance < candDistance)
                 {
+                    index = i;
                     best = place;
-                    seqIndex = i;
                     candDistance = nextDistance;
                 }
             }
         }
 
-        return (best, seqIndex, candDistance);
+        return (best, index, candDistance);
     }
+}
 
+/// <summary>
+/// Infrequent-First Heuristic from https://doi.org/10.1145/1463434.1463449.
+/// </summary>
+internal static class IfHeuristic
+{
     /// <summary>
     /// Advise a route.
     /// </summary>
     public static List<int> Advise(
-        IReadOnlyList<IfPlace> pois, IDistanceMatrix matrix, double maxDistance, int catsCount, int placeCount)
+        IReadOnlyList<IfPlace> pois, IDistanceMatrix matrix, double maxDistance, int placeCount)
     {
         var seq = new List<int>() { 0, placeCount - 1 };
         var distance = matrix.Distance(0, placeCount - 1);
 
-        var cats = SortCategories(GetCategories(pois, catsCount));
+        var cats = IfPlaceSeparator.Separate(pois);
 
         foreach (var cat in cats)
         {
-            var (best, seqIndex, candDistance) = FindBest(seq, cat, matrix, distance);
+            var (best, seqIndex, candDistance) = IfCandidateFinder.FindBest(seq, cat, matrix, distance);
 
             if (best is not null && candDistance <= maxDistance * 1.0)
             {
