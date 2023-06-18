@@ -4,7 +4,7 @@ using System.Linq;
 namespace GrainPath.Application.Algorithms;
 
 /// <summary>
-/// Detect a cycle in a directed graph using standard 3-color recursive
+/// Detect a cycle in a <b>directed</b> graph using standard 3-color recursive
 /// procedure.
 /// </summary>
 public sealed class CycleDetector
@@ -46,8 +46,8 @@ public sealed class CycleDetector
 
     public CycleDetector(int order)
     {
-        _Vs = Enumerable.Repeat(new Vertex(), order).ToList();
-        _Es = Enumerable.Repeat(new SortedSet<int>(), order).ToList();
+        _Vs = Enumerable.Range(0, order).Select(_ => new Vertex()).ToList();
+        _Es = Enumerable.Range(0, order).Select(_ => new SortedSet<int>()).ToList();
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public sealed class CycleDetector
             res.Add(cur);
         }
 
-        res?.Reverse();
+        res.Reverse();
 
         return res.Count > 0 ? res : null;
     }
