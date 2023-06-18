@@ -16,6 +16,11 @@ public static class RoutesHandler
     private static readonly int BUCKET_SIZE = 20;
 
     /// <summary>
+    /// Find up to quantity routes.
+    /// </summary>
+    private static readonly int ROUTES_COUNT = 10;
+
+    /// <summary>
     /// Selector between Osrm (precise) and Haversine (approximate) distance matrices.
     /// </summary>
     private static readonly int DISTANCE_MATRIX_THRESHOLD = 5;
@@ -30,26 +35,23 @@ public static class RoutesHandler
     /// Extract waypoints out of the route sequence. Skip first and last items
     /// (source and target).
     /// </summary>
-    private static List<Place> ExtractWaypoints(List<int> route, List<Place> places)
-    {
-        return Enumerable.Range(1, route.Count - 1)
-            .Aggregate(new List<Place>(), (acc, i) => { acc.Add(places[route[i]]); return acc; });
-    }
+    private static List<Place> Extract(List<int> route, List<Place> places)
+        => route.Skip(1).SkipLast(1).Select(i => places[i]).ToList();
 
     /// <summary>
     /// Calculate a route that visit places of provided categories.
     /// </summary>
     public static async Task<(List<RouteObject>, ErrorObject)> Handle(
         IModel model, IRoutingEngine engine, WgsPoint source, WgsPoint target,
-        double distance, List<Category> categories, List<PrecedenceEdge> precedence)
+        double maxDistance, List<Category> categories, List<PrecedenceEdge> precedence)
     {
         /* Get list of places and locations within bounding ellipse. Note that
          * the source and target are part of the list. */
 
-        var ellipse = Spherical.BoundingEllipse(source, target, distance);
+        var ellipse = Spherical.BoundingEllipse(source, target, maxDistance);
 
         var (around, err0) = await model.GetAroundWithin(
-            ellipse, Spherical.Midpoint(source, target), distance / 2.0, categories, BUCKET_SIZE);
+            ellipse, Spherical.Midpoint(source, target), maxDistance / 2.0, categories, BUCKET_SIZE);
 
         if (around is null) { return (new(), err0); }
 
@@ -67,8 +69,8 @@ public static class RoutesHandler
         // Construct waypoint sequences.
 
         var routes = (precedence.Count == 0)
-            ? (RelaxedSolver.Solve(places, matrix, categories.Count, distance))
-            : (PrecedenceSolver.Solve(places, matrix, categories.Count, distance, precedence));
+            ? (RelaxedSolver.Solve(places, matrix, maxDistance, ROUTES_COUNT))
+            : (PrecedenceSolver.Solve(places, matrix, precedence, maxDistance, ROUTES_COUNT));
 
         // Construct polylines.
 
@@ -86,7 +88,7 @@ public static class RoutesHandler
         // Finalize route objects.
 
         var objs = Enumerable.Range(0, routes.Count).Aggregate(new List<RouteObject>(), (acc, i) => {
-            acc.Add(new() { path = polylines[i], waypoints = ExtractWaypoints(routes[i], places) }); return acc; });
+            acc.Add(new() { path = polylines[i], waypoints = Extract(routes[i], places) }); return acc; });
 
         return (objs, null);
     }

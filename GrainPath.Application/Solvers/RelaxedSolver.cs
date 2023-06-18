@@ -26,21 +26,21 @@ internal static class RelaxedSolver
     }
 
     public static List<List<int>> Solve(
-        IReadOnlyList<Place> places, IDistanceMatrix matrix, double distance, int routesCount)
+        IReadOnlyList<Place> places, IDistanceMatrix matrix, double maxDistance, int routesCount)
     {
         var routes = new List<List<int>>();
-        var ifPlaces = PlaceConverter.Convert(places);
+        var solverPlaces = PlaceConverter.Convert(places);
 
         for (int i = 0; i < routesCount; ++i)
         {
-            var ifRoute = IfHeuristic.Advise(ifPlaces, matrix, distance, places.Count);
+            var ifRoute = IfHeuristic.Advise(solverPlaces, matrix, maxDistance, places.Count);
 
             if (ifRoute.Count <= 2) { break; } // no more good places remained
 
             var (route, dict) = SimplifyIfRoute(ifRoute);
 
             routes.Add(TwoOptHeuristic.Advise(route, matrix));
-            ifPlaces = ifPlaces.Where(ifPlace => !dict.Contains(ifPlace.Index)).ToList();
+            solverPlaces = solverPlaces.Where(ifPlace => !dict.Contains(ifPlace.Index)).ToList();
         }
 
         return routes;

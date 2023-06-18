@@ -12,7 +12,7 @@ internal sealed class IfCategoryComparer : IComparer<List<SolverPlace>>
     public int Compare(List<SolverPlace> l, List<SolverPlace> r) => l.Count.CompareTo(r.Count);
 }
 
-internal static class IfPlaceSeparator
+internal static class IfCategoryFormer
 {
     /// <summary>
     /// Separate points by category.
@@ -42,7 +42,8 @@ internal static class IfPlaceSeparator
     /// <summary>
     /// Group places by category and sort categories by relevancy.
     /// </summary>
-    public static List<List<SolverPlace>> Separate(IReadOnlyList<SolverPlace> places) => Sort(Group(places));
+    public static List<List<SolverPlace>> Form(IReadOnlyList<SolverPlace> places)
+        => Sort(Group(places));
 }
 
 internal static class IfCandidateFinder
@@ -89,12 +90,12 @@ internal static class IfHeuristic
     /// Advise a route.
     /// </summary>
     public static List<int> Advise(
-        IReadOnlyList<SolverPlace> places, IDistanceMatrix matrix, double maxDistance, int placeCount)
+        IReadOnlyList<SolverPlace> places, IDistanceMatrix matrix, double maxDistance, int placesCount)
     {
-        var seq = new List<int>() { 0, placeCount - 1 };
-        var distance = matrix.Distance(0, placeCount - 1);
+        var seq = new List<int>() { 0, placesCount - 1 };
+        var distance = matrix.Distance(0, placesCount - 1);
 
-        var cats = IfPlaceSeparator.Separate(places);
+        var cats = IfCategoryFormer.Form(places);
 
         foreach (var cat in cats)
         {
