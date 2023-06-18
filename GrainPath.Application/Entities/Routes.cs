@@ -18,7 +18,7 @@ public sealed class RouteObject
     public List<Place> waypoints { get; set; }
 }
 
-public sealed class PrecedenceEdge
+public sealed class PrecedenceWebEdge
 {
     /// <summary>
     /// Category from.
@@ -33,6 +33,19 @@ public sealed class PrecedenceEdge
     [Required]
     [Range(0, int.MaxValue)]
     public int? to;
+}
+
+public sealed class PrecedenceEdge
+{
+    /// <summary>
+    /// Category from.
+    /// </summary>
+    public int fr;
+
+    /// <summary>
+    /// Category to.
+    /// </summary>
+    public int to;
 }
 
 public sealed class RoutesRequest
@@ -67,7 +80,7 @@ public sealed class RoutesRequest
     /// Order on categories imposed by the user.
     /// </summary>
     [Required]
-    public List<PrecedenceEdge> precedence { get; set; }
+    public List<PrecedenceWebEdge> precedence { get; set; }
 }
 
 public sealed class RoutesResponse

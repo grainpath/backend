@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using GrainPath.Api.Helpers;
@@ -70,9 +71,12 @@ public sealed class RouteController : ControllerBase
     {
         if (!RoutesVerifier.Verify(request)) { return BadRequest(); }
 
+        var precedence = request.precedence
+            .Select(p => new PrecedenceEdge() { fr = p.fr.Value, to = p.to.Value }).ToList();
+
         var (routes, err) = await RoutesHandler.Handle(
-            _context.Model, _context.Engine, request.source.AsWgs(), request.target.AsWgs(),
-            request.distance.Value, request.categories, request.precedence);
+            _context.Model, _context.Engine, request.source.AsWgs(),
+            request.target.AsWgs(), request.distance.Value, request.categories, precedence);
 
         if (err is not null) { _logger.LogError(err.Message); return StatusCode(500); }
 

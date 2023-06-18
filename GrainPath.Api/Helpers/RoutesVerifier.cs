@@ -6,7 +6,7 @@ namespace GrainPath.Api.Helpers;
 
 internal static class RoutesVerifier
 {
-    private static bool verifyPrecedence(List<PrecedenceEdge> edges, int order)
+    private static bool VerifyPrecedence(List<PrecedenceWebEdge> edges, int order)
     {
         var g = new CycleDetector(order);
 
@@ -29,6 +29,6 @@ internal static class RoutesVerifier
     public static bool Verify(RoutesRequest request)
     {
         return CategoryVerifier.Verify(request.categories)
-            && verifyPrecedence(request.precedence, request.categories.Count);
+            && VerifyPrecedence(request.precedence, request.categories.Count);
     }
 }
