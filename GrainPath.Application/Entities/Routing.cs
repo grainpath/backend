@@ -25,8 +25,3 @@ public sealed class ShortestPathObject
     [Required]
     public List<WgsPoint> polyline { get; set; }
 }
-
-public sealed class DistanceMatrixObject
-{
-    public List<List<double>> distances { get; set; }
-}

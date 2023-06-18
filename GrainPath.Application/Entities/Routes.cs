@@ -12,7 +12,7 @@ public sealed class RouteObject
     public ShortestPathObject path { get; set; }
 
     /// <summary>
-    /// Ordered sequence of places satisfying given conditions.
+    /// Ordered sequence of places.
     /// </summary>
     [Required]
     public List<Place> waypoints { get; set; }
@@ -72,6 +72,9 @@ public sealed class RoutesRequest
 
 public sealed class RoutesResponse
 {
+    /// <summary>
+    /// List of advised route objects.
+    /// </summary>
     [Required]
     public List<RouteObject> routes { get; set; }
 }

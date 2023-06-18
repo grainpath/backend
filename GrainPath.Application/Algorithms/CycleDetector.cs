@@ -20,7 +20,7 @@ public sealed class CycleDetector
 
     private int _cycleRef = -1;
     private readonly List<Vertex> _Vs;
-    private readonly List<SortedSet<int>> _Es = new();
+    private readonly List<SortedSet<int>> _Es;
 
     private bool cycle(int u)
     {
@@ -31,7 +31,9 @@ public sealed class CycleDetector
             _Vs[v].Predecessor = u;
             switch (_Vs[v].Color)
             {
-                case Color.A: return cycle(v);
+                case Color.A:
+                    if (cycle(v)) { return true; }
+                    break;
                 case Color.B:
                     _cycleRef = v;
                     return true;
@@ -51,7 +53,7 @@ public sealed class CycleDetector
     /// <summary>
     /// Loops are recognized as cycles.
     /// </summary>
-    public void AddEdge(int fr, int to) => _Es[fr].Add(to);
+    public CycleDetector AddEdge(int fr, int to) { _ = _Es[fr].Add(to); return this; }
 
     public List<int> Cycle()
     {

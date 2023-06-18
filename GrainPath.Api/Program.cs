@@ -1,4 +1,4 @@
-using GrainPath.Data;
+using GrainPath.DataModel;
 using GrainPath.RoutingEngine;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
