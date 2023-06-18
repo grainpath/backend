@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Interfaces;
-using GrainPath.Data.MongoDb.Fetchers;
+using GrainPath.DataModel.MongoDb.Fetchers;
 using MongoDB.Driver;
 
-namespace GrainPath.Data.MongoDb;
+namespace GrainPath.DataModel.MongoDb;
 
 internal sealed class MongoDbModel : IModel
 {

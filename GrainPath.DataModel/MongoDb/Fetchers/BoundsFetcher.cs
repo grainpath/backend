@@ -4,7 +4,7 @@ using GrainPath.Application.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 
-namespace GrainPath.Data.MongoDb.Fetchers;
+namespace GrainPath.DataModel.MongoDb.Fetchers;
 
 internal static class BoundsFetcher
 {

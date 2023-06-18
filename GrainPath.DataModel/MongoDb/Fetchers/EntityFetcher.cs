@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GrainPath.Application.Entities;
 using MongoDB.Driver;
 
-namespace GrainPath.Data.MongoDb.Fetchers;
+namespace GrainPath.DataModel.MongoDb.Fetchers;
 
 internal static class EntityFetcher
 {

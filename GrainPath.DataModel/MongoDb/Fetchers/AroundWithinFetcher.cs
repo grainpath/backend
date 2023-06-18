@@ -5,7 +5,7 @@ using GrainPath.Application.Entities;
 using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
 
-namespace GrainPath.Data.MongoDb.Fetchers;
+namespace GrainPath.DataModel.MongoDb.Fetchers;
 
 internal static class AroundWithinFetcher
 {

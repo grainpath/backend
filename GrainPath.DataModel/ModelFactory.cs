@@ -1,9 +1,9 @@
 using System;
 using GrainPath.Application.Interfaces;
-using GrainPath.Data.MongoDb;
+using GrainPath.DataModel.MongoDb;
 using MongoDB.Driver;
 
-namespace GrainPath.Data;
+namespace GrainPath.DataModel;
 
 internal static class MongoDbModelFactory
 {

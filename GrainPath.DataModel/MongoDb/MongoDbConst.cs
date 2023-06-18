@@ -1,4 +1,4 @@
-namespace GrainPath.Data.MongoDb;
+namespace GrainPath.DataModel.MongoDb;
 
 internal static class MongoDbConst
 {

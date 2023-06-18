@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GrainPath.Application.Entities;
-using GrainPath.Data.MongoDb.Helpers;
+using GrainPath.DataModel.MongoDb.Helpers;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
-namespace GrainPath.Data.MongoDb.Fetchers;
+namespace GrainPath.DataModel.MongoDb.Fetchers;
 
 internal static class PlacesFetcher
 {
