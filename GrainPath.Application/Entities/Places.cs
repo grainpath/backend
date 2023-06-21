@@ -19,7 +19,7 @@ public sealed class PlacesRequest
     public double? radius { get; set; }
 
     /// <summary>
-    /// Categories with a keyword and optional features.
+    /// Categories with a keyword and optional attributes.
     /// </summary>
     [Required]
     [MinLength(1)]

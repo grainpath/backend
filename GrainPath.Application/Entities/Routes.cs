@@ -25,14 +25,14 @@ public sealed class PrecedenceWebEdge
     /// </summary>
     [Required]
     [Range(0, int.MaxValue)]
-    public int? fr;
+    public int? fr { get; set; }
 
     /// <summary>
     /// Category to.
     /// </summary>
     [Required]
     [Range(0, int.MaxValue)]
-    public int? to;
+    public int? to { get; set; }
 }
 
 public sealed class PrecedenceEdge
@@ -40,12 +40,12 @@ public sealed class PrecedenceEdge
     /// <summary>
     /// Category from.
     /// </summary>
-    public int fr;
+    public int fr { get; set; }
 
     /// <summary>
     /// Category to.
     /// </summary>
-    public int to;
+    public int to { get; set; }
 }
 
 public sealed class RoutesRequest
