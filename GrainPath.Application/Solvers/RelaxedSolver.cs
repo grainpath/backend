@@ -1,13 +1,14 @@
 using System.Collections.Generic;
-using System.Linq;
 using GrainPath.Application.Entities;
 using GrainPath.Application.Heuristics;
 using GrainPath.Application.Interfaces;
 
 namespace GrainPath.Application.Solvers;
 
-internal static class RelaxedSolver
+internal sealed class RelaxedSolver : BaseSolver
 {
+    private RelaxedSolver() { }
+
     /// <summary>
     /// IfHeuristic may return routes with repeating indices due to disjoint
     /// sets. Those can be safely removed.
@@ -15,14 +16,14 @@ internal static class RelaxedSolver
     private static (List<int>, SortedSet<int>) SimplifyIfRoute(List<int> ifRoute)
     {
         var route = new List<int>();
-        var dict = new SortedSet<int>();
+        var occur = new SortedSet<int>();
 
-        foreach (var point in ifRoute)
+        foreach (var index in ifRoute)
         {
-            if (!dict.Contains(point)) { route.Add(point); dict.Add(point); }
+            if (occur.Add(index)) { route.Add(index); }
         }
 
-        return (route, dict);
+        return (route, occur);
     }
 
     public static List<List<int>> Solve(
@@ -37,10 +38,10 @@ internal static class RelaxedSolver
 
             if (ifRoute.Count < 3) { break; } // no more good places remained
 
-            var (route, dict) = SimplifyIfRoute(ifRoute);
+            var (route, occur) = SimplifyIfRoute(ifRoute);
 
-            routes.Add(TwoOptHeuristic.Advise(route, matrix));
-            solverPlaces = solverPlaces.Where(ifPlace => !dict.Contains(ifPlace.Index)).ToList();
+            routes.Add(TwoOptHeuristic.Refine(route, matrix));
+            solverPlaces = FilterPlaces(solverPlaces, occur);
         }
 
         return routes;
