@@ -43,11 +43,11 @@ internal static class PlacesFetcher
                 /* Merge the list of places with the result in case the same place
                 * is associated with more than one category. */
 
-                foreach (var p in places)
+                foreach (var place in places)
                 {
-                    if (result.TryGetValue(p.grainId, out var place))
+                    if (result.TryGetValue(place.grainId, out var p))
                     {
-                        place.categories.Add(i);
+                        p.categories.Add(i);
                     }
                     else { result.Add(place.grainId, place); }
                 }
