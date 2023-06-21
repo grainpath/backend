@@ -16,7 +16,7 @@ internal static class TwoOptHeuristic
     /// and last items are not swappable. Used as a refinement step for routes
     /// without precedence constraints.
     /// </summary>
-    public static List<int> Advise(List<int> route, IDistanceMatrix matrix)
+    public static List<int> Refine(List<int> route, IDistanceMatrix matrix)
     {
         bool change;
         do
