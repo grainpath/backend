@@ -23,7 +23,7 @@ internal static class IfCategoryFormer
         {
             if (!acc.ContainsKey(place.Category))
             {
-                acc.Add(place.Category, new List<SolverPlace>());
+                acc.Add(place.Category, new());
             }
             acc[place.Category].Add(place);
             return acc;
@@ -49,35 +49,34 @@ internal static class IfCategoryFormer
 internal static class IfCandidateFinder
 {
     /// <summary>
-    /// Given a certain keyword, find a pair of poi and position for insertion
-    /// that gives the smallest distance increase.
+    /// Given a certain category, find a pair of place and position for
+    /// insertion that gives the smallest distance increase.
     /// </summary>
-    public static (SolverPlace, int, double) FindBest(
-        IReadOnlyList<int> seq, IReadOnlyList<SolverPlace> cat, IDistanceMatrix matrix, double currDistance)
+    public static (SolverPlace, double, int) FindBest(
+        IReadOnlyList<int> seq, IReadOnlyList<SolverPlace> cat, IDistanceMatrix matrix, double currDist)
     {
-        int index = -1;
         SolverPlace best = null;
-        double candDistance = double.MaxValue;
+        double lastDist = double.MaxValue;
+
+        int index = -1;
 
         foreach (var place in cat)
         {
             for (int i = 1; i < seq.Count; ++i)
             {
-                var nextDistance = currDistance
-                    - matrix.Distance(seq[i - 1], seq[i])
-                    + matrix.Distance(seq[i - 1], place.Index)
-                    + matrix.Distance(place.Index, seq[i]);
+                var candDist = DistanceAdjuster
+                    .NextDistance(seq, matrix, place, currDist, i);
 
-                if (nextDistance < candDistance)
+                if (candDist < lastDist)
                 {
                     index = i;
                     best = place;
-                    candDistance = nextDistance;
+                    lastDist = candDist;
                 }
             }
         }
 
-        return (best, index, candDistance);
+        return (best, lastDist, index);
     }
 }
 
@@ -90,20 +89,20 @@ internal static class IfHeuristic
     /// Advise a route.
     /// </summary>
     public static List<int> Advise(
-        IReadOnlyList<SolverPlace> places, IDistanceMatrix matrix, double maxDistance, int placesCount)
+        IReadOnlyList<SolverPlace> places, IDistanceMatrix matrix, double maxDist, int placesCount)
     {
         var seq = new List<int>() { 0, placesCount - 1 };
-        var distance = matrix.Distance(0, placesCount - 1);
+        var currDist = matrix.Distance(0, placesCount - 1);
 
         var cats = IfCategoryFormer.Form(places);
 
         foreach (var cat in cats)
         {
-            var (best, seqIndex, candDistance) = IfCandidateFinder.FindBest(seq, cat, matrix, distance);
+            var (best, nextDist, seqIndex) = IfCandidateFinder.FindBest(seq, cat, matrix, currDist);
 
-            if (best is not null && candDistance <= maxDistance * 1.0)
+            if (best is not null && nextDist <= maxDist * 1.0)
             {
-                distance = candDistance;
+                currDist = nextDist;
                 seq.Insert(seqIndex, best.Index);
             }
         }
