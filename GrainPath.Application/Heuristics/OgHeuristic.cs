@@ -33,8 +33,7 @@ internal static class OgCategoryFormer
             ensureKey(result, prec.fr);
             ensureKey(result, prec.to);
 
-            ++result[prec.to].pred;
-            result[prec.fr].succ.Add(prec.to);
+            if (result[prec.fr].succ.Add(prec.to)) { ++result[prec.to].pred; }
         }
 
         return result;
