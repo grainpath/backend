@@ -16,6 +16,10 @@ internal static class PrecedenceSolver
         for (int i = 0; i < routesCount; ++i)
         {
             var ogRoute = OgHeuristic.Advise(solverPlaces, matrix, precedence, maxDistance, places.Count);
+
+            if (ogRoute.Count < 3) { break; }
+
+            routes.Add(ogRoute);
         }
 
         return routes;

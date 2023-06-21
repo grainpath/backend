@@ -35,7 +35,7 @@ internal static class RelaxedSolver
         {
             var ifRoute = IfHeuristic.Advise(solverPlaces, matrix, maxDistance, places.Count);
 
-            if (ifRoute.Count <= 2) { break; } // no more good places remained
+            if (ifRoute.Count < 3) { break; } // no more good places remained
 
             var (route, dict) = SimplifyIfRoute(ifRoute);
 
